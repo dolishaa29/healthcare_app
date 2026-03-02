@@ -61,3 +61,22 @@ catch(err)
     res.status(500).json({msg:"internal server error"});
 }
 }
+
+exports.userprofile=async(req,res)=>
+{
+    const user = req.user;
+    return res.status(200).json({success: true,user})
+}
+
+exports.userlist=async(req,res)=>
+{
+    try{
+    let users=await rec.find();
+    res.status(200).json({users:users});
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(500).json({msg:"internal server error"});
+    }
+}

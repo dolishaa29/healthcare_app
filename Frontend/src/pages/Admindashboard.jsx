@@ -15,6 +15,8 @@ const Admindashboard = () => {
       <button onClick={() => navigate('/Viewdoctor')} >
         View Doctor
       </button>
+
+      <button onClick={() => navigate('/Viewusers')} > View User </button>
     </div>
   )
 }

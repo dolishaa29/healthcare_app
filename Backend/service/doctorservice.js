@@ -70,3 +70,9 @@ exports.doctorprofile=async(req,res)=>
     const doctor = req.doctor;
     return res.status(200).json({success: true,doctor})
 }
+
+exports.doctorlist=async(req,res)=>
+{
+    let doctors=await rec.find();
+    return res.status(200).json({success: true,doctors})
+}
