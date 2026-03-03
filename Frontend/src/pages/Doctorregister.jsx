@@ -26,7 +26,7 @@ const Doctorregister = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:7000/doctorregister",
+        "http://localhost:7000/doctorpermission",
         {
           email,
           password,
@@ -37,10 +37,9 @@ const Doctorregister = () => {
         },
       );
 
-      if (response.status === 200) {
-        setMessage("Doctor Registered Successfully");
+      if (response.status === 201) {
+        setMessage("Doctor Registered Successfully , waiting for approval");
         
-        navigate("/Doctordashboard");
       } else {
         setMessage(response.data.message || "Registration Failed");
       }

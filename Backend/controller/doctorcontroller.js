@@ -1,4 +1,4 @@
-const { doctorlogin,doctorprofile,doctorregister,doctorlogout,doctorlist} = require("../service/doctorservice");
+const { doctorlogin,doctorprofile,doctorregister,doctorlogout,doctorlist, doctorpermission} = require("../service/doctorservice");
 
 exports.doctorregister=async(req,res)=>
 {
@@ -19,4 +19,9 @@ exports.doctorlogout=async(req,res)=>
 exports.doctorlist=async(req,res)=>
 {
   await doctorlist(req,res);
+}
+
+exports.doctorpermission=async(req,res)=>
+{
+  await doctorpermission(req,res);
 }
