@@ -107,14 +107,15 @@ exports.doctorlist=async(req,res)=>
 }
 
 exports.doctorrequest=async(req,res)=>
-{
+{  
+    console.log("Fetching doctor requests");
     let doctors=await rec2.find();
     return res.status(200).json({success: true,doctors});
 }
 
 exports.doctorpermissionupdate=async(req,res)=>
 {
-    id=req.body._id;
+    id=req.body.id;
     let permission=req.body.permission;
     let updated=await rec2.findByIdAndUpdate(id,{permission:permission});
     return res.status(200).json({success:true,msg:"permission updated successfully",updated});
