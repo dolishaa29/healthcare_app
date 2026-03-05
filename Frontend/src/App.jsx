@@ -11,6 +11,7 @@ import Userdashboard from './pages/Userdashboard';
 import Viewusers from './pages/Viewusers';
 import Viewdoctors from './pages/Viewdoctors';
 import DoctorRequest from './pages/doctorrequest';
+import Approved from './pages/Approved';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/Viewusers' element={<Viewusers/>}/>
         <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
         <Route path='/Doctorrequest' element={<DoctorRequest/>}/>
+        <Route path='/Approved' element={<Approved/>}/>
       </Routes>
       </BrowserRouter>
     </div>
