@@ -10,7 +10,7 @@ const DoctorRequest = () => {
     } catch (err) {
       console.log(err);
     }
-  };
+  };                  
 
   useEffect(() => {
     fetchDoctors();
