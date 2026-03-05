@@ -12,6 +12,8 @@ import Viewusers from './pages/Viewusers';
 import Viewdoctors from './pages/Viewdoctors';
 import DoctorRequest from './pages/doctorrequest';
 import Approved from './pages/Approved';
+import RejectedDoctors from './pages/RejectedDoctors';
+import Appointment from './pages/Appointment';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
         <Route path='/Doctorrequest' element={<DoctorRequest/>}/>
         <Route path='/Approved' element={<Approved/>}/>
+        <Route path='/RejectedDoctors' element={<RejectedDoctors/>}/>
+        <Route path='/Appointment' element={<Appointment/>}/>
       </Routes>
       </BrowserRouter>
     </div>
