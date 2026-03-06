@@ -14,6 +14,7 @@ import DoctorRequest from './pages/doctorrequest';
 import Approved from './pages/Approved';
 import RejectedDoctors from './pages/RejectedDoctors';
 import Appointment from './pages/Appointment';
+import ViewAppointment from './pages/ViewAppointment';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path='/Approved' element={<Approved/>}/>
         <Route path='/RejectedDoctors' element={<RejectedDoctors/>}/>
         <Route path='/Appointment' element={<Appointment/>}/>
+        <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
       </Routes>
       </BrowserRouter>
     </div>
