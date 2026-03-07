@@ -32,8 +32,8 @@ function App() {
         <Route path='/Viewusers' element={<Viewusers/>}/>
         <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
         <Route path='/Doctorrequest' element={<DoctorRequest/>}/>
-        <Route path='/Approved' element={<Approved/>}/>
-        <Route path='/RejectedDoctors' element={<RejectedDoctors/>}/>
+        <Route path='/Approveddoctors' element={<Approved/>}/>
+        <Route path='/Rejecteddoctors' element={<RejectedDoctors/>}/>
         <Route path='/Appointment' element={<Appointment/>}/>
         <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
       </Routes>
