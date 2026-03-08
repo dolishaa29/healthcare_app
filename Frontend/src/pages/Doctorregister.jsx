@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const Doctorregister = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [specialization, setSpecialization] = useState("");
   const [contact, setContact] = useState("");
@@ -17,7 +16,7 @@ const Doctorregister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password || !name || !specialization || !contact || !address) {
+    if (!email || !name || !specialization || !contact || !address) {
       setMessage("Please fill all fields");
       return;
     }
@@ -29,7 +28,6 @@ const Doctorregister = () => {
         "http://localhost:7000/doctorpermission",
         {
           email,
-          password,
           name,
           specialization,
           contact,
@@ -74,16 +72,6 @@ const Doctorregister = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-
-        <div>
-          <label>Password:</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
         <div>
           <label>Specialization:</label><br />
           <input

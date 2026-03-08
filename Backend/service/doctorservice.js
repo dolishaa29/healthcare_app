@@ -2,6 +2,7 @@ let rec=require("../model/doctor");
 let rec2=require("../model/permission");
 let jwt=require("jsonwebtoken");
 let bct=require("bcryptjs");
+let crypto=require("crypto");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -17,12 +18,10 @@ exports.doctorpermission=async(req,res)=>
 {   
     console.log("Doctor permission request body:", req.body);
     let email=req.body.email;
-    let password=req.body.password;
     let contact=req.body.contact;
     let name=req.body.name;
     let specialization=req.body.specialization;
     let address=req.body.address;
-    let hp=await bct.hash(password,10);
     let already = await rec2.findOne({ email: email });
 
 if (already && (already.permission === "pending" || already.permission === "approved")) {
@@ -34,7 +33,6 @@ if (already && (already.permission === "pending" || already.permission === "appr
     else{
         let newdoctor=new rec2({
             email:email,
-            password:hp,
             contact:contact,
             name:name,
             specialization:specialization,
@@ -51,11 +49,11 @@ exports.doctorregister = async (req, res) => {
     console.log("Doctor registration request body:", req.body);
 
     let email = req.body.email;
-    let password = req.body.password;
     let contact = req.body.contact;
     let name = req.body.name;
     let specialization = req.body.specialization;
     let address = req.body.address;
+    let password = crypto.randomBytes(4).toString("hex");
 
     let hp = await bct.hash(password, 10);
 
@@ -74,7 +72,10 @@ exports.doctorregister = async (req, res) => {
       from: "auraahealthh@gmail.com",
       to: email,
       subject: "Registration Successful",
-      text: `Hello Dr. ${name}, your account has been successfully registered and approved.`
+      text: `Hello Dr. ${name}, your account has been successfully registered and approved.
+      Your login credentials are as follows:
+      Email: ${email}
+      Password: ${password}`
     };
 
     await transporter.sendMail(mail);

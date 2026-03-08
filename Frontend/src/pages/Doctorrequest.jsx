@@ -22,7 +22,6 @@ const DoctorRequest = () => {
       await axios.post("http://localhost:7000/doctorregister", {
         name: doc.name,
         email: doc.email,
-        password: doc.password,
         contact: doc.contact,
         specialization: doc.specialization,
         address: doc.address,
