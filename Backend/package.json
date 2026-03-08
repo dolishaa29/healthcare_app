@@ -8,6 +8,7 @@
     "express": "^5.2.1",
     "js-cookie": "^3.0.5",
     "mongoose": "^9.2.2",
-    "moongose": "^1.0.0"
+    "moongose": "^1.0.0",
+    "nodemailer": "^8.0.1"
   }
 }

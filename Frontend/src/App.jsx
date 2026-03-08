@@ -36,6 +36,7 @@ function App() {
         <Route path='/Rejecteddoctors' element={<RejectedDoctors/>}/>
         <Route path='/Appointment' element={<Appointment/>}/>
         <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
+        <Route path='*' element={<h1>No Such Router Exist</h1>} />
       </Routes>
       </BrowserRouter>
     </div>

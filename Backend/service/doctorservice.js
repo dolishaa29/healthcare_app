@@ -2,7 +2,16 @@ let rec=require("../model/doctor");
 let rec2=require("../model/permission");
 let jwt=require("jsonwebtoken");
 let bct=require("bcryptjs");
-const permission = require("../model/permission");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "auraahealthh@gmail.com",
+    pass: "fuuu tgol iirl gdww"
+  }
+});
+
 
 exports.doctorpermission=async(req,res)=>
 {   
@@ -36,30 +45,47 @@ if (already && (already.permission === "pending" || already.permission === "appr
     }
 }
 
+exports.doctorregister = async (req, res) => {
+  try {
 
-exports.doctorregister=async(req,res)=>
-{   
     console.log("Doctor registration request body:", req.body);
-    let email=req.body.email;
-    let password=req.body.password;
-    let contact=req.body.contact;
-    let name=req.body.name;
-    let specialization=req.body.specialization;
-    let address=req.body.address;
-    let hp=await bct.hash(password,10);
-  
-        let newdoctor=new rec({
-            email:email,
-            password:hp,
-            contact:contact,
-            name:name,
-            specialization:specialization,
-            address:address
-        });
-        await newdoctor.save();
-        res.json({message:"doctor registered successfully"});
 
-}
+    let email = req.body.email;
+    let password = req.body.password;
+    let contact = req.body.contact;
+    let name = req.body.name;
+    let specialization = req.body.specialization;
+    let address = req.body.address;
+
+    let hp = await bct.hash(password, 10);
+
+    let newdoctor = new rec({
+      email: email,
+      password: hp,
+      contact: contact,
+      name: name,
+      specialization: specialization,
+      address: address
+    });
+
+    await newdoctor.save();
+
+    const mail = {
+      from: "auraahealthh@gmail.com",
+      to: email,
+      subject: "Registration Successful",
+      text: `Hello Dr. ${name}, your account has been successfully registered and approved.`
+    };
+
+    await transporter.sendMail(mail);
+
+    res.json({ message: "doctor registered successfully and email sent" });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "error in registration" });
+  }
+};
 
 exports.doctorlogin=async(req,res)=>
 {
