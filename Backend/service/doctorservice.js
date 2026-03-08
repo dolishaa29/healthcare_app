@@ -107,7 +107,7 @@ exports.doctorlogin=async(req,res)=>
         expiresIn:"1d"
     });
     res.cookie('emstoken', token);
-    return res.status(200).json({success: true,msg:'doctor login successfully',token})
+    return res.status(200).json({success: true,msg:'doctor login successfully',token});
  }
  else
  {
