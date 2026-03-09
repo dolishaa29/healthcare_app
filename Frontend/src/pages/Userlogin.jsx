@@ -73,7 +73,7 @@ const Userlogin = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-
+      <h7>Dont have an account? <button onClick={() => navigate('/Userregister')}>Register</button></h7>
       <p>{message}</p>
     </div>
   );

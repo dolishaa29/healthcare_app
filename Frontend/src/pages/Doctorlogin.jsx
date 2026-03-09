@@ -73,7 +73,7 @@ const Doctorlogin = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-
+     <h7>Dont have an account? <button onClick={() => navigate('/Doctorregister')}>Register</button></h7>
       <p>{message}</p>
     </div>
   );

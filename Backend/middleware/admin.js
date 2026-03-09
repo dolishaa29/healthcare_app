@@ -16,6 +16,7 @@ async function auth(req, res, next) {
       }
     } else {
       console.log("Please Login First");
+      
     }
   } catch (err) {
     console.log(err);

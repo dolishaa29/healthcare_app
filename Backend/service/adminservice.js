@@ -22,6 +22,7 @@ return res.status(201).json({success: true,msg:'admin already registered'})
 
 exports.adminlogin=async(req,res)=>
 {
+
 let email=req.body.email;
 let password=req.body.password;
 let data=await rec.findOne({email:email});
@@ -62,7 +63,16 @@ return res.status(200).json({success: true,msg: "admin profile fetched successfu
 
 exports.adminlogout=async(req,res)=>
 {
-const admin = req.admin;
-res.clearCookie('emtoken', "");
-return res.status(200).json({success:true});
+res.clearCookie("token");
+return res.status(200).json({success: true,msg:'admin logout successfully'})
+}
+
+exports.adminDashboard=async(req,res)=>
+{
+    const admin = req.admin;
+    return res.status(200).json({success: true,msg: "admin dashboard accessed successfully",dashboard:
+    {
+     email:admin.email,contact:admin.contact
+    },
+    });
 }

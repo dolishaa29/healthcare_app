@@ -1,4 +1,4 @@
-const { adminregister, adminlogin, adminprofile, adminlogout} = require("../service/adminservice");
+const { adminregister, adminlogin, adminprofile, adminlogout, adminDashboard} = require("../service/adminservice");
 
 exports.adminregister=async(req,res)=>
 {
@@ -15,4 +15,9 @@ exports.adminprofile=async(req,res)=>
 exports.adminlogout=async(req,res)=>
 {
   await adminlogout(req,res);
+}
+
+exports.adminDashboard=async(req,res)=>
+{
+  await adminDashboard(req,res);
 }

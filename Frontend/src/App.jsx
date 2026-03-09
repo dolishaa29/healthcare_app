@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import react from 'react'
-import Adminlogin from './pages/adminlogin'
+import Adminlogin from './pages/Adminlogin'
 import Admindashboard from './pages/Admindashboard';
 import Doctorregister from './pages/Doctorregister';
 import Doctorlogin from './pages/Doctorlogin';
@@ -15,14 +15,17 @@ import Approved from './pages/Approved';
 import RejectedDoctors from './pages/RejectedDoctors';
 import Appointment from './pages/Appointment';
 import ViewAppointment from './pages/ViewAppointment';
+import Login from './pages/Login';
+import PrivateRoute from './components/priroutes';
 
 function App() {
   return (
     <div>
       <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Adminlogin/>}/>
-        <Route path='/AdminDashboard' element={<Admindashboard/>}/>
+        <Route path='/' element={<Login/>}/>
+        <Route path='/Adminlogin' element={<Adminlogin/>}/>
+        <Route path='/Admindashboard' element={<PrivateRoute><Admindashboard/></PrivateRoute>}/>
         <Route path='/Doctorregister' element={<Doctorregister/>}/>
         <Route path='/Doctorlogin' element={<Doctorlogin/>}/>
         <Route path='/Doctordashboard' element={<Docterdashboard/>}/>
