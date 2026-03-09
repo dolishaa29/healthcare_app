@@ -45,6 +45,8 @@ const Admindashboard = () => {
       <button onClick={() => navigate('/Approveddoctors')} > Approved Doctors </button>
 
       <button onClick={() => navigate('/Rejecteddoctors')} > Rejected Doctors </button>
+
+      <button onClick={() => navigate('/ViewAppointment')} > View Appointment </button>
     </div>
   )
 }
