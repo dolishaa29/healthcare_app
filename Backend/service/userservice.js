@@ -80,3 +80,13 @@ exports.userlist=async(req,res)=>
         res.status(500).json({msg:"internal server error"});
     }
 }
+
+exports.userDashboard=async(req,res)=>
+{
+    const user =  req.user;
+    return res.status(200).json({success: true,msg: "user dashboard fetched successfully",dashboard:
+    {
+     email:user.email,name:user.name,contact:user.contact,address:user.address,id:user._id
+    },
+    });
+}

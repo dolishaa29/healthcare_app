@@ -19,6 +19,7 @@ app.use(cors({
 app.use("/",require("./router/adminrouter"));
 app.use("/",require("./router/doctorrouter"));
 app.use("/",require("./router/userrouter"));
+app.use("/",require("./router/appointrouter"));
 const PORT=7000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
