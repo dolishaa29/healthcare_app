@@ -14,3 +14,4 @@ exports.appointmentstatus=async(req,res)=>
 {
     await appointmentstatus(req,res);
 }
+

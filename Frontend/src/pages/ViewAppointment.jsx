@@ -11,25 +11,49 @@ const ViewAppointment = () => {
   }, []);
 
   const fetchAppointments = async () => {
-    const res = await axios.get("http://localhost:7000/viewappointment",{
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${Cookies.get("emtoken")}`,
-      },
-      withCredentials: true,
-    });
-     
-    setAppointments(res.data.appointments);
+    try {
+      const res = await axios.get("http://localhost:7000/viewappointment", {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Cookies.get("emtoken")}`,
+        },
+        withCredentials: true,
+      });
+
+      setAppointments(res.data.appointments);
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleRequest = async (id, type) => {
+  const handleAcceptRequest = async (id) => {
     try {
       await axios.post("http://localhost:7000/appointmentstatus", {
         id: id,
-        status: type
+        status: "approved"
       });
 
-      alert(`Appointment ${type}`);
+      await axios.post("http://localhost:7000/sendmail", {
+
+      });
+
+      alert("Appointment Accepted");
+      fetchAppointments();
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const rejectRequests = async (id) => {
+    try {
+      await axios.post("http://localhost:7000/appointmentstatus", {
+        id: id,
+        status: "rejected"
+      });
+
+      alert("Appointment Rejected");
       fetchAppointments();
 
     } catch (error) {
@@ -42,25 +66,39 @@ const ViewAppointment = () => {
       <h2>Appointments</h2>
 
       {appointments.map((app) => (
-        <div key={app._id} style={{border:"1px solid #ccc", padding:"10px", margin:"10px"}}>
-
+        <div
+          key={app._id}
+          style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}
+        >
           <p>Name: {app.name}</p>
           <p>Status: {app.status}</p>
 
           <button
-            onClick={() => handleRequest(app._id, "accept")}
-            style={{marginRight:"10px", background:"green", color:"#fff"}}
+            onClick={() => handleAcceptRequest(app._id)}
+            style={{
+              marginRight: "10px",
+              background: "green",
+              color: "#fff",
+              padding: "5px 10px",
+              border: "none",
+              cursor: "pointer"
+            }}
           >
             Approve
           </button>
 
           <button
-            onClick={() => handleRequest(app._id, "reject")}
-            style={{background:"red", color:"#fff"}}
+            onClick={() => rejectRequests(app._id)}
+            style={{
+              background: "red",
+              color: "#fff",
+              padding: "5px 10px",
+              border: "none",
+              cursor: "pointer"
+            }}
           >
             Reject
           </button>
-
         </div>
       ))}
     </div>
