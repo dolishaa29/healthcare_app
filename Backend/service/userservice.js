@@ -1,4 +1,5 @@
 let rec=require("../model/user");
+let rec2=require("../model/Appointment/appointment");
 let bcrypt=require("bcrypt");
 let jwt=require("jsonwebtoken");
 
@@ -90,3 +91,12 @@ exports.userDashboard=async(req,res)=>
     },
     });
 }
+
+exports.userviewapp=async(req,res)=>{
+    const user = req.user;
+    console.log("User ID from request:", user._id);
+    let appointments = await rec2.find({ userid: user._id });
+    console.log("Appointments for user:", appointments);
+    return res.status(200).json({ success: true, appointments });
+};
+    

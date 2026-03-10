@@ -54,6 +54,7 @@ const Userdashboard = () => {
         <p>Name:{name}</p>
       <h1>User Dashboard</h1>
         <button onClick={() => navigate('/Appointment')} > Book Appointment </button>
+        <button onClick={() => navigate('/userviewapp')} > View Appointments </button>
     </div>
   )
 }

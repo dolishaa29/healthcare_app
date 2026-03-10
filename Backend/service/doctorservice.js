@@ -1,5 +1,6 @@
 let rec=require("../model/doctor");
 let rec2=require("../model/permission");
+let app=require("../model/Appointment/appointment");
 let jwt=require("jsonwebtoken");
 let bct=require("bcryptjs");
 let crypto=require("crypto");
@@ -146,4 +147,23 @@ exports.doctorpermissionupdate=async(req,res)=>
     let permission=req.body.permission;
     let updated=await rec2.findByIdAndUpdate(id,{permission:permission});
     return res.status(200).json({success:true,msg:"permission updated successfully",updated});
+}
+
+exports.doctorDashboard=async(req,res)=>
+{
+    const doctor =  req.doctor;
+    return res.status(200).json({success: true,msg: "doctor dashboard fetched successfully",dashboard:
+    {
+     email:doctor.email,name:doctor.name,contact:doctor.contact,address:doctor.address,id:doctor._id
+    },
+    });
+}
+
+exports.doctorviewapp=async(req,res)=>{
+    const doctor = req.doctor;
+    console.log("Doctor ID from request:", doctor._id);
+    let appointments = await app.find({ doctorid: doctor._id });
+    
+    console.log("Appointments for doctor:", appointments);
+    return res.status(200).json({ success: true, appointments });
 }

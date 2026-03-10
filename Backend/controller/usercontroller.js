@@ -1,5 +1,5 @@
 
-const { userregister,userlogin,userlogout,userprofile,userlist, userDashboard} = require("../service/userservice");
+const { userregister,userlogin,userlogout,userprofile,userlist, userDashboard, userviewapp} = require("../service/userservice");
 
 exports.userregister=async(req,res)=>
 {
@@ -27,3 +27,6 @@ exports.userDashboard=async(req,res)=>
 
 }
 
+exports.userviewapp=async(req,res)=>{
+    await userviewapp(req,res);
+}

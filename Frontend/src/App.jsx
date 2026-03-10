@@ -17,6 +17,8 @@ import Appointment from './pages/Appointment';
 import ViewAppointment from './pages/ViewAppointment';
 import Login from './pages/Login';
 import PrivateRoute from './components/priroutes';
+import Userviewapp from './pages/Userviewapp';
+import Doctorviewapp from './pages/doctorviewapp';
 
 function App() {
   return (
@@ -40,6 +42,9 @@ function App() {
         <Route path='/Appointment' element={<Appointment/>}/>
         <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
         <Route path='*' element={<h1>No Such Router Exist</h1>} />
+        <Route path='/userviewapp' element={<Userviewapp/>}/>
+        <Route path='/doctorviewapp' element={<Doctorviewapp/>}/>
+        
       </Routes>
       </BrowserRouter>
     </div>
