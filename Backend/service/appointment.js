@@ -1,5 +1,5 @@
 let rec4=require("../model/Appointment/appointrequest");
-
+let rec5=require("../model/Appointment/appointment");
 exports.appointrequest=async(req,res)=>
 {
  console.log("Appointment request received");   
@@ -48,6 +48,19 @@ exports.appointmentstatus=async(req,res)=>
 
 exports.approveappointment=async(req,res)=>
 {
-    
-    
+      let appointment=req.body;
+      let rec=new rec5({
+        userid:appointment.userid,
+        name:appointment.name,
+        email:appointment.email,
+        doctorid:appointment.doctorid,
+        doctormail:appointment.doctormail,
+        description:appointment.description,
+        date:appointment.date,
+        time:appointment.time
+      });
+
+      await rec.save();
+      return res.status(201).json({success: true,msg:'appointment approved successfully'});
+
 }

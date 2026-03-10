@@ -1,4 +1,4 @@
-const { appointrequest, viewappointment, appointmentstatus } = require("../service/appointment");
+const { appointrequest, viewappointment, appointmentstatus, approveappointment } = require("../service/appointment");
 
 exports.appointrequest=async(req,res)=>
 {
@@ -15,3 +15,7 @@ exports.appointmentstatus=async(req,res)=>
     await appointmentstatus(req,res);
 }
 
+exports.approveappointment=async(req,res)=>
+{
+    await approveappointment(req,res);
+}

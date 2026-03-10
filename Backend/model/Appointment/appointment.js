@@ -6,6 +6,7 @@ userid:{type:String},
 doctorid:{type:String},
 doctormail:{type:String},
 description:{type:String},
-Date:{type:String},
+date:{type:String},
+time:{type:String},
 });
 module.exports=mongo.model('appointmentnew',app);
