@@ -15,7 +15,7 @@ import ViewAppointment from './pages/ViewAppointment';
 import Login from './pages/Login';
 import PrivateRoute from './components/priroutes';
 import Userviewapp from './pages/Userviewapp';
-import Doctorviewapp from './pages/doctorviewapp';
+import Doctorviewapp from './pages/Doctorviewapp';
 import Adminregister from './pages/Adminregister';
 
 function App() {
