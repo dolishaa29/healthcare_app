@@ -6,7 +6,7 @@ exports.doctorregister=async(req,res)=>
 }
 exports.doctorlogin = async (req, res) =>
 {
-    await doctorlogin(req, res);
+ await doctorlogin(req, res);
 }
 exports.doctorprofile=async(req,res)=>
 {
@@ -41,6 +41,7 @@ exports.doctorDashboard=async(req,res)=>
   await doctorDashboard(req,res);
 }
 
-exports.doctorviewapp=async(req,res)=>{
+exports.doctorviewapp=async(req,res)=>
+{
   await doctorviewapp(req,res);
 }
