@@ -15,34 +15,24 @@ const Userregister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!email || !password || !name || !contact || !address) {
       setMessage("Please fill all fields");
       return;
     }
 
     setLoading(true);
-
     try {
-      const response = await axios.post(
-        "http://localhost:7000/userregister", 
-        {
-          email,
-          password,
-          name,
-          contact,
-          address,
-        }
-      );
+      const response = await axios.post("http://localhost:7000/userregister", {
+        email, password, name, contact, address,
+      });
 
       if (response.status === 200) {
         setMessage("User Registered Successfully");
-        navigate("/Userdashboard"); 
+        setTimeout(() => navigate("/Userdashboard"), 1500); 
       } else {
         setMessage(response.data.message || "Registration Failed");
       }
     } catch (err) {
-      console.error("Register Error:", err.response ? err.response.data : err.message);
       setMessage(err.response?.data?.message || "Error while registering");
     } finally {
       setLoading(false);
@@ -50,62 +40,109 @@ const Userregister = () => {
   };
 
   return (
-    <div>
-      <h2>User Register</h2>
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans overflow-hidden py-10">
+      
+      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label><br />
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img 
+          src="public/health.jfif" 
+          alt="Medical Background" 
+          className="w-full h-full object-cover opacity-[0.04] grayscale" 
+        />
+      </div>
+
+      <div className="relative z-10 w-full max-w-[500px] p-10 bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(147,51,234,0.1)] mx-4">
+        
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+            Aura<span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Health</span>
+          </h1>
+          <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-2">Create Patient Account</p>
         </div>
 
-        <div>
-          <label>Email:</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Full Name</label>
+              <input 
+                type="text" 
+                placeholder="John Doe" 
+                value={name}
+                onChange={(e) => setName(e.target.value)} 
+                required
+                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Email</label>
+              <input 
+                type="email" 
+                placeholder="john@example.com" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)} 
+                required
+                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              />
+            </div>
+          </div>
 
-        <div>
-          <label>Password:</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+          <div>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Secure Password</label>
+            <input 
+              type="password" 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} 
+              required
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+            />
+          </div>
 
-        <div>
-          <label>Contact:</label><br />
-          <input
-            type="number"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-          />
-        </div>
+          <div>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Contact Number</label>
+            <input 
+              type="number" 
+              placeholder="Your Mobile Number" 
+              value={contact}
+              onChange={(e) => setContact(e.target.value)} 
+              required
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
+          </div>
 
-        <div>
-          <label>Address:</label><br />
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </div>
+          <div>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Home Address</label>
+            <input 
+              type="text" 
+              placeholder="Street, City, Zip" 
+              value={address}
+              onChange={(e) => setAddress(e.target.value)} 
+              required
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+            />
+          </div>
 
-        <br />
-        <button type="submit" disabled={loading}>
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
+          <button 
+            type="submit" disabled={loading}
+            className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-70"
+          >
+            {loading ? "Creating Account..." : "Register Now"}
+          </button>
+        </form>
 
-      <p>{message}</p>
+        {message && (
+          <p className={`text-center text-xs mt-4 font-bold ${message.includes('Successfully') ? 'text-green-500' : 'text-red-500'}`}>
+            {message}
+          </p>
+        )}
+
+        <p className="text-center text-sm text-slate-500 mt-6">
+          Already have an account? 
+          <button onClick={() => navigate('/')} className="text-purple-600 hover:underline ml-1 font-semibold">Sign In</button>
+        </p>
+      </div>
     </div>
   );
 };

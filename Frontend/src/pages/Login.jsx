@@ -1,20 +1,103 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState('user');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const handleLogin =async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-  const paths = {
-    user: '/Userlogin',
-    doctor: '/Doctorlogin',
-    admin: '/Adminlogin'
-  };
+    if (!email || !password) {
+      setMessage("Please fill all fields");
+      return;
+    }
+    if(role==="user"){
+    try {
+      const response = await axios.post(
+        "http://localhost:7000/userlogin",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    navigate(paths[role]);
-  };
+      if (response.status === 200 && response.data.token) {
+        Cookies.set("token", response.data.token, { expires: 1 });
+
+        setMessage("Login Successful");
+        navigate("/Userdashboard");
+      } else {
+        setMessage(response.data.message || "Invalid Credentials");
+      }
+
+    } catch (err) {
+      console.error("Login Error:", err.response ? err.response.data : err.message);
+      setMessage(err.response?.data?.message || "Login Failed! Please try again.");
+    } finally {
+      setLoading(false);
+    }
+    }
+
+    else if(role==="doctor"){
+
+    try {
+      const response = await axios.post(
+        "http://localhost:7000/doctorlogin",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.status === 200 && response.data.token) {
+        Cookies.set("emstoken", response.data.token, { expires: 1 });
+
+        setMessage("Login Successful");
+        navigate("/Doctordashboard");
+      } else {
+        setMessage(response.data.message || "Invalid Credentials");
+      }
+
+    } catch (err) {
+      console.error("Login Error:", err.response ? err.response.data : err.message);
+      setMessage(err.response?.data?.message || "Login Failed! Please try again.");
+    } finally {
+      setLoading(false);
+    }
+    
+
+  }
+
+  else if(role==="admin"){
+    try {
+      const response = await axios.post(
+        "http://localhost:7000/adminlogin",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.status === 200 && response.data.token) {
+      
+        Cookies.set("emtoken", response.data.token, { expires: 1 });
+
+        setMessage("Login Successful");
+        navigate("/Admindashboard");
+      } else {
+        setMessage(response.data.message || "Invalid login credentials");
+      }
+
+    } catch (err) {
+      console.error("Login Error:", err.response ? err.response.data : err.message);
+      setMessage(err.response?.data?.message || "Login failed! Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+}
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans overflow-hidden">
@@ -62,6 +145,8 @@ const Login = () => {
             <input 
               type="email" 
               placeholder="Email"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
               required
               className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
             />
@@ -72,6 +157,8 @@ const Login = () => {
             <input 
               type="password" 
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
             />
@@ -84,6 +171,27 @@ const Login = () => {
             Sign In as {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         </form>
+        
+         {role === "user" && (
+          <p className="text-center text-sm text-slate-500 mt-6">
+            Don't have an account? 
+            <button onClick={() => navigate('/Userregister')} className="text-purple-600 hover:underline ml-1 font-semibold">Register</button>
+          </p>
+        )}
+
+        {role === "doctor" && (
+          <p className="text-center text-sm text-slate-500 mt-6">
+            Don't have an account?  
+            <button onClick={() => navigate('/Doctorregister')} className="text-purple-600 hover:underline ml-1 font-semibold">Register</button>
+          </p>
+        )}
+
+        {message && (
+          <p className={`text-center text-xs mt-4 font-bold text-red-600`}>
+            {message}
+          </p>
+        )}
+
       </div>
     </div>
   );
