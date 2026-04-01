@@ -7,7 +7,7 @@ import Userregister from './pages/Userregister';
 import Userdashboard from './pages/Userdashboard';
 import Viewusers from './pages/Viewusers';
 import Viewdoctors from './pages/Viewdoctors';
-import DoctorRequest from './pages/doctorrequest';
+import DoctorRequest from './pages/Doctorrequest';
 import Approved from './pages/Approved';
 import RejectedDoctors from './pages/RejectedDoctors';
 import Appointment from './pages/Appointment';
