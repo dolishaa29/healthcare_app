@@ -13,7 +13,7 @@ const Viewusers = () => {
       setLoading(true);
 
       try {
-        const response = await axios.get("http://localhost:7000/viewusers");
+        const response = await axios.get(import.meta.env.VITE_API_URL + "/viewusers");
 
         if (response.status === 200) {
           setUsers(response.data.users);

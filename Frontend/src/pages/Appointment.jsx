@@ -16,7 +16,7 @@ const Appointment = () => {
     const fetchDoctors = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:7000/viewdoctors");
+        const response = await axios.get(import.meta.env.VITE_API_URL + "/viewdoctors");
 
         if (response.status === 200) {
           setDoctors(response.data.doctors);
@@ -42,7 +42,7 @@ const Appointment = () => {
     try {
 
       const res = await axios.post(
-        "http://localhost:7000/appointrequest",
+        import.meta.env.VITE_API_URL + "/appointrequest",
         {
           doctorid,
           doctormail,

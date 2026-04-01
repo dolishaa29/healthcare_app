@@ -16,12 +16,14 @@ import Login from './pages/Login';
 import PrivateRoute from './components/priroutes';
 import Userviewapp from './pages/Userviewapp';
 import Doctorviewapp from './pages/doctorviewapp';
+import Adminregister from './pages/Adminregister';
 
 function App() {
   return (
     <div>
       <BrowserRouter>
       <Routes>
+        <Route path='/hehe' element={<Adminregister/>}/>
         <Route path='/' element={<Login/>}/>
         <Route path='/Admindashboard' element={<PrivateRoute><Admindashboard/></PrivateRoute>}/>
         <Route path='/Doctorregister' element={<Doctorregister/>}/>

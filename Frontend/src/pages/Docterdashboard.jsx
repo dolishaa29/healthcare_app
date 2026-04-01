@@ -19,7 +19,7 @@ const Docterdashboard = () => {
 
     const fetchDashboard = async () => {setLoading(true);
       try {
-        const response = await axios.get("http://localhost:7000/doctordashboard", {
+        const response = await axios.get(import.meta.env.VITE_API_URL + "/doctordashboard", {
           headers: {
                      "Content-Type": "application/json",
                      "Authorization": `Bearer ${Cookies.get("emstoken")}`,

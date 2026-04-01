@@ -6,7 +6,7 @@ const DoctorRequest = () => {
 
   const fetchDoctors = async () => {
     try {
-      const res = await axios.get("http://localhost:7000/doctorrequest");
+      const res = await axios.get(import.meta.env.VITE_API_URL + "/doctorrequest");
       setDoctors(res.data.doctors);
     } catch (err) {
       console.log(err);
@@ -19,7 +19,7 @@ const DoctorRequest = () => {
 
   const handleApprove = async (doc) => {
     try {
-      await axios.post("http://localhost:7000/doctorregister", {
+      await axios.post(import.meta.env.VITE_API_URL + "/doctorregister", {
         name: doc.name,
         email: doc.email,
         contact: doc.contact,
@@ -27,7 +27,7 @@ const DoctorRequest = () => {
         address: doc.address,
       });
 
-      await axios.put("http://localhost:7000/doctorpermissionupdate", {
+      await axios.put(import.meta.env.VITE_API_URL + "/doctorpermissionupdate", {
         id: doc._id,
         permission: "approved",
       });
@@ -41,7 +41,7 @@ const DoctorRequest = () => {
 
   const handleReject = async (doc) => {
     try {
-      await axios.put("http://localhost:7000/doctorpermissionupdate", {
+      await axios.put(import.meta.env.VITE_API_URL + "/doctorpermissionupdate", {
         id: doc._id,
         permission: "rejected",
       });

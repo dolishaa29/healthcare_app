@@ -21,7 +21,7 @@ const Login = () => {
     if(role==="user"){
     try {
       const response = await axios.post(
-        "http://localhost:7000/userlogin",
+        import.meta.env.VITE_API_URL + "/userlogin",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -47,7 +47,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:7000/doctorlogin",
+        import.meta.env.VITE_API_URL + "/doctorlogin",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -74,7 +74,7 @@ const Login = () => {
   else if(role==="admin"){
     try {
       const response = await axios.post(
-        "http://localhost:7000/adminlogin",
+        import.meta.env.VITE_API_URL + "/adminlogin",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );

@@ -22,7 +22,7 @@ const Userregister = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:7000/userregister", {
+      const response = await axios.post(import.meta.env.VITE_API_URL + "/userregister", {
         email, password, name, contact, address,
       });
 

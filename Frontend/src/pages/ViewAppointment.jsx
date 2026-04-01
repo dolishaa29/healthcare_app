@@ -19,7 +19,7 @@ const ViewAppointment = () => {
   const fetchAppointments = async () => {
     try {
 
-      const res = await axios.get("http://localhost:7000/viewappointment", {
+      const res = await axios.get(import.meta.env.VITE_API_URL + "/viewappointment", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("emtoken")}`,
@@ -50,11 +50,11 @@ const ViewAppointment = () => {
       };
 
       await axios.post(
-        "http://localhost:7000/approveappointment",
+        import.meta.env.VITE_API_URL + "/approveappointment",
         sendData
       );
 
-      await axios.put("http://localhost:7000/appointmentstatus", {
+      await axios.put(import.meta.env.VITE_API_URL + "/appointmentstatus", {
         id: selectedAppointment._id,
         status: "approved"
       });
@@ -75,7 +75,7 @@ const ViewAppointment = () => {
   const rejectRequests = async (id) => {
     try {
 
-      await axios.put("http://localhost:7000/appointmentstatus", {
+      await axios.put(import.meta.env.VITE_API_URL + "/appointmentstatus", {
         id: id,
         status: "rejected"
       });

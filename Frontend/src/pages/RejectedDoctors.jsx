@@ -7,7 +7,7 @@ const RejectedDoctors = () => {
 
   const fetchDoctors = async () => {
     try {
-      const res = await axios.get("http://localhost:7000/doctorrequest");
+      const res = await axios.get(import.meta.env.VITE_API_URL + "/doctorrequest");
       setDoctors(res.data.doctors);
     } catch (err) {
       console.log(err);

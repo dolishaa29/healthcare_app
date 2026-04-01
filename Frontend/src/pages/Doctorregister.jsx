@@ -22,7 +22,7 @@ const Doctorregister = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:7000/doctorpermission", {
+      const response = await axios.post(import.meta.env.VITE_API_URL + "/doctorpermission", {
         email, name, specialization, contact, address,
       });
 

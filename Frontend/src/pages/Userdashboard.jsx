@@ -21,7 +21,7 @@ const Userdashboard = () => {
     const fetchDashboard = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:7000/userdashboard", {
+        const response = await axios.get(import.meta.env.VITE_API_URL + "/userdashboard", {
           headers: {
                      "Content-Type": "application/json",
                      "Authorization": `Bearer ${Cookies.get("token")}`,

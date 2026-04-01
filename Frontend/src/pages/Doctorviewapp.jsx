@@ -11,7 +11,7 @@ const Doctorviewapp = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get("http://localhost:7000/doctorviewapp", {
+      const response = await axios.get(import.meta.env.VITE_API_URL + "/doctorviewapp", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("emstoken")}`,

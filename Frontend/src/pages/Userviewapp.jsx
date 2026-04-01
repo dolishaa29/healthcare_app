@@ -12,7 +12,7 @@ const Userviewapp = () => {
  
    const fetchAppointments = async () => {
      try {
-       const response = await axios.get("http://localhost:7000/userviewapp", {
+       const response = await axios.get(import.meta.env.VITE_API_URL + "/userviewapp", {
          headers: {
            "Content-Type": "application/json",
            Authorization: `Bearer ${Cookies.get("token")}`,
