@@ -141,7 +141,7 @@ const Login = () => {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2">Login Identity</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2">Login </label>
             <input 
               type="email" 
               placeholder="Email"
@@ -153,7 +153,7 @@ const Login = () => {
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2">Secure Key</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-2">Secure </label>
             <input 
               type="password" 
               placeholder="Password"
