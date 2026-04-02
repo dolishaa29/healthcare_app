@@ -125,7 +125,12 @@ exports.doctorlogout=async(req,res)=>
 exports.doctorprofile=async(req,res)=>
 {
     const doctor = req.doctor;
-    return res.status(200).json({success: true,doctor})
+    let doctorData = await rec.findById(doctor._id);
+    if (!doctorData) {
+        return res.status(404).json({ success: false, msg: "Doctor not found" });
+    }
+
+    return res.status(200).json({success: true,doctors:doctorData});
 }
 
 exports.doctorlist=async(req,res)=>

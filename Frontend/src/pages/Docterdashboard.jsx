@@ -10,6 +10,7 @@ import {
   Menu, 
   X, 
   ChevronRight,
+  User,
 } from 'lucide-react';
 
 const Docterdashboard = () => {
@@ -42,6 +43,10 @@ const Docterdashboard = () => {
       setLoading(false);
     }
   };
+  const menuItems = [
+    { name: 'View Appointments', path: '/doctorviewapp', icon: <CalendarCheck size={20} /> },
+    { name: 'Profile', path: '/doctorprofile', icon: <User size={20} /> },
+  ];
 
   const handleLogout = () => {
     Cookies.remove("emstoken");
@@ -74,12 +79,15 @@ const Docterdashboard = () => {
 
         <nav className="flex-1 px-3 space-y-1.5">
           <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active isExpanded={isSidebarOpen} />
-          <SidebarLink 
-            icon={<CalendarCheck size={20}/>} 
-            label="Appointments" 
-            onClick={() => navigate('/doctorviewapp')} 
-            isExpanded={isSidebarOpen} 
-          />
+          {menuItems.map((item) => (
+            <SidebarLink 
+              key={item.path}
+              icon={item.icon} 
+              label={item.name} 
+              onClick={() => navigate(item.path)} 
+              isExpanded={isSidebarOpen} 
+            />
+          ))}
         </nav>
 
         <div className="p-5 border-t border-slate-50">

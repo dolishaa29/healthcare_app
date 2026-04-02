@@ -17,6 +17,8 @@ import PrivateRoute from './components/priroutes';
 import Userviewapp from './pages/Userviewapp';
 import Doctorviewapp from './pages/Doctorviewapp';
 import Adminregister from './pages/Adminregister';
+import DoctorProfile from './pages/DoctorProfile';
+import Changepassworddoc from './pages/changepassworddoc';
 
 function App() {
   return (
@@ -40,7 +42,8 @@ function App() {
         <Route path='*' element={<h1>No Such Router Exist</h1>} />
         <Route path='/userviewapp' element={<Userviewapp/>}/>
         <Route path='/doctorviewapp' element={<Doctorviewapp/>}/>
-        
+        <Route path='/doctorprofile' element={<DoctorProfile/>}/>
+        <Route path='/changepassword' element={<Changepassworddoc/>}/>
       </Routes>
       </BrowserRouter>
     </div>
