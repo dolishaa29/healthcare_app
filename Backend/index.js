@@ -1,19 +1,23 @@
 let express = require("express");
 let path = require("path");
 let dotenv = require("dotenv");
-let cors = require("cors");
 let cookieParser = require("cookie-parser");
 
 dotenv.config();
 
 let app = express();
 
-app.use(cors({
-  origin: "https://auraahealth.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://auraahealth.vercel.app');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
