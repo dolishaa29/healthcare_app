@@ -167,3 +167,34 @@ exports.doctorviewapp=async(req,res)=>{
     console.log("Appointments for doctor:", appointments);
     return res.status(200).json({ success: true, appointments });
 }
+
+exports.doctorupdate=async(req,res)=>
+{
+    const doctor = req.doctor;
+    let updateData = req.body;
+    let updatedDoctor = await rec.findByIdAndUpdate(doctor._id, updateData, { new: true });
+    return res.status(200).json({ success: true, msg: "doctor profile updated successfully", doctor: updatedDoctor });
+}
+
+exports.changePassword=async(req,res)=>
+{
+try{
+    const doctor = req.doctor;
+    let oldpassword=req.body.oldpassword;
+    let newpassword=req.body.newpassword;
+    let data=await rec.findById(doctor._id);
+    let existpass=data.password;
+    let pass=await bct.compare(oldpassword,existpass);
+    if(!pass)    {
+        return res.status(400).json({msg:"invalid old password"});
+    }
+    newpassword=await bct.hash(newpassword,10);
+    await rec.findByIdAndUpdate(doctor._id,{password:newpassword});
+    return res.status(200).json({msg:"password changed successfully"});
+}
+catch(err)
+{
+    console.log(err);
+    res.status(500).json({msg:"internal server error"});
+}
+}

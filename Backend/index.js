@@ -10,7 +10,8 @@ let app = express();
 
 // ✅ CORS setup
 app.use(cors({
-  origin: "https://auraahealth.vercel.app",
+  //origin: "https://auraahealth.vercel.app",
+  origin:"http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -41,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 // Server start
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
