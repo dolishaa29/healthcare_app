@@ -8,8 +8,8 @@ dotenv.config();
 
 let app = express();
 app.use(cors({
-  //origin: "https://auraahealth.vercel.app",
-  origin:"*",
+  origin: "https://auraahealth.vercel.app",
+  //origin:"*",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
