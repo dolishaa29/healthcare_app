@@ -25,7 +25,7 @@ const Changepassworddoc = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:7000/changepassword",
+        `${import.meta.env.VITE_API_URL}/changepassword`,
         {
           oldpassword: currentPassword,
           newpassword: newPassword,

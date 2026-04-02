@@ -19,7 +19,7 @@ const DoctorProfile = () => {
   const fetchDoctorProfile = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:7000/doctorprofile", {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/doctorprofile`, {
         headers: { Authorization: `Bearer ${Cookies.get("emstoken")}` },
         withCredentials: true,
       });
@@ -55,7 +55,7 @@ const DoctorProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put("http://localhost:7000/updatedoctor", doctor, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/updatedoctor`, doctor, {
         headers: { Authorization: `Bearer ${Cookies.get("emstoken")}` },
         withCredentials: true,
       });
