@@ -40,8 +40,6 @@ const Changepassworddoc = () => {
         setCurrentPassword('');
         setNewPassword('');
         setConfirmNewPassword('');
-        // Optional: redirect after success
-        // setTimeout(() => navigate('/dashboard'), 2000);
       }
     } catch (err) {
       setError(err.response?.data?.msg || "Failed to change password");

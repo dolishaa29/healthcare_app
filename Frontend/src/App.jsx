@@ -19,6 +19,7 @@ import Doctorviewapp from './pages/Doctorviewapp';
 import Adminregister from './pages/Adminregister';
 import DoctorProfile from './pages/DoctorProfile';
 import Changepassworddoc from './pages/changepassworddoc';
+import ViewDoctorss from './pages/ViewDoctor';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path='/doctorviewapp' element={<Doctorviewapp/>}/>
         <Route path='/doctorprofile' element={<DoctorProfile/>}/>
         <Route path='/changepassword' element={<Changepassworddoc/>}/>
+        <Route path='/ViewDoctorss' element={<ViewDoctorss/>}/>
       </Routes>
       </BrowserRouter>
     </div>

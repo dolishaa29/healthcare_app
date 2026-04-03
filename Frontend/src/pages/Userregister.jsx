@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 const Userregister = () => {
   const [email, setEmail] = useState("");
@@ -102,13 +104,12 @@ const Userregister = () => {
 
           <div>
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Contact Number</label>
-            <input 
-              type="number" 
-              placeholder="Your Mobile Number" 
+            <PhoneInput
+              placeholder="Your Mobile Number"
               value={contact}
-              onChange={(e) => setContact(e.target.value)} 
+              onChange={setContact}
               required
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
             />
           </div>
 

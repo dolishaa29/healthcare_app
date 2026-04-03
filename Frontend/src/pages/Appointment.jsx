@@ -44,7 +44,7 @@ const Appointment = () => {
     try {
       const res = await axios.post(
         import.meta.env.VITE_API_URL + "/appointrequest",
-        { doctorid, doctormail, description },
+        { doctorid, description },
         {
           headers: {
             "Content-Type": "application/json",
@@ -71,11 +71,9 @@ const Appointment = () => {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans overflow-hidden py-10">
       
-      {/* Decorative Blur Orbs */}
       <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
       <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
 
-      {/* Subtle Background Image */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img 
           src="public/health.jfif" 
@@ -94,7 +92,6 @@ const Appointment = () => {
         </div>
 
         <div className="space-y-5">
-          {/* Doctor Dropdown */}
           <div>
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Select Doctor</label>
             <div className="relative group">
@@ -118,11 +115,10 @@ const Appointment = () => {
                 {loading ? <Loader2 size={18} className="animate-spin" /> : <ChevronDown size={18} />}
               </div>
               <Stethoscope size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 hidden md:block" />
-              {/* If you want icons inside input, adjust padding-left: pl-11 */}
+
             </div>
           </div>
 
-          {/* Description Textarea */}
           <div>
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Reason for Visit</label>
             <div className="relative">
@@ -137,7 +133,6 @@ const Appointment = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <button 
             onClick={sendAppointmentRequest}
             disabled={submitting || loading}
@@ -157,7 +152,6 @@ const Appointment = () => {
           </button>
         </div>
 
-        {/* Feedback Message */}
         {message && (
           <p className={`text-center text-xs mt-4 font-bold ${message.includes('Successfully') ? 'text-green-500' : 'text-red-500'}`}>
             {message}
