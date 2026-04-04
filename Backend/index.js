@@ -15,28 +15,38 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"]
 };
 
-// ✅ This is enough
 app.use(cors(corsOptions));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "public")));
 
-let { health } = require("./dbconnection");
+require("./dbconnection");
 
-app.use("/", require("./router/adminrouter"));
-app.use("/", require("./router/doctorrouter"));
-app.use("/", require("./router/userrouter"));
-app.use("/", require("./router/appointrouter"));
-
+// ✅ test route
 app.get("/", (req, res) => {
   res.send("Server is running 🚀");
 });
 
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Backend is working fine" });
+});
+
+// ✅ routes
+app.use("/", require("./router/adminrouter"));
+app.use("/", require("./router/doctorrouter"));
+app.use("/", require("./router/userrouter"));
+app.use("/", require("./router/appointrouter"));
+
+// ✅ optional global error handler
+app.use((err, req, res, next) => {
+  console.error("Global Error:", err);
+  res.status(500).json({
+    success: false,
+    message: "Something went wrong",
+    error: err.message
+  });
 });
 
 const PORT = process.env.PORT || 7000;
