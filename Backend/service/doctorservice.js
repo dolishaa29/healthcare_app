@@ -104,7 +104,7 @@ exports.doctorlogin=async(req,res)=>
 
  if(pass)
  {
-    let token=jwt.sign({token:data.email},"aabb",{
+    let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{
         expiresIn:"1d"
     });
     res.cookie('emstoken', token);

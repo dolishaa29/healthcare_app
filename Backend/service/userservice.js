@@ -45,7 +45,7 @@ exports.userlogin=async(req,res)=>
     let pass=await bcrypt.compare(password,lpass);
     if(pass)
     {
-    let token=jwt.sign({token:data.email},"aabb",{expiresIn:"1h"});
+    let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{expiresIn:"1h"});
     
     res.cookie("token",token);
     console.log("token:",token);

@@ -36,7 +36,7 @@ console.log(lpass);
 pass=await bct.compare(password,lpass); 
 if(pass)
 {
-let token=jwt.sign({token:data.email},"aabb",{
+let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{
 expiresIn:"1d"
 });
 res.cookie('token', token);

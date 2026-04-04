@@ -6,7 +6,7 @@ async function auth(req, res, next) {
     if (req.cookies.emstoken != undefined && req.cookies.emstoken != "") {
       const token = req.cookies.emstoken;
       
-      const data = jwt.verify(token, "aabb");
+      const data = jwt.verify(token, process.env.JWT_SECRET);
       let doctor= await doctormodel.findOne({ email: data.token });
       
       if (!doctor) return res.status(403).json({ msg: "Doctor not found" });
