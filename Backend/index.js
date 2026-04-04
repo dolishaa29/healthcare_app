@@ -8,7 +8,6 @@ dotenv.config();
 
 const app = express();
 
-// ✅ CORS config
 const corsOptions = {
   origin: "https://auraahealth.vercel.app",
   credentials: true,
@@ -16,11 +15,8 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"]
 };
 
-// ✅ Must be before routes
+// ✅ This is enough
 app.use(cors(corsOptions));
-
-// ✅ VERY IMPORTANT for preflight requests
-app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +26,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 let { health } = require("./dbconnection");
 
-// Routes
 app.use("/", require("./router/adminrouter"));
 app.use("/", require("./router/doctorrouter"));
 app.use("/", require("./router/userrouter"));
