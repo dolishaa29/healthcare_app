@@ -1,19 +1,24 @@
 let rec4=require("../model/Appointment/appointrequest");
 let rec5=require("../model/Appointment/appointment");
+let rec=require("../model/doctor");
 exports.appointrequest=async(req,res)=>
 {
  console.log("Appointment request received");   
  let user=req.user;
  let doctorid=req.body.doctorid;
- let doctormail=req.body.doctormail;
  let description=req.body.description;
+ let data=await rec.findOne({_id:doctorid});
+ if(!data)
+ {
+    return res.status(404).json({success: false,msg:'Doctor not found'});
+ }
 
  let appointment=new rec4({
     userid:user._id,
     name:user.name,
     email:user.email,
     doctorid:doctorid,
-    doctormail:doctormail,
+    doctormail:data.email,
     description:description,
  });
 
