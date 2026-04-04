@@ -1,19 +1,26 @@
-let express = require("express");
-let path = require("path");
-let dotenv = require("dotenv");
-let cors = require("cors");
-let cookieParser = require("cookie-parser");
+const express = require("express");
+const path = require("path");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 
-let app = express();
+const app = express();
 
-app.use(cors({
+// ✅ CORS config
+const corsOptions = {
   origin: "https://auraahealth.vercel.app",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
-}));
+};
+
+// ✅ Must be before routes
+app.use(cors(corsOptions));
+
+// ✅ VERY IMPORTANT for preflight requests
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,6 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 let { health } = require("./dbconnection");
 
+// Routes
 app.use("/", require("./router/adminrouter"));
 app.use("/", require("./router/doctorrouter"));
 app.use("/", require("./router/userrouter"));
