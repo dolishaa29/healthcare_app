@@ -2,7 +2,7 @@ let express=require("express");
 let auth=require("../middleware/admin");
 let auths=require("../middleware/doctor");
 let router=express.Router();
-const { doctorregister , doctorlogin,doctorlogout,doctorprofile, doctorlist, doctorpermission, doctorrequest, doctorpermissionupdate, doctorDashboard, doctorviewapp, doctorupdate, changePassword} = require("../controller/doctorcontroller");
+const { doctorregister , doctorlogin,doctorlogout,doctorprofile, doctorlist, doctorpermission, doctorrequest, doctorpermissionupdate, doctorDashboard, doctorviewapp, doctorupdate, changePassword, doctorprofileview} = require("../controller/doctorcontroller");
 
 
 router.post("/doctorregister",doctorregister);
@@ -17,6 +17,7 @@ router.get("/doctordashboard",auths,doctorDashboard);
 router.get("/doctorviewapp",auths,doctorviewapp);
 router.put("/updatedoctor",auths,doctorupdate);
 router.put("/changepassword",auths,changePassword);
+router.get("/doctorprofileview/:id",doctorprofileview);
 
 
 

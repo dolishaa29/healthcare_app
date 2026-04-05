@@ -47,7 +47,7 @@ const DoctorCard = ({ doctor }) => {
   };
 
   const handleViewMore = () => {
-    navigate(`/doctors/${doctor._id}`);
+    navigate(`/doctorprofileview/${doctor._id}`);
   };
 
   return (
@@ -62,7 +62,6 @@ const DoctorCard = ({ doctor }) => {
         <p>{doctor.experienceYears} Years of Expertise</p>
       </div>
 
-      {/* Basic Details */}
       <div>
         <div>
           <span>🏥 Hospital:</span>
