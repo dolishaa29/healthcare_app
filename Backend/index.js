@@ -28,13 +28,7 @@ app.use("/", require("./router/doctorrouter"));
 app.use("/", require("./router/userrouter"));
 app.use("/", require("./router/appointrouter"));
 
-app.get("/", (req, res) => {
-  res.send("Server is running 🚀");
-});
 
-app.get("/health", (req, res) => {
-  res.status(200).json({ message: "Backend is working fine" });
-});
 
 const PORT = process.env.PORT || 7000;
 

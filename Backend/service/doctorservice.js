@@ -176,8 +176,20 @@ exports.doctorviewapp=async(req,res)=>{
 exports.doctorupdate=async(req,res)=>
 {
     const doctor = req.doctor;
-    let updateData = req.body;
-    let updatedDoctor = await rec.findByIdAndUpdate(doctor._id, updateData, { new: true });
+    let image = req.file ? req.file.path : null;
+    let updateData = {
+        name: req.body.name,
+        specialization: req.body.specialization,
+        contact: req.body.contact,
+        address: req.body.address,
+        hospitalName: req.body.hospitalName,
+        clinicAddress: req.body.clinicAddress,
+        bio: req.body.bio,
+        experienceYears: req.body.experienceYears,
+        degree: req.body.degrees,
+        image: image,
+    };
+    let updatedDoctor = await rec.findOneAndUpdate({ _id: doctor._id }, updateData, { new: true });
     return res.status(200).json({ success: true, msg: "doctor profile updated successfully", doctor: updatedDoctor });
 }
 

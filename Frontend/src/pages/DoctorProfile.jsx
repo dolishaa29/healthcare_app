@@ -8,10 +8,12 @@ const DoctorProfile = () => {
     name: "", email: "", contact: "", address: "",
     gender: "", dateOfBirth: "", age: "", experienceYears: "",
     hospitalName: "", clinicAddress: "", bio: "",
-    specialization: [""],
-    degrees: [{ title: "", institution: "", year: "" }],
+    specialization: "",
+    degrees: { title: "", institution: "", year: "" },
   });
 
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -23,7 +25,17 @@ const DoctorProfile = () => {
         headers: { Authorization: `Bearer ${Cookies.get("emstoken")}` },
         withCredentials: true,
       });
-      setDoctor(response.data.doctors);
+      const doctorData = response.data.doctors;
+      setDoctor({
+        ...doctorData,
+        specialization: doctorData.specialization || "",
+        degrees: Array.isArray(doctorData.degrees) && doctorData.degrees.length
+          ? doctorData.degrees[0]
+          : { title: "", institution: "", year: "" },
+      });
+      if (doctorData.image) {
+        setImagePreview(`${import.meta.env.VITE_API_URL}/${doctorData.image}`);
+      }
     } catch (err) {
       setError("Failed to fetch profile details.");
     } finally {
@@ -40,23 +52,62 @@ const DoctorProfile = () => {
     setDoctor((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSpecializationChange = (index, value) => {
-    const updated = [...doctor.specialization];
-    updated[index] = value;
-    setDoctor((prev) => ({ ...prev, specialization: updated }));
+  const handleSpecializationChange = (value) => {
+    setDoctor((prev) => ({ ...prev, specialization: value }));
   };
 
-  const handleDegreeChange = (index, field, value) => {
-    const updated = [...doctor.degrees];
-    updated[index][field] = value;
-    setDoctor((prev) => ({ ...prev, degrees: updated }));
+  const handleDegreeChange = (field, value) => {
+    setDoctor((prev) => ({
+      ...prev,
+      degrees: { ...prev.degrees, [field]: value },
+    }));
   };
 
+
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`${import.meta.env.VITE_API_URL}/updatedoctor`, doctor, {
-        headers: { Authorization: `Bearer ${Cookies.get("emstoken")}` },
+      const formData = new FormData();
+      
+      formData.append('name', doctor.name);
+      formData.append('email', doctor.email);
+      formData.append('contact', doctor.contact);
+      formData.append('address', doctor.address);
+      formData.append('gender', doctor.gender);
+      formData.append('dateOfBirth', doctor.dateOfBirth);
+      formData.append('age', doctor.age);
+      formData.append('experienceYears', doctor.experienceYears);
+      formData.append('hospitalName', doctor.hospitalName);
+      formData.append('clinicAddress', doctor.clinicAddress);
+      formData.append('bio', doctor.bio);
+      formData.append('specialization', doctor.specialization);
+      formData.append('degrees', JSON.stringify([doctor.degrees]));
+      
+      if (imageFile) {
+        formData.append('image', imageFile);
+      }
+
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/updatedoctor`, formData, {
+        headers: { 
+          Authorization: `Bearer ${Cookies.get("emstoken")}`,
+          'Content-Type': 'multipart/form-data'
+        },
         withCredentials: true,
       });
       if (response.status === 200) alert("Profile Updated Successfully!");
@@ -97,6 +148,35 @@ const DoctorProfile = () => {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-8">
             
+            <section className="text-center">
+              <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center justify-center gap-2">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Profile Picture
+              </h3>
+              <div className="flex flex-col items-center space-y-4">
+                <div className="w-32 h-32 rounded-full border-4 border-purple-200 overflow-hidden bg-slate-100">
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Profile Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-400">
+                      <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <label className="cursor-pointer px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                  Choose Image
+                </label>
+                {imageFile && <p className="text-xs text-slate-500">{imageFile.name}</p>}
+              </div>
+            </section>
+            
             <section>
               <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span> Basic Information
@@ -125,6 +205,7 @@ const DoctorProfile = () => {
                     </div>
                 </div>
               </div>
+
             </section>
 
             <section>
@@ -150,22 +231,33 @@ const DoctorProfile = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                <section>
                 <h3 className={labelStyle}>Specializations</h3>
-                {doctor.specialization.map((spec, index) => (
-                  <input key={index} value={spec} onChange={(e) => handleSpecializationChange(index, e.target.value)} className={`${inputStyle} mb-2`} placeholder="e.g. Cardiology" />
-                ))}
+                <input value={doctor.specialization} onChange={(e) => handleSpecializationChange(e.target.value)} className={inputStyle} placeholder="e.g. Cardiology" />
               </section>
 
               <section>
-                <h3 className={labelStyle}>Academic Degrees</h3>
-                {doctor.degrees.map((deg, index) => (
-                  <div key={index} className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-3 mb-3">
-                    <input value={deg.title} onChange={(e) => handleDegreeChange(index, "title", e.target.value)} className={inputStyle} placeholder="Degree Title" />
-                    <div className="grid grid-cols-2 gap-2">
-                        <input value={deg.institution} onChange={(e) => handleDegreeChange(index, "institution", e.target.value)} className={inputStyle} placeholder="Institution" />
-                        <input value={deg.year} onChange={(e) => handleDegreeChange(index, "year", e.target.value)} className={inputStyle} placeholder="Year" />
-                    </div>
+                <h3 className={labelStyle}>Academic Degree</h3>
+                <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-3">
+                  <input
+                    value={doctor.degrees.title}
+                    onChange={(e) => handleDegreeChange("title", e.target.value)}
+                    className={inputStyle}
+                    placeholder="Degree Title"
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      value={doctor.degrees.institution}
+                      onChange={(e) => handleDegreeChange("institution", e.target.value)}
+                      className={inputStyle}
+                      placeholder="Institution"
+                    />
+                    <input
+                      value={doctor.degrees.year}
+                      onChange={(e) => handleDegreeChange("year", e.target.value)}
+                      className={inputStyle}
+                      placeholder="Year"
+                    />
                   </div>
-                ))}
+                </div>
               </section>
             </div>
 

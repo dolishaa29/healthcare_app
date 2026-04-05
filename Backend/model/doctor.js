@@ -20,20 +20,11 @@ let doctormodel=mongo.Schema({
       default: 0,
     },
 
-    degrees: [
-      {
+    degrees: {
         title: { type: String, default: null },
         institution: { type: String, default: null },
         year: { type: Number, default: 0 },
-      },
-    ],
-
-    specialization: [
-      {
-        type: String,
-        default: null,
-      },
-    ],
+  },
 
     experienceYears: {
       type: Number,
@@ -50,6 +41,11 @@ let doctormodel=mongo.Schema({
     },
 
     bio: {
+      type: String,
+      default: null,
+    },
+
+    image: {
       type: String,
       default: null,
     },
