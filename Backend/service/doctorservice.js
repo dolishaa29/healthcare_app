@@ -203,3 +203,13 @@ catch(err)
     res.status(500).json({msg:"internal server error"});
 }
 }
+
+exports.doctorprofileview=async(req,res)=>
+{
+    id=req.params.id;
+    let doctor=await rec.findById(id);
+    if(!doctor)    {
+        return res.status(404).json({success: false,msg:'doctor not found'})
+    }
+    return res.status(200).json({success: true,doctor});
+}
