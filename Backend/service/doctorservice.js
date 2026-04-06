@@ -2,6 +2,7 @@ let rec=require("../model/doctor");
 let rec2=require("../model/permission");
 let app=require("../model/Appointment/appointment");
 let jwt=require("jsonwebtoken");
+let otp=require("../model/OTP");
 let bct=require("bcryptjs");
 let crypto=require("crypto");
 const nodemailer = require("nodemailer");
@@ -229,3 +230,62 @@ exports.doctorprofileview=async(req,res)=>
     }
     return res.status(200).json({success: true,doctor:doctor});
 }
+
+exports.otpgenerate=async(req,res)=>{
+    try{
+    let email=req.body.email;
+    let role=req.body.role;
+    let doctor=await rec.findOne({email:email});
+    if(!doctor)    
+    {
+        return res.status(404).json({success: false,msg:'invalid doctor email'});
+    }
+    let otp=Math.floor(100000 + Math.random() * 900000);
+    let existingOtp = await otp.findOne({ email: email });
+    if (existingOtp) {
+        existingOtp.otp = otp;
+        existingOtp.createdAt = Date.now();
+        await existingOtp.save();
+    } else {
+        let newOtp = new otp({ email: email, role: role, otp: otp });
+        await newOtp.save();
+    }
+
+    const mail = {
+        from: "auraaahealthh@gmail.com",
+        to: email,
+        subject: "Password Reset OTP",
+        text: `Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`
+    };
+
+    await transporter.sendMail(mail);
+    return res.status(200).json({ success: true, msg: "OTP sent to email" });  
+
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({msg:"internal server error"});
+    }
+}
+
+exports.otpverify=async(req,res)=>
+{
+    try
+    {
+    let email=req.body.email;
+    let otp=req.body.otp;
+    let role=req.body.role;
+    let record=await otp.findOne({email:email,otp:otp,role:role});
+    if(!record)
+    {
+        return res.status(400).json({success: false,msg:"invalid OTP"});
+    }
+        await otp.deleteOne({email:email,otp:otp,role:role});
+        return res.status(200).json({success: true,msg:"OTP verified successfully"});
+}
+    catch(err)
+    {
+        console.log(err);
+        res.status(500).json({msg:"internal server error"});
+    }
+}    
