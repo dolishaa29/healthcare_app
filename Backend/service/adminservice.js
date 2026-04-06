@@ -22,9 +22,9 @@ return res.status(201).json({success: true,msg:'admin already registered'})
 
 exports.adminlogin=async(req,res)=>
 {
-
 let email=req.body.email;
 let password=req.body.password;
+console.log(email,password);
 let data=await rec.findOne({email:email});
 console.log(data);
 if(!data)

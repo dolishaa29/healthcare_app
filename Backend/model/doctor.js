@@ -15,16 +15,10 @@ let doctormodel=mongo.Schema({
       type: Date,
       default: null,
     },
-    age: {
-      type: Number,
-      default: 0,
-    },
 
-    degrees: {
-        title: { type: String, default: null },
+    title: { type: String, default: null },
         institution: { type: String, default: null },
         year: { type: Number, default: 0 },
-  },
 
     experienceYears: {
       type: Number,
@@ -35,7 +29,7 @@ let doctormodel=mongo.Schema({
       type: String,
       default: null,
     },
-    clinicAddress: {
+    HospitalAddress: {
       type: String,
       default: null,
     },

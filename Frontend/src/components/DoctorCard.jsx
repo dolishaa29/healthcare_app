@@ -35,7 +35,6 @@ const DoctorCard = ({ doctor, image }) => {
   return (
     <div className="group relative bg-white rounded-[2.5rem] p-3 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(126,34,206,0.1)] transition-all duration-500 w-full max-w-sm overflow-hidden">
       
-      {/* PREMIUM IMAGE CONTAINER */}
       <div className="relative w-full h-64 overflow-hidden rounded-[2rem] bg-slate-50">
         {image ? (
           <img 

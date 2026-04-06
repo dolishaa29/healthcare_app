@@ -5,6 +5,7 @@ let jwt=require("jsonwebtoken");
 let bct=require("bcryptjs");
 let crypto=require("crypto");
 const nodemailer = require("nodemailer");
+const { title } = require("process");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -183,10 +184,12 @@ exports.doctorupdate=async(req,res)=>
         contact: req.body.contact,
         address: req.body.address,
         hospitalName: req.body.hospitalName,
-        clinicAddress: req.body.clinicAddress,
+        HospitalAddress: req.body.HospitalAddress,
         bio: req.body.bio,
         experienceYears: req.body.experienceYears,
-        degree: req.body.degrees,
+        title: req.body.title,
+        institution: req.body.institution,
+        year: req.body.year,
         image: image,
     };
     let updatedDoctor = await rec.findOneAndUpdate({ _id: doctor._id }, updateData, { new: true });

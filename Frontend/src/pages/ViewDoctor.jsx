@@ -37,7 +37,6 @@ const ViewDoctorss = () => {
             </div>
 
             {loading ? (
-                /* Skeleton Loader Grid */
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 w-full">
                     {[1, 2, 3, 4, 5, 6].map((n) => (
                         <div key={n} className="h-96 bg-gray-100 animate-pulse rounded-3xl w-full"></div>
@@ -48,10 +47,8 @@ const ViewDoctorss = () => {
                     <h3 className="text-2xl font-bold text-gray-400">No doctors currently active.</h3>
                 </div>
             ) : (
-                /* Doctor Grid */
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8 w-full items-stretch">
                     {doctors.map((doc) => {
-                        // SIMPLE FIX: Get only the filename and add the backend URL
                         let fullImageUrl = null;
                         if (doc.image) {
                             const filename = doc.image.split(/[\\/]/).pop();
