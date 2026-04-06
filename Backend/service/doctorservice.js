@@ -6,7 +6,6 @@ let otps=require("../model/OTP");
 let bct=require("bcryptjs");
 let crypto=require("crypto");
 const nodemailer = require("nodemailer");
-const { title } = require("process");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -235,12 +234,14 @@ exports.otpgenerate=async(req,res)=>{
     try{
     let email=req.body.email;
     let role=req.body.role;
+    console.log("OTP generation request for email:", email, "and role:", role);
     let doctor=await rec.findOne({email:email});
     if(!doctor)    
     {
         return res.status(404).json({success: false,msg:'invalid doctor email'});
     }
     let otp=crypto.randomInt(100000, 1000000).toString();
+    console.log("Generated OTP:", otp);
     let existingOtp = await otps.findOne({ email: email ,role: role});
     if (existingOtp) {
         existingOtp.otp = otp;
@@ -255,7 +256,7 @@ exports.otpgenerate=async(req,res)=>{
         from: "auraaahealthh@gmail.com",
         to: email,
         subject: "Password Reset OTP",
-        text: `Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`
+        text: `hi Dr. ${email}, Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`
     };
 
     await transporter.sendMail(mail);
@@ -280,9 +281,22 @@ exports.otpverify=async(req,res)=>
     {
         return res.status(400).json({success: false,msg:"invalid OTP"});
     }
+        let password=crypto.randomBytes(4).toString("hex");
+        let hp=await bct.hash(password,10);
+        await rec.findOneAndUpdate({email:email},{password:hp});
+
+        const mail = {
+            from: "auraahealthh@gmail.com",
+            to: email,
+            subject: "New Password After OTP Verification",
+            text: `hi Dr. ${email}, Your OTP has been verified successfully. Your new password is: ${password}. Please change it after logging in.`
+        };
+        await transporter.sendMail(mail);
+
         await otps.deleteOne({email:email,otp:otp,role:role});
-        return res.status(200).json({success: true,msg:"OTP verified successfully"});
-}
+
+        return res.status(200).json({success: true,msg:"OTP verified successfully and new password sent to email"});
+    }
     catch(err)
     {
         console.log(err);

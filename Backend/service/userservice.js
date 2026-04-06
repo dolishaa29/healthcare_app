@@ -3,6 +3,17 @@ let rec2=require("../model/Appointment/appointment");
 let otps=require("../model/OTP");
 let bcrypt=require("bcrypt");
 let jwt=require("jsonwebtoken");
+let crypto=require("crypto");
+const nodemailer = require("nodemailer");
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "auraahealthh@gmail.com",
+    pass: "fuuu tgol iirl gdww"
+  }
+});
+
+
 
 exports.userregister=async(req,res)=>
 {  
@@ -114,7 +125,7 @@ exports.otpgenerate=async(req,res)=>
         return res.status(400).json({msg:"no user with that email found"});
 
     }
-    let otp=crypto.randomInt(100000,1000000).string();
+    let otp=crypto.randomInt(100000,1000000).toString();
     let existingotp=await otps.findOne({email:email,role:role});
     if(existingotp)
     {

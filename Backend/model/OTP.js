@@ -1,4 +1,4 @@
-let mongo=require("moongose");
+let mongo=require("mongoose");
 let otpmodel=mongo.Schema({
    email:{type:String , unique:true},
    role:{type:String},
