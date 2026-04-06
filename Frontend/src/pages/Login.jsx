@@ -163,7 +163,31 @@ const Login = () => {
               className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
             />
           </div>
-
+          {role === "user" && (
+            <div className="text-right mb-0">
+              <button 
+                type="button"
+                onClick={() => navigate('/forgotpassword/user')}
+                className="text-sm text-purple-600 hover:underline font-semibold"
+              >
+                Forgot Password?
+              </button>
+            </div>
+          )
+          }
+            {role === "doctor" && (
+            <div className="text-right mb-0">
+              <button 
+                type="button"
+                onClick={() => navigate('/forgotpassword/doctor')}
+                className="text-sm text-purple-600 hover:underline font-semibold"
+              >
+                Forgot Password?
+              </button>
+            </div>
+          )
+          }
+           
           <button 
             type="submit"
             className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98]"

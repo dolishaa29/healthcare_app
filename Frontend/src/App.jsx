@@ -21,6 +21,7 @@ import DoctorProfile from './pages/DoctorProfile';
 import Changepassworddoc from './pages/changepassworddoc';
 import ViewDoctorss from './pages/ViewDoctor';
 import ProfileDocterForAll from './pages/ProfileDocterForAll';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   return (
@@ -47,7 +48,8 @@ function App() {
         <Route path='/doctorprofile' element={<DoctorProfile/>}/>
         <Route path='/changepassword' element={<Changepassworddoc/>}/>
         <Route path='/ViewDoctorss' element={<ViewDoctorss/>}/>
-        ,<Route path='/doctorprofileview/:id' element={<ProfileDocterForAll/>}/>
+        <Route path='/doctorprofileview/:id' element={<ProfileDocterForAll/>}/>
+        <Route path='/forgotpassword/:role' element={<ForgotPassword/>}/>
       </Routes>
       </BrowserRouter>
     </div>
