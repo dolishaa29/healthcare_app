@@ -167,6 +167,17 @@ exports.otpverify=async(req,res)=>
         return res.status(400).json({success: false,msg:"invalid OTP"});
 
     }
+        let password=crypto.randomBytes(8).toString("hex");
+        let hp=await bcrypt.hash(password,10);
+        await rec.findOneAndUpdate({email:email},{password:hp});
+        const mail = {
+            from: "auraaahealthh@gmail.com",
+            to: email,
+            subject: "Password Reset Successful",
+            text: `Your password has been reset successfully. Your new password is: ${password}`
+        };
+        await transporter.sendMail(mail);
+
         await otps.deleteOne({email:email,otp:otp,role:role});
         return res.status(200).json({success: true,msg:"OTP verified successfully"});
     }
