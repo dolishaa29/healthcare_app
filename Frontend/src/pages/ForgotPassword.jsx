@@ -57,14 +57,18 @@ const ForgotPassword = () => {
             if(role==="user"){
                 const response = await axios.post(import.meta.env.VITE_API_URL + "/userverifyotp",
                     { email, otp, role },
-                    { headers: { "Content-Type": "application/json" , Authorization: `Bearer ${Cookies.get("token")}` }, withCredentials: true }
+                    { headers: { "Content-Type": "application/json" , 
+                        Authorization: `Bearer ${Cookies.get("token")}` }, 
+                        withCredentials: true }
                 );
                 setOtpMessage(response.data.message || "OTP verified successfully");
             }
             else if(role==="doctor"){
                 const response = await axios.post(import.meta.env.VITE_API_URL + "/doctorverifyotp",
                     { email, otp, role },
-                    { headers: { "Content-Type": "application/json" , Authorization: `Bearer ${Cookies.get("emstoken")}` }, withCredentials: true }
+                    { headers: { "Content-Type": "application/json" , 
+                        Authorization: `Bearer ${Cookies.get("emstoken")}` }, 
+                        withCredentials: true }
                 );
                 setOtpMessage(response.data.message || "OTP verified successfully");
             }
