@@ -240,7 +240,7 @@ exports.otpgenerate=async(req,res)=>{
     {
         return res.status(404).json({success: false,msg:'invalid doctor email'});
     }
-    let otp=Math.floor(100000 + Math.random() * 900000);
+    let otp=crypto.randomInt(100000, 1000000).toString();
     let existingOtp = await otp.findOne({ email: email });
     if (existingOtp) {
         existingOtp.otp = otp;
