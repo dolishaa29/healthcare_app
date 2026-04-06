@@ -2,7 +2,7 @@ let rec=require("../model/doctor");
 let rec2=require("../model/permission");
 let app=require("../model/Appointment/appointment");
 let jwt=require("jsonwebtoken");
-let otp=require("../model/OTP");
+let otps=require("../model/OTP");
 let bct=require("bcryptjs");
 let crypto=require("crypto");
 const nodemailer = require("nodemailer");
@@ -241,13 +241,13 @@ exports.otpgenerate=async(req,res)=>{
         return res.status(404).json({success: false,msg:'invalid doctor email'});
     }
     let otp=crypto.randomInt(100000, 1000000).toString();
-    let existingOtp = await otp.findOne({ email: email });
+    let existingOtp = await otps.findOne({ email: email ,role: role});
     if (existingOtp) {
         existingOtp.otp = otp;
         existingOtp.createdAt = Date.now();
         await existingOtp.save();
     } else {
-        let newOtp = new otp({ email: email, role: role, otp: otp });
+        let newOtp = new otps({ email: email, role: role, otp: otp });
         await newOtp.save();
     }
 
@@ -275,12 +275,12 @@ exports.otpverify=async(req,res)=>
     let email=req.body.email;
     let otp=req.body.otp;
     let role=req.body.role;
-    let record=await otp.findOne({email:email,otp:otp,role:role});
+    let record=await otps.findOne({email:email,otp:otp,role:role});
     if(!record)
     {
         return res.status(400).json({success: false,msg:"invalid OTP"});
     }
-        await otp.deleteOne({email:email,otp:otp,role:role});
+        await otps.deleteOne({email:email,otp:otp,role:role});
         return res.status(200).json({success: true,msg:"OTP verified successfully"});
 }
     catch(err)

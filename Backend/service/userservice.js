@@ -1,5 +1,6 @@
 let rec=require("../model/user");
 let rec2=require("../model/Appointment/appointment");
+let otps=require("../model/OTP");
 let bcrypt=require("bcrypt");
 let jwt=require("jsonwebtoken");
 
@@ -100,3 +101,68 @@ exports.userviewapp=async(req,res)=>{
     return res.status(200).json({ success: true, appointments });
 };
     
+
+exports.otpgenerate=async(req,res)=>
+{
+    try
+    {
+    let email=req.body.email;
+    let role=req.body.role;
+    let user=rec.findOne({email:email});
+    if(!user)
+    {
+        return res.status(400).json({msg:"no user with that email found"});
+
+    }
+    let otp=crypto.randomInt(100000,1000000).string();
+    let existingotp=await otps.findOne({email:email,role:role});
+    if(existingotp)
+    {
+        existingotp.otp=otp;
+        existingotp.createdAt=Date.now();
+        await existingotp.save();
+    }
+    else{
+        let newotp=new otps({email:email,role:role,otp:otp});
+        await newotp.save();
+    }
+    const mail = {
+        from: "auraaahealthh@gmail.com",
+        to: email,
+        subject: "Password Reset OTP",
+        text: `Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`
+    };
+
+    await transporter.sendMail(mail);
+    return res.status(200).json({ success: true, msg: "OTP sent to email" });  
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(500).json({msg:"internal server error"});
+    }
+}
+
+exports.otpverify=async(req,res)=>
+{
+    try
+    {
+    let email=req.body.email;
+    let otp=req.body.otp;
+    let role=req.body.role;
+    let record=await otps.findOne({email:email,otp:otp,role:role});
+    if(!record)
+    {
+        return res.status(400).json({success: false,msg:"invalid OTP"});
+
+    }
+        await otps.deleteOne({email:email,otp:otp,role:role});
+        return res.status(200).json({success: true,msg:"OTP verified successfully"});
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(500).json({msg:"internal server error"});
+    }
+
+}
