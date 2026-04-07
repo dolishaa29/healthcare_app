@@ -25,7 +25,7 @@ const ForgotPassword = () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}${apiPath}forgotpassword`, 
                 { email, role }, 
-                { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+                
             );
             setStatus({ msg: response.data.message || "OTP sent successfully!", isError: false });
             setStep(2);
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}${apiPath}verifyotp`,
                 { email, otp, role },
-                { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+               
             );
             setStatus({ msg: response.data.message || "OTP Verified!", isError: false });
         } catch (err) {
