@@ -9,7 +9,7 @@ const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
-  port: process.env.port || 587,
+  port: Number(process.env.port) ,
   secure: process.env.secure === "true",
   debug: true, 
   logger: true,
