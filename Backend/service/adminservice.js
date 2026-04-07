@@ -39,7 +39,11 @@ if(pass)
 let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{
 expiresIn:"1d"
 });
-res.cookie('token', token);
+res.cookie('token', token , {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+});
 console.log("send token"+token);
 return res.status(200).json({success: true,msg:'admin login successfully',token})                                            
 }
