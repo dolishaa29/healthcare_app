@@ -119,7 +119,7 @@ exports.otpgenerate=async(req,res)=>
     {
     let email=req.body.email;
     let role=req.body.role;
-    let user=rec.findOne({email:email});
+    let user=await rec.findOne({email:email});
     if(!user)
     {
         return res.status(400).json({msg:"no user with that email found"});
