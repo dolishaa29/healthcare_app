@@ -59,7 +59,12 @@ exports.userlogin=async(req,res)=>
     {
     let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{expiresIn:"1h"});
     
-    res.cookie("token",token);
+    res.cookie("token",token ,{
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        
+    });
     console.log("token:",token);
     res.status(200).json({msg:"user logged in successfully",token:token});
     }
