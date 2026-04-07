@@ -10,6 +10,7 @@ const Doctorregister = () => {
   const [specialization, setSpecialization] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
+  const [certificate, setCertificate] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,15 +18,15 @@ const Doctorregister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !name || !specialization || !contact || !address) {
-      setMessage("Please fill all fields");
+    if (!email || !name || !specialization || !contact || !address || !certificate) {
+      setMessage("Please fill all fields and upload your certificate.");
       return;
     }
 
     setLoading(true);
     try {
       const response = await axios.post(import.meta.env.VITE_API_URL + "/doctorpermission", {
-        email, name, specialization, contact, address,
+        email, name, specialization, contact, address, certificate
       });
 
       if (response.status === 201) {
@@ -119,6 +120,17 @@ const Doctorregister = () => {
               onChange={(e) => setAddress(e.target.value)} 
               required
               className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+            />
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-xl border-2 border-dashed border-slate-200">
+            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-2">Medical Docs </label>
+            <input 
+              type="file" 
+              accept=".pdf" 
+              onChange={(e) => setCertificate(e.target.files[0])}
+              className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+              required 
             />
           </div>
 
