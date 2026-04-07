@@ -3,53 +3,54 @@ const path = require("path");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const mongoose = require("mongoose");
 
 dotenv.config();
 
 const app = express();
 
-// ✅ सही origin (NO trailing slash)
+// ✅ CORS FIX (NO trailing slash)
 const allowedOrigin = "https://auraahealth.vercel.app";
 
-// ✅ CORS FIX (robust version)
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin || origin === allowedOrigin) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed: " + origin));
-    }
-  },
+  origin: allowedOrigin,
   credentials: true
 }));
 
-// ✅ handle preflight
-app.options("*", cors());
+// ✅ Handle preflight requests
+app.options("*", cors({
+  origin: allowedOrigin,
+  credentials: true
+}));
 
-// ✅ middlewares
+// ✅ Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ✅ static files (images)
+// ✅ Static files (images)
 app.use(express.static(path.join(__dirname, "public")));
 
-// ✅ test route
+// ✅ Test route
 app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 
-// ✅ database
-const { health } = require("./dbconnection");
+// ✅ MongoDB connection (FIXED)
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB Connected ✅"))
+.catch(err => console.error("MongoDB Error ❌", err));
 
-// ✅ routes
+// ✅ Routes
 app.use("/", require("./router/adminrouter"));
 app.use("/", require("./router/doctorrouter"));
 app.use("/", require("./router/userrouter"));
 app.use("/", require("./router/appointrouter"));
 
-// ✅ server start
+// ✅ Server start
 const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
