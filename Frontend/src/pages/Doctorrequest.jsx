@@ -71,6 +71,7 @@ const DoctorRequest = () => {
           <p><b>Specialization:</b> {doc.specialization}</p>
           <p><b>Contact:</b> {doc.contact}</p>
           <p><b>Address:</b> {doc.address}</p>
+          <p><b>Certificate:</b> {doc.certificate}</p>
 
           <button
             onClick={() => handleApprove(doc)}

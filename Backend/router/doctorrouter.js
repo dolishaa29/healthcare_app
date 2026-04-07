@@ -22,7 +22,7 @@ router.get('/doctorprofile', auths, doctorprofile);
 router.get("/doctorlogout",auths,doctorlogout);
 router.get("/viewdoctors",doctorlist);
 router.post("/doctorpermission",doctorpermission);
-router.get("/doctorrequest",doctorrequest);
+router.get("/doctorrequest",upload.single("certificate"),doctorrequest);
 router.put("/doctorpermissionupdate",doctorpermissionupdate);
 router.get("/doctordashboard",auths,doctorDashboard);
 router.get("/doctorviewapp",auths,doctorviewapp);

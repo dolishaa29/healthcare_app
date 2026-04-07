@@ -24,6 +24,7 @@ exports.doctorpermission=async(req,res)=>
     let name=req.body.name;
     let specialization=req.body.specialization;
     let address=req.body.address;
+    let certificate=req.file.filename;
     let already = await rec2.findOne({ email: email });
 
 if (already && (already.permission === "pending" || already.permission === "approved")) {
@@ -38,7 +39,9 @@ if (already && (already.permission === "pending" || already.permission === "appr
             contact:contact,
             name:name,
             specialization:specialization,
-            address:address
+            address:address,
+            certificate:certificate,
+
         });
         await newdoctor.save();
         return res.status(201).json({success: true,msg:'doctor registered , approval pending'})
@@ -65,7 +68,8 @@ exports.doctorregister = async (req, res) => {
       contact: contact,
       name: name,
       specialization: specialization,
-      address: address
+      address: address,
+
     });
 
     await newdoctor.save();

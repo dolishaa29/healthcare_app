@@ -6,6 +6,7 @@ let doctormodel=mongo.Schema({
    specialization:{type:String},
    contact:{type:Number},
    address:{type:String},
+   certificate:{type:String},
    permission:{type:String,default:"pending",enum:["pending","approved","rejected"]},
 
 });

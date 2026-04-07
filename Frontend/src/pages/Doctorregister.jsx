@@ -18,19 +18,36 @@ const Doctorregister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!email || !name || !specialization || !contact || !address || !certificate) {
       setMessage("Please fill all fields and upload your certificate.");
       return;
     }
 
     setLoading(true);
-    try {
-      const response = await axios.post(import.meta.env.VITE_API_URL + "/doctorpermission", {
-        email, name, specialization, contact, address, certificate
-      });
+    setMessage("");
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("specialization", specialization);
+    formData.append("contact", contact);
+    formData.append("address", address);
+    formData.append("certificate", certificate); 
 
-      if (response.status === 201) {
-        setMessage("Registration successful! Waiting for admin approval.");
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "/doctorpermission", 
+        formData, 
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", 
+          },
+        }
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        setMessage("success: Registration successful! Waiting for admin approval.");
+        setCertificate(null);
       } else {
         setMessage(response.data.message || "Registration Failed");
       }
@@ -45,14 +62,7 @@ const Doctorregister = () => {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans overflow-hidden py-10">
       <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
       <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <img 
-          src="public/health.jfif" 
-          alt="Medical Background" 
-          className="w-full h-full object-cover opacity-[0.04] grayscale" 
-        />
-      </div>
-
+      
       <div className="relative z-10 w-full max-w-[500px] p-10 bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(147,51,234,0.1)] mx-4">
         
         <div className="text-center mb-8">
@@ -107,7 +117,7 @@ const Doctorregister = () => {
               value={contact}
               onChange={setContact}
               required
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus-within:ring-4 focus-within:ring-purple-500/10 transition-all shadow-sm"
             />
           </div>
 
@@ -124,12 +134,12 @@ const Doctorregister = () => {
           </div>
 
           <div className="bg-slate-50 p-4 rounded-xl border-2 border-dashed border-slate-200">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-2">Medical Docs </label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-2">Medical Docs (PDF Only)</label>
             <input 
               type="file" 
               accept=".pdf" 
-              onChange={(e) => setCertificate(e.target.files[0])}
-              className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+              onChange={(e) => setCertificate(e.target.files[0])} 
+              className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
               required 
             />
           </div>
@@ -138,13 +148,13 @@ const Doctorregister = () => {
             type="submit" disabled={loading}
             className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-70"
           >
-            {loading ? "Processing..." : "Submit Registration Request"}
+            {loading ? "Uploading Documents..." : "Submit Registration Request"}
           </button>
         </form>
 
         {message && (
           <p className={`text-center text-xs mt-4 font-bold ${message.includes('success') ? 'text-green-500' : 'text-red-500'}`}>
-            {message}
+            {message.replace('success: ', '')}
           </p>
         )}
 
