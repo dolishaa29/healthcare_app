@@ -7,7 +7,7 @@ const DoctorRequest = () => {
   const fetchDoctors = async () => {
     try {
       const res = await axios.get(import.meta.env.VITE_API_URL + "/doctorrequest");
-      setDoctors(res.data.doctors);
+      setDoctors(res.data.doctors || res.data);
     } catch (err) {
       console.log(err);
     }
@@ -57,7 +57,7 @@ const DoctorRequest = () => {
     <div style={{ padding: "20px" }}>
       <h2>Doctor Requests</h2>
 
-      {doctors.filter((doc) => doc.permission === "pending").map((doc) => (
+      {doctors && doctors.filter((doc) => doc.permission === "pending").map((doc) => (
         <div
           key={doc._id}
           style={{
@@ -71,7 +71,17 @@ const DoctorRequest = () => {
           <p><b>Specialization:</b> {doc.specialization}</p>
           <p><b>Contact:</b> {doc.contact}</p>
           <p><b>Address:</b> {doc.address}</p>
-          <p><b>Certificate:</b> {doc.certificate}</p>
+          <p>
+            <b>Certificate: </b>
+            <a 
+              href={`${import.meta.env.VITE_API_URL}/images/${doc.certificate}`} 
+              target="_blank" 
+              rel="noreferrer"
+              style={{ color: "blue", textDecoration: "underline" }}
+            >
+              View PDF File
+            </a>
+          </p>
 
           <button
             onClick={() => handleApprove(doc)}
