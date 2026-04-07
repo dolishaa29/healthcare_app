@@ -8,42 +8,50 @@ dotenv.config();
 
 const app = express();
 
-// ✅ CORS FIX (no trailing slash + proper config)
+// ✅ सही origin (NO trailing slash)
+const allowedOrigin = "https://auraahealth.vercel.app";
+
+// ✅ CORS FIX (robust version)
 app.use(cors({
-  origin: "https://auraahealth.vercel.app", // ❗ NO trailing slash
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin || origin === allowedOrigin) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed: " + origin));
+    }
+  },
+  credentials: true
 }));
 
-// ✅ Handle preflight requests
+// ✅ handle preflight
 app.options("*", cors());
 
-// ✅ Middleware
+// ✅ middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ✅ Static files (for images like health.jfif)
+// ✅ static files (images)
 app.use(express.static(path.join(__dirname, "public")));
 
-// ✅ Test route (IMPORTANT for debugging Render)
+// ✅ test route
 app.get("/", (req, res) => {
-  res.send("API is running successfully 🚀");
+  res.send("API is running 🚀");
 });
 
-// ✅ Database connection
+// ✅ database
 const { health } = require("./dbconnection");
 
-// ✅ Routes
+// ✅ routes
 app.use("/", require("./router/adminrouter"));
 app.use("/", require("./router/doctorrouter"));
 app.use("/", require("./router/userrouter"));
 app.use("/", require("./router/appointrouter"));
 
-// ✅ Start server
+// ✅ server start
 const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
