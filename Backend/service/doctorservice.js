@@ -10,8 +10,8 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "auraahealthh@gmail.com",
-    pass: "fuuu tgol iirl gdww"
+    user: process.env.EMAIL,
+    pass: process.env.PASS_KEY
   }
 });
 
@@ -75,7 +75,7 @@ exports.doctorregister = async (req, res) => {
     await newdoctor.save();
 
     const mail = {
-      from: "auraahealthh@gmail.com",
+      from: process.env.EMAIL,
       to: email,
       subject: "Registration Successful",
       text: `Hello Dr. ${name}, your account has been successfully registered and approved.
@@ -261,7 +261,7 @@ exports.otpgenerate=async(req,res)=>{
     }
 
     const mail = {
-        from: "auraaahealthh@gmail.com",
+        from: process.env.EMAIL,
         to: email,
         subject: "Password Reset OTP",
         text: `hi Dr. ${email}, Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`
@@ -294,7 +294,7 @@ exports.otpverify=async(req,res)=>
         await rec.findOneAndUpdate({email:email},{password:hp});
 
         const mail = {
-            from: "auraahealthh@gmail.com",
+            from: process.env.EMAIL,
             to: email,
             subject: "New Password After OTP Verification",
             text: `hi Dr. ${email}, Your OTP has been verified successfully. Your new password is: ${password}. Please change it after logging in.`
