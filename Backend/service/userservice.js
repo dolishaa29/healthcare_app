@@ -7,8 +7,8 @@ let crypto=require("crypto");
 const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
-    port: 465,
-    secure: true,
+    port: process.env.port || 587,
+    secure: process.env.secure === "true",
     debug: true,
     logger: true,
 
