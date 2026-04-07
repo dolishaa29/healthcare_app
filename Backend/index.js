@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 
 // ✅ CORS FIX (NO trailing slash)
-const allowedOrigin = "https://auraahealth.vercel.app/";
+const allowedOrigin = "https://auraahealth.vercel.app";
 
 app.use(cors({
   origin: allowedOrigin,
