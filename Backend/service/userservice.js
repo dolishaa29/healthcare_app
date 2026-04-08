@@ -5,15 +5,20 @@ let bcrypt=require("bcrypt");
 let jwt=require("jsonwebtoken");
 let crypto=require("crypto");
 const nodemailer = require("nodemailer");
-const transporter = nodemailer.createTransport({
-  service: "gmail",
 
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465, // Use 465 for SSL or 587 for TLS
+  secure: true, // true for 465, false for 587
   auth: {
     user: process.env.EMAIL,
-    pass: process.env.PASS_KEY
+    pass: process.env.PASS_KEY // This MUST be a 16-character App Password
+  },
+  tls: {
+    // Helps with self-signed certificate errors in some deployment environments
+    rejectUnauthorized: false
   }
 });
-
 
 
 exports.userregister=async(req,res)=>
