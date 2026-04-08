@@ -7,16 +7,12 @@ let crypto=require("crypto");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-host: "smtp.gmail.com",
-  port: 465,
-  secure: false,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL,
     pass: process.env.PASS_KEY
   },
-  tls: {
-    rejectUnauthorized: false
-  }
+
 });
 
 
