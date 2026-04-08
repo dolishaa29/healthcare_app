@@ -7,17 +7,11 @@ let crypto=require("crypto");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465, // Use 465 for SSL or 587 for TLS
-  secure: true, // true for 465, false for 587
+  service: "gmail",
   auth: {
     user: process.env.EMAIL,
-    pass: process.env.PASS_KEY // This MUST be a 16-character App Password
+    pass: process.env.PASS_KEY 
   },
-  tls: {
-    // Helps with self-signed certificate errors in some deployment environments
-    rejectUnauthorized: false
-  }
 });
 
 
