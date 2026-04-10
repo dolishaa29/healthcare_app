@@ -316,3 +316,26 @@ exports.otpverify=async(req,res)=>
         res.status(500).json({msg:"internal server error"});
     }
 }    
+
+exports.deletedoctor = async (req, res) => {
+    try {
+        console.log("hi")
+        const id = req.body.id;
+        console.log(id);
+        const deletedDoctor = await rec.findByIdAndDelete(id);
+        console.log(deletedDoctor)
+
+        res.status(200).json({
+            success: true,
+            message: "Doctor ka record successfully delete kar diya gaya hai.",
+            data: deletedDoctor
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server mein kuch gadbad hui.",
+            error: error.message
+        });
+    }
+};

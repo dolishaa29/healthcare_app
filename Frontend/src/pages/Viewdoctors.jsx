@@ -8,6 +8,11 @@ const ViewDoctors = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const handledelete=async(id)=>
+  {
+    await axios.post(import.meta.env.VITE_API_URL + "/deletedoctor",{id});
+  }
+
   useEffect(() => {
     const fetchDoctors = async () => {
       setLoading(true);
@@ -112,10 +117,10 @@ const ViewDoctors = () => {
                        <button className="px-3 py-1.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg hover:bg-green-500 hover:text-white transition-all duration-300 border border-amber-100">
                         BLOCK
                         </button>
-                        <button className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-bold rounded-lg hover:bg-rose-600 hover:text-white transition-all duration-300 border border-rose-100">
-                        DELETE
-                        </button>
-
+                        <button className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-bold rounded-lg hover:bg-rose-600 hover:text-white transition-all duration-300 border border-rose-100" 
+                         onClick={() => handledelete(doctor._id)}>
+                            Delete
+                          </button>
                       </div>
                      </td>
                     </tr>

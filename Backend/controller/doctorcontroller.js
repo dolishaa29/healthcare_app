@@ -1,4 +1,4 @@
-const { doctorlogin,doctorprofile,doctorregister,doctorlogout,doctorlist, doctorpermission, doctorpermissionupdate, doctorrequest, doctorDashboard, doctorviewapp, changePassword, doctorupdate, doctorprofileview, otpgenerate, otpverify} = require("../service/doctorservice");
+const { doctorlogin,doctorprofile,doctorregister,doctorlogout,doctorlist, doctorpermission, doctorpermissionupdate, doctorrequest, doctorDashboard, doctorviewapp, changePassword, doctorupdate, doctorprofileview, otpgenerate, otpverify, deletedoctor} = require("../service/doctorservice");
 
 exports.doctorregister=async(req,res)=>
 {
@@ -69,3 +69,7 @@ exports.doctorverifyotp=async(req,res)=>
   await otpverify(req,res);
 }
 
+exports.deletedoctor=async(req,res)=>
+{
+  await deletedoctor(req,res);
+}
