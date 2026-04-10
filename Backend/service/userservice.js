@@ -14,8 +14,6 @@ const transporter = nodemailer.createTransport({
   },
 
 });
-
-
 exports.userregister=async(req,res)=>
 {  
     console.log("userregister called with body:", req.body);
