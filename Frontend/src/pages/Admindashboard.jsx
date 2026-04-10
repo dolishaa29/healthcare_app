@@ -45,8 +45,6 @@ const Admindashboard = () => {
     { name: 'View Doctor', path: '/Viewdoctor', icon: <Stethoscope size={20} /> },
     { name: 'View Users', path: '/Viewusers', icon: <Users size={20} /> },
     { name: 'Doctor Requests', path: '/Doctorrequest', icon: <UserPlus size={20} /> },
-    { name: 'Approved Doctors', path: '/Approveddoctors', icon: <UserCheck size={20} /> },
-    { name: 'Rejected Doctors', path: '/Rejecteddoctors', icon: <UserX size={20} /> },
     { name: 'View Appointment', path: '/ViewAppointment', icon: <Calendar size={20} /> },
   ];
 

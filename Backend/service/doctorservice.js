@@ -62,7 +62,11 @@ exports.doctorregister = async (req, res) => {
     let password = crypto.randomBytes(4).toString("hex");
 
     let hp = await bct.hash(password, 10);
-
+    let existing=await rec.findOne({email:email})
+    if(existing)
+    {
+        return res.status(400).json({message:"already exist"})
+    }
     let newdoctor = new rec({
       email: email,
       password: hp,

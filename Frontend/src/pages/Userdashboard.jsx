@@ -62,7 +62,6 @@ const Userdashboard = () => {
           <SidebarLink icon={<CalendarPlus size={20}/>} label="Book Appointment" onClick={() => navigate('/Appointment')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<LayoutList size={20}/>} label="My Appointments" onClick={() => navigate('/userviewapp')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<CalendarPlus size={20}/>} label="View Doctor/Appointments" onClick={() => navigate('/ViewDoctorss')} isExpanded={isSidebarOpen} />
-          <SidebarLink icon={<LogOut size={20}/>} label="Sign Out" onClick={() => { Cookies.remove("token"); navigate("/"); }} isExpanded={isSidebarOpen} />
         </nav>
 
         <div className="p-5 border-t border-slate-50">

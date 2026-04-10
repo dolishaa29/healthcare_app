@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 const DoctorRequest = () => {
   const [doctors, setDoctors] = useState([]);
   const [type, setType] = useState("pending"); 
-  const navigate = useNavigate();
 
   const fetchDoctors = async () => {
     try {
