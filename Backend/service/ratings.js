@@ -15,4 +15,38 @@ exports.getrating=async(req,res)=>
         res.status(500).json({msg:"internal server error"})
     }
 }
+ 
+exports.viewrating=async(req,res)=>
+{
+  try {
+    const data = await ratings.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "usermail",
+          foreignField: "email",
+          as: "user"
+        }
+      },
+      {
+        $lookup: {
+          from: "doctors",
+          localField: "doctormail",
+          foreignField: "email",
+          as: "doctor"
+        }
+      },
+      {
+        $unwind: "$user"
+      },
+      {
+        $unwind: "$doctor"
+      }
+    ]);
 
+    res.json(data);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
