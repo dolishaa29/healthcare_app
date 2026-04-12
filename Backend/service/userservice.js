@@ -52,6 +52,13 @@ exports.userlogin=async(req,res)=>
     {
         res.status(400).json({msg:"user not found"});
     }
+    if(data.userstatus==="block")
+    {
+        return res.status(403).json({ 
+            success: false, 
+            msg: 'Your account is blocked by the admin. Login failed.' 
+        });
+    }
     lpass=data.password;
     let pass=await bcrypt.compare(password,lpass);
     if(pass)
