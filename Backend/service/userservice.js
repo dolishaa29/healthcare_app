@@ -197,13 +197,14 @@ exports.blockuser = async (req, res) => {
     try {
         
         const id = req.body.id;
-        console.log(id);
+        console.log("user "+id);
         const user = await rec.findById(id);
 
         const newStatus = user.userstatus === "block" ? "unblock" : "block";
         user.userstatus = newStatus;
+        console.log(newStatus);
         await user.save();
-
+       
         return res.status(200).json({
             success: true,
             msg: `User has been ${newStatus} successfully`,
@@ -211,6 +212,7 @@ exports.blockuser = async (req, res) => {
         });
 
     } catch (err) {
+        console.log("hi")
         console.error("Error toggling doctor status:", err);
         res.status(500).json({
             success: false,

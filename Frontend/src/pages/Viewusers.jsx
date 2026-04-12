@@ -8,6 +8,22 @@ const Viewusers = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const handleblock = async (id) => {
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL + '/blockuser', { id });
+      if (response.data.success) {
+        setUsers((prevusers) =>
+          prevusers.map((user) =>
+            user._id === id ? { ...user, userstatus: response.data.data.userstatus } : user
+          )
+        );
+      }
+    } catch (err) {
+      setMessage("Error while toggling block status");
+    }
+  };
+
+
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
@@ -103,8 +119,15 @@ const Viewusers = () => {
                           <button className="px-4 py-1.5 bg-purple-100 text-purple-600 text-[10px] font-black rounded-lg hover:bg-purple-600 hover:text-white transition-all border border-slate-200/50">
                             PROFILE
                           </button>
-                          <button className="px-4 py-1.5 bg-yellow-50 text-yellow-600 text-[10px] font-black rounded-lg hover:bg-yellow-500 hover:text-white transition-all border border-amber-100">
-                            BLOCK
+                          <button 
+                            className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all duration-300 border ${
+                              user.userstatus === "block" 
+                              ? "bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-500 hover:text-white" 
+                              : "bg-green-50 text-green-600 border-green-100 hover:bg-green-500 hover:text-white"
+                            }`}
+                            onClick={() => handleblock(user._id)}
+                          >
+                            {user.userstatus === "block" ? "UNBLOCK" : "BLOCK"}
                           </button>
                         </div>
                       </td>
