@@ -3,6 +3,7 @@ let auth=require("../middleware/user");
 let router=express.Router();
 
 const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, userotpgenerate, userotpverify } = require("../controller/usercontroller");
+const { blockuser } = require("../service/userservice");
 
 router.post("/userregister",userregister);
 router.post("/userlogin",userlogin);
@@ -13,5 +14,6 @@ router.get("/userdashboard",auth,userDashboard);
 router.get("/userviewapp",auth,userviewapp);
 router.post("/userforgotpassword",userotpgenerate);
 router.post("/userverifyotp",userotpverify);
+router.post("/blockuser",blockuser);
 
 module.exports=router;
