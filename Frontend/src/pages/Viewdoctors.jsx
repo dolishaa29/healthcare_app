@@ -8,10 +8,29 @@ const ViewDoctors = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handledelete=async(id)=>
-  {
-    await axios.post(import.meta.env.VITE_API_URL + "/deletedoctor",{id});
-  }
+  const handledelete = async (id) => {
+    try {
+      await axios.post(import.meta.env.VITE_API_URL + "/deletedoctor", { id });
+      setDoctors(doctors.filter((doc) => doc._id !== id));
+    } catch (err) {
+      setMessage("Error while deleting doctor");
+    }
+  };
+
+  const handleblock = async (id) => {
+    try {
+      const response = await axios.post(import.meta.env.VITE_API_URL + '/blockdoctor', { id });
+      if (response.data.success) {
+        setDoctors((prevDoctors) =>
+          prevDoctors.map((doc) =>
+            doc._id === id ? { ...doc, doctorstatus: response.data.data.doctorstatus } : doc
+          )
+        );
+      }
+    } catch (err) {
+      setMessage("Error while toggling block status");
+    }
+  };
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -108,21 +127,32 @@ const ViewDoctors = () => {
                       <td className="px-6 py-5 text-slate-500 text-sm">
                         {doctor.address}
                       </td>
-                       <td className="px-8 py-5 text-right">
-                       <div className="flex items-center justify-end gap-5">
-    
-                       <button className="px-3 py-1.5 bg-purple-100 text-purple-600 text-[10px] font-bold rounded-lg hover:bg-purple-600 hover:text-white transition-all duration-300 border border-slate-200/50">
-                       PROFILE
-                       </button>
-                       <button className="px-3 py-1.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg hover:bg-green-500 hover:text-white transition-all duration-300 border border-amber-100">
-                        BLOCK
-                        </button>
-                        <button className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-bold rounded-lg hover:bg-rose-600 hover:text-white transition-all duration-300 border border-rose-100" 
-                         onClick={() => handledelete(doctor._id)}>
-                            Delete
+                      <td className="px-8 py-5 text-right">
+                        <div className="flex items-center justify-end gap-5">
+                          <button className="px-3 py-1.5 bg-purple-100 text-purple-600 text-[10px] font-bold rounded-lg hover:bg-purple-600 hover:text-white transition-all duration-300 border border-slate-200/50"
+                           onClick={() => navigate(`/doctorprofileview/${doctor._id}`)} >
+                            PROFILE
                           </button>
-                      </div>
-                     </td>
+                          
+                          <button 
+                            className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all duration-300 border ${
+                              doctor.doctorstatus === "block" 
+                              ? "bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-500 hover:text-white" 
+                              : "bg-green-50 text-green-600 border-green-100 hover:bg-green-500 hover:text-white"
+                            }`}
+                            onClick={() => handleblock(doctor._id)}
+                          >
+                            {doctor.doctorstatus === "block" ? "UNBLOCK" : "BLOCK"}
+                          </button>
+
+                          <button 
+                            className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-bold rounded-lg hover:bg-rose-600 hover:text-white transition-all duration-300 border border-rose-100" 
+                            onClick={() => handledelete(doctor._id)}
+                          >
+                            DELETE
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))
                 )}

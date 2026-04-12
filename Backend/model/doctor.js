@@ -43,6 +43,8 @@ let doctormodel=mongo.Schema({
       type: String,
       default: null,
     },
+
+    doctorstatus:{type:String , default:"unblock" , enum:["block","unblock"]},
   
 
 });

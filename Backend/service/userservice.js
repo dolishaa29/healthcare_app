@@ -192,3 +192,29 @@ exports.otpverify=async(req,res)=>
     }
 
 }
+
+exports.blockuser = async (req, res) => {
+    try {
+        
+        const id = req.body.id;
+        console.log(id);
+        const user = await rec.findById(id);
+
+        const newStatus = user.userstatus === "block" ? "unblock" : "block";
+        user.userstatus = newStatus;
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            msg: `User has been ${newStatus} successfully`,
+            data: user
+        });
+
+    } catch (err) {
+        console.error("Error toggling doctor status:", err);
+        res.status(500).json({
+            success: false,
+            msg: "Internal server error"
+        });
+    }
+};

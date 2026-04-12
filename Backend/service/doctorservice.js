@@ -109,6 +109,14 @@ exports.doctorlogin=async(req,res)=>
  {
     return res.status(404).json({success: false,msg:'doctor not found'})
  }
+
+if (data.doctorstatus === "block") {
+        return res.status(403).json({ 
+            success: false, 
+            msg: 'Your account is blocked by the admin. Login failed.' 
+        });
+    }
+
  let lpass=data.password;
  let pass=await bct.compare(password,lpass);
 
@@ -336,6 +344,33 @@ exports.deletedoctor = async (req, res) => {
             success: false,
             message: "Server mein kuch gadbad hui.",
             error: error.message
+        });
+    }
+};
+
+
+exports.blockdoctor = async (req, res) => {
+    try {
+        
+        const id = req.body.id;
+        console.log(id);
+        const doctor = await rec.findById(id);
+
+        const newStatus = doctor.doctorstatus === "block" ? "unblock" : "block";
+        doctor.doctorstatus = newStatus;
+        await doctor.save();
+
+        return res.status(200).json({
+            success: true,
+            msg: `Doctor has been ${newStatus} successfully`,
+            data: doctor
+        });
+
+    } catch (err) {
+        console.error("Error toggling doctor status:", err);
+        res.status(500).json({
+            success: false,
+            msg: "Internal server error"
         });
     }
 };

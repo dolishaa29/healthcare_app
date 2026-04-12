@@ -5,6 +5,7 @@ let usermodel=mongo.Schema({
    name:{type:String},
    contact:{type:Number},
    address:{type:String},
+   doctorstatus:{type:String , default:"unblock" , enum:["block","unblock"]},
 
 });
 module.exports=mongo.model('user',usermodel);
