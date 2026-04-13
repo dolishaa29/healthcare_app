@@ -227,3 +227,21 @@ exports.blockuser = async (req, res) => {
         });
     }
 };
+
+exports.userbyid=async(req,res)=>
+{
+try{
+    let id=req.params.id;
+    let data=await rec.findById(id);
+    return res.status(200).json({
+        success:true,
+        data:data
+    });
+}
+catch(err)
+{
+    console.log(err);
+    res.status(500).json({status:false , msg:"internal server error"});
+}
+}
+
