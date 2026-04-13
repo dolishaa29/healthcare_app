@@ -198,7 +198,8 @@ exports.doctorviewapp=async(req,res)=>{
 exports.doctorupdate=async(req,res)=>
 {
     const doctor = req.doctor;
-    let image = req.file ? req.file.path : null;
+    let image = req.file ? req.file.path : doctor.image;
+    console.log(image);
     let updateData = {
         name: req.body.name,
         specialization: req.body.specialization,

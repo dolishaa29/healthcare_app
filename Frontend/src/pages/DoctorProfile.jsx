@@ -41,6 +41,7 @@ const DoctorProfile = () => {
   useEffect(() => { fetchDoctorProfile(); }, []);
 
   const handleChange = (e) => {
+    try{
     const { name, value, type, files } = e.target;
     
     if (type === "file") {
@@ -52,6 +53,11 @@ const DoctorProfile = () => {
     } else {
       setDoctor((prev) => ({ ...prev, [name]: value }));
     }
+  }
+  catch(err)
+  {
+    console.log(err);
+  }
   };
 
   const handleSubmit = async (e) => {
