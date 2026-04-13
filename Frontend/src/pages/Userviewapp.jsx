@@ -39,7 +39,6 @@ const Userviewapp = () => {
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-purple-200/40 blur-[120px] rounded-full" />
         <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-200/30 blur-[120px] rounded-full" />
-        <div className="absolute inset-0 opacity-[0.03] grayscale bg-[url('/health.jfif')] bg-cover bg-center" />
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-12">

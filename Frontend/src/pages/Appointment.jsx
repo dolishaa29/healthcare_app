@@ -73,15 +73,6 @@ const Appointment = () => {
       
       <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
       <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
-
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <img 
-          src="public/health.jfif" 
-          alt="Medical Background" 
-          className="w-full h-full object-cover opacity-[0.04] grayscale" 
-        />
-      </div>
-
       <div className="relative z-10 w-full max-w-[500px] p-10 bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(147,51,234,0.1)] mx-4">
         
         <div className="text-center mb-8">

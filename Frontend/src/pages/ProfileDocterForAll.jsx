@@ -21,7 +21,6 @@ const ProfileDocterForAll = () => {
       
       setDoctor(data);
 
-      // Store image URL in state immediately upon fetch
       if (data?.image) {
         const filename = data.image.split(/[\\/]/).pop();
         setImagePreview(`${API_BASE_URL}/images/${filename}`);
@@ -38,7 +37,6 @@ const ProfileDocterForAll = () => {
     if (id) fetchDoctorProfile();
   }, [id]);
 
-  // Reusable Styles
   const infoLabelStyle = "block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1";
   const infoValueStyle = "text-slate-800 font-medium bg-white/50 border border-slate-100 px-4 py-2.5 rounded-xl shadow-sm backdrop-blur-sm";
 

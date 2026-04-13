@@ -33,95 +33,93 @@ const DoctorCard = ({ doctor, image }) => {
   };
 
   return (
-    <div className="group relative bg-white rounded-[2.5rem] p-3 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(126,34,206,0.1)] transition-all duration-500 w-full max-w-sm overflow-hidden">
+    <div className="group relative bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 w-full max-w-sm overflow-hidden flex flex-col">
       
-      <div className="relative w-full h-64 overflow-hidden rounded-[2rem] bg-slate-50">
+      <div className="relative h-[320px] w-full overflow-hidden p-3">
         {image ? (
           <img 
             src={image} 
             alt={doctor.name} 
-            className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+            className="w-full h-full object-cover rounded-[2rem] transition-transform duration-1000 group-hover:scale-110"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-            <span className="text-slate-300 font-medium text-[10px] tracking-[0.2em]">NO PROFILE</span>
+          <div className="w-full h-full bg-slate-50 rounded-[2rem] flex items-center justify-center">
+            <span className="text-slate-300 text-[10px] font-black tracking-widest uppercase">No Profile</span>
           </div>
         )}
 
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-          <div className="bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/50 shadow-sm">
-            <p className="text-[9px] font-black text-slate-800 tracking-tighter">
-              {doctor.experienceYears}Y+ EXPERIENCE
+
+        <div className="absolute top-7 right-7">
+          <div className="bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-sm border border-white/40">
+            <p className="text-[10px] font-black text-slate-800 tracking-tighter">
+              {doctor.experienceYears}Y+ EXP
             </p>
           </div>
-          
         </div>
+
+
+
+        <button 
+          onClick={() => navigate(`/doctorprofileview/${doctor._id}`)}
+          className="absolute bottom-7 right-7 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg border border-white/50 hover:bg-indigo-600 hover:text-white transition-all group/btn"
+          title="View Profile"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+        </button>
       </div>
 
-      <div className="pt-5 pb-2 px-4">
-        <div className="flex flex-col gap-1 mb-4">
-          <span className="text-[10px] font-bold text-purple-500 tracking-widest uppercase">
-            {doctor.specialization || "General Medicine"}
+
+
+
+      <div className="px-7 pt-2 pb-7">
+        <div className="flex flex-col mb-5">
+          <span className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">
+            {doctor.specialization || "Generalist"}
           </span>
-          <div className="flex items-center gap-1.5">
-            <h3 className="text-2xl font-semibold text-slate-900 tracking-tight">
-              {doctor.name}
-            </h3>
-            <svg className="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-          </div>
-        </div>
-        
-        <div className="flex flex-col gap-2 mb-6">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
-            <p className="text-xs font-medium text-slate-500 truncate">{doctor.hospitalName || "Partner Hospital"}</p>
-          </div>
-          <p className="text-[11px] font-medium text-slate-400 pl-3 leading-relaxed">
-            {doctor.clinicAddress || "Central Clinic, Main Branch"}
+          <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+            Dr. {doctor.name}
+          </h3>
+          <p className="text-[11px] font-medium text-slate-400 mt-0.5 truncate">
+            {doctor.hospitalName || "Partner Health"} • {doctor.clinicAddress || "Central Clinic"}
           </p>
         </div>
-        {isBooking && (
-          <div className="mb-4 animate-in slide-in-from-top-2 duration-500">
+
+
+
+
+        {isBooking ? (
+          <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <textarea 
-              className="w-full p-4 rounded-2xl bg-slate-50 border-none text-sm text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-purple-100 transition-all resize-none"
+              className="w-full p-4 rounded-2xl bg-slate-50 border-none text-[12px] text-slate-700 placeholder:text-slate-300 focus:ring-1 focus:ring-slate-100 transition-all resize-none"
               rows="2"
-              placeholder="Tell us your concern..."
+              placeholder="Brief description..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <button 
-              onClick={() => setIsBooking(false)}
-              className="mt-2 text-[10px] font-bold text-slate-400 hover:text-rose-500 w-full transition-colors uppercase tracking-widest"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
-
-        <div className="flex gap-2">
-          {!isBooking && (
-             <button 
-                onClick={() => navigate(`/doctorprofileview/${doctor._id}`)} 
-                className="p-4 rounded-2xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all active:scale-95"
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setIsBooking(false)}
+                className="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-             </button>
-          )}
-          
+                Back
+              </button>
+              <button 
+                onClick={handleFinalizeBooking}
+                disabled={loading}
+                className="flex-grow py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-[0.15em] active:scale-95"
+              >
+                {loading ? "..." : "Confirm"}
+              </button>
+            </div>
+          </div>
+        ) : (
           <button 
             onClick={handleAction} 
-            disabled={loading}
-            className={`flex-grow py-4 rounded-2xl font-bold text-[11px] tracking-[0.1em] transition-all shadow-sm ${
-              isBooking 
-              ? "bg-slate-900 text-white hover:shadow-xl shadow-slate-200" 
-              : "bg-purple-600 text-white hover:bg-purple-700 hover:shadow-xl shadow-purple-200"
-            } disabled:bg-slate-200 active:scale-95 uppercase`}
+            className="w-full py-4 rounded-[1.5rem] bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95"
           >
-            {loading ? "Please wait..." : isBooking ? "Confirm Booking" : "Make Appointment"}
+            Make Appointment
           </button>
-        </div>
+        )}
       </div>
     </div>
   );
