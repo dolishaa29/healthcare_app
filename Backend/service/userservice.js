@@ -246,3 +246,27 @@ catch(err)
 }
 }
 
+exports.changepassword=async(req,res)=>
+{
+    try{
+    const user=req.user;
+    let oldpassword=req.body.oldpassword;
+    let newpassword=req.body.newpassword;
+    let data=await rec.findById(id);
+    let existing=data.password;
+    let pass=await bcrypt.compare(oldpassword,existing);
+    if(!pass)
+    {
+        return res.status(400).json({msg:"invalid old password"});
+    }
+    newpassword=await bcrypt.hash(newpassword,10);
+    await rec.findByIdAndUpdate(user._id,{password:newpassword});
+    return res.status(200).json({success:true, msg:"password updated successfully"});
+}
+catch(err)
+{
+    console.log(err);
+    res.status(500).json({msg:"internal server error"});
+}
+
+}
