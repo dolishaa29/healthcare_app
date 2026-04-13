@@ -232,10 +232,11 @@ exports.userbyid=async(req,res)=>
 {
 try{
     let id=req.params.id;
+    console.log(id);
     let data=await rec.findById(id);
     return res.status(200).json({
         success:true,
-        data:data
+        user:data
     });
 }
 catch(err)

@@ -15,6 +15,6 @@ router.get("/userviewapp",auth,userviewapp);
 router.post("/userforgotpassword",userotpgenerate);
 router.post("/userverifyotp",userotpverify);
 router.post("/blockuser",blockuser);
-router.get('/userbyid',userbyid);
+router.get("/userbyid/:id",userbyid);
 
 module.exports=router;
