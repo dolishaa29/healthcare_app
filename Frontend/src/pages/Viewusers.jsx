@@ -116,8 +116,11 @@ const Viewusers = () => {
                       </td>
                       <td className="px-8 py-5">
                         <div className="flex items-center justify-center gap-2">
-                          <button className="px-4 py-1.5 bg-purple-100 text-purple-600 text-[10px] font-black rounded-lg hover:bg-purple-600 hover:text-white transition-all border border-slate-200/50">
-                            PROFILE
+                          <button 
+                          className="px-4 py-1.5 bg-purple-100 text-purple-600 text-[10px] font-black rounded-lg hover:bg-purple-600 hover:text-white transition-all border border-slate-200/50"
+                          onClick={() => navigate(`/userbyid/${user._id}`)}
+                          >
+                          PROFILE
                           </button>
                           <button 
                             className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all duration-300 border ${

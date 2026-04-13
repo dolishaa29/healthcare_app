@@ -2,7 +2,7 @@ let express=require("express");
 let auth=require("../middleware/user");
 let router=express.Router();
 
-const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, userotpgenerate, userotpverify } = require("../controller/usercontroller");
+const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, userotpgenerate, userotpverify, userbyid } = require("../controller/usercontroller");
 const { blockuser } = require("../service/userservice");
 
 router.post("/userregister",userregister);
@@ -15,5 +15,6 @@ router.get("/userviewapp",auth,userviewapp);
 router.post("/userforgotpassword",userotpgenerate);
 router.post("/userverifyotp",userotpverify);
 router.post("/blockuser",blockuser);
+router.get('/userbyid',userbyid);
 
 module.exports=router;

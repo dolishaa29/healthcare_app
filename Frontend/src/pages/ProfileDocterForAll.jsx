@@ -34,7 +34,7 @@ const ProfileDocterForAll = () => {
   };
 
   useEffect(() => {
-    if (id) fetchDoctorProfile();
+     fetchDoctorProfile();
   }, [id]);
 
   const infoLabelStyle = "block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1";
