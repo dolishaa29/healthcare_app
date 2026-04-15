@@ -252,7 +252,7 @@ exports.changepassword=async(req,res)=>
     const user=req.user;
     let oldpassword=req.body.oldpassword;
     let newpassword=req.body.newpassword;
-    let data=await rec.findById(id);
+    let data=await rec.findById(user._id);
     let existing=data.password;
     let pass=await bcrypt.compare(oldpassword,existing);
     if(!pass)

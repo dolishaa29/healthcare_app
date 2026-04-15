@@ -28,7 +28,7 @@ router.post("/userforgotpassword",userotpgenerate);
 router.post("/userverifyotp",userotpverify);
 router.post("/blockuser",blockuser);
 router.get("/userbyid/:id",userbyid);
-router.post("/changepassworduser",changepassword);
+router.put("/changepassworduser",auth,changepassword);
 router.put("/updateuser",auth,upload.single('image'),updateuser);
 
 module.exports=router;

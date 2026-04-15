@@ -128,7 +128,7 @@ const UserProfile = () => {
             </h1>
             <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest mt-1">Manage your account details</p>
           </div>
-          <button type="button" onClick={() => navigate("/changepassword")} className="px-5 py-2 text-sm font-bold text-blue-600 border border-blue-200 rounded-full hover:bg-blue-50 transition-all">
+          <button type="button" onClick={() => navigate("/changepassworduser")} className="px-5 py-2 text-sm font-bold text-blue-600 border border-blue-200 rounded-full hover:bg-blue-50 transition-all">
             Change Password
           </button>
         </div>
