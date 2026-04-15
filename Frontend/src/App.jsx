@@ -23,6 +23,7 @@ import ViewDoctorss from './pages/ViewDoctor';
 import ProfileDocterForAll from './pages/ProfileDocterForAll';
 import ForgotPassword from './pages/ForgotPassword';
 import Viewuserall from './pages/Viewuserall';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
         <Route path='/doctorprofileview/:id' element={<ProfileDocterForAll/>}/>
         <Route path='/forgotpassword/:role' element={<ForgotPassword/>}/>
         <Route path='/userbyid/:id' element={<Viewuserall/>}/>
+        <Route path='/userprofile' element={<UserProfile/>}/>
       </Routes>
       </BrowserRouter>
     </div>
