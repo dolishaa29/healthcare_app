@@ -34,7 +34,8 @@ const Viewuserall = () => {
             <p><strong>Email:</strong> {user.email}</p>
             <p><strong>Contact:</strong> {user.contact}</p>
             <p><strong>Address:</strong> {user.address}</p>
-            <p><strong>Gender:</strong> {user.dob}</p>
+            <p><strong>Gender:</strong> {user.gender}</p>
+            <p><strong>DOB:</strong> {user.dob}</p>
             <p><strong>Fathers Name:</strong> {user.fatherName}</p>
             <p><strong>Mothers Name:</strong> {user.motherName}</p>
             <p><strong>Martial Status:</strong> {user.martitalStatus}</p>
