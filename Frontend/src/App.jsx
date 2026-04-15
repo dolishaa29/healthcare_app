@@ -24,6 +24,7 @@ import ProfileDocterForAll from './pages/ProfileDocterForAll';
 import ForgotPassword from './pages/ForgotPassword';
 import Viewuserall from './pages/Viewuserall';
 import UserProfile from './pages/UserProfile';
+import Changepassuser from './pages/Changepassuser';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
         <Route path='/forgotpassword/:role' element={<ForgotPassword/>}/>
         <Route path='/userbyid/:id' element={<Viewuserall/>}/>
         <Route path='/userprofile' element={<UserProfile/>}/>
+        <Route path='/changepassworduser' element={<Changepassuser/>}/>
       </Routes>
       </BrowserRouter>
     </div>

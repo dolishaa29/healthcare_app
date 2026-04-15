@@ -92,7 +92,7 @@ const UserProfile = () => {
     if (imageFile) {
       formData.append("image", imageFile);
     } else {
-      formData.append("image", user.image || "");
+      formData.append("image", user.image );
     }
 
     try {
