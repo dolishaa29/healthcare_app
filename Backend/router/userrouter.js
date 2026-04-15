@@ -1,9 +1,21 @@
 let express=require("express");
 let auth=require("../middleware/user");
 let router=express.Router();
+const multer = require("multer");
 
 const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, userotpgenerate, userotpverify, userbyid, changepassword } = require("../controller/usercontroller");
-const { blockuser } = require("../service/userservice");
+const { blockuser, updateuser } = require("../service/userservice");
+
+let upload =multer({ 
+    storage:multer.diskStorage({
+        destination:(req, file, cb)=>{
+            cb(null,"./public/images");
+        },
+        filename:(req,file,cb)=>{
+            cb(null, file.originalname);
+        }
+    })
+})
 
 router.post("/userregister",userregister);
 router.post("/userlogin",userlogin);
@@ -17,5 +29,6 @@ router.post("/userverifyotp",userotpverify);
 router.post("/blockuser",blockuser);
 router.get("/userbyid/:id",userbyid);
 router.post("/changepassworduser",changepassword);
+router.put("/updateuser",auth,upload.single('image'),updateuser);
 
 module.exports=router;

@@ -270,3 +270,28 @@ catch(err)
 }
 
 }
+
+exports.updateuser=async(req,res)=>
+{
+    const user=req.user;
+    let image=req.file ? req.file.path :user.image;
+    console.log(image);
+    let updatedData={
+        email:req.body.email,
+        name:req.body.name,
+        contact:req.body.contact,
+        address:req.body.address,
+        gender:req.body.gender,
+        dob:req.body.dob,
+        fatherName:req.body.fatherName,
+        motherName:req.body.motherName,
+        maritalStatus:req.body.maritalStatus,
+        nationality:req.body.nationality,
+        bloodGroup:req.body.bloodGroup,
+        emergencyContactName:req.body.emergencyContactName,
+        emergencyContactNumber:req.body.emergencyContactNumber,
+        emergencyRelation:req.body.emergencyRelation,
+    }
+    let updateduser= await rec.findOneAndUpdate({_id:user._id},updatedData,{new:true});
+    return res.status(200).json({ success: true, msg: "User profile updated successfully", user:updateduser });
+}

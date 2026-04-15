@@ -33,8 +33,8 @@ const UserProfile = () => {
   const fetchUserProfile = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/userProfile`, {
-        headers: { Authorization: `Bearer ${Cookies.get("emstoken")}` },
+      const response = await axios.get(`${API_BASE_URL}/userprofile`, {
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         withCredentials: true,
       });
 
@@ -98,7 +98,7 @@ const UserProfile = () => {
     try {
       await axios.put(`${API_BASE_URL}/updateuser`, formData, {
         headers: { 
-          Authorization: `Bearer ${Cookies.get("emstoken")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
           'Content-Type': 'multipart/form-data' 
         },
         withCredentials: true,

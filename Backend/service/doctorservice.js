@@ -202,9 +202,10 @@ exports.doctorupdate=async(req,res)=>
     console.log(image);
     let updateData = {
         name: req.body.name,
-        specialization: req.body.specialization,
+        specialization:req.body.specialization,
         contact: req.body.contact,
         address: req.body.address,
+        gender: req.body.gender,
         hospitalName: req.body.hospitalName,
         HospitalAddress: req.body.HospitalAddress,
         bio: req.body.bio,
