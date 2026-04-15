@@ -156,8 +156,9 @@ exports.doctorprofile=async(req,res)=>
 }
 
 exports.doctorlist=async(req,res)=>
-{
-    let doctors=await rec.find();
+{   
+    let doctors=await rec.find({doctorstatus:"unblock"});
+
     return res.status(200).json({success: true,doctors})
 }
 
