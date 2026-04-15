@@ -45,7 +45,6 @@ const Viewuserall = () => {
             <p><strong>Emergency Contact Number:</strong> {user.emergencyContactNumber}</p>
             <p><strong>Emergency Contact Relation:</strong> {user.emergencyRelation}</p>
             <p><strong>image:</strong> {user.image}</p>
-            
         </div>
     );
 }
