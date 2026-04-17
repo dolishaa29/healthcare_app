@@ -5,11 +5,12 @@ let ratings = require('../model/doctorRating');
 
 exports.getrating = async (req, res) => {
     try {
+        let user=req.user;
         let { doctorId, userId, rating, description } = req.body;
 
         let newRating = new ratings({
+            userId:user._id,
              doctorId,
-             userId,
             rating,
             description
         });
