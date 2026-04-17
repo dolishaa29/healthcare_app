@@ -33,6 +33,7 @@ exports.getrating = async (req, res) => {
 
 exports.viewrating = async (req, res) => {
     try {
+        console.log('heyy');
         let data = await ratings.aggregate([
             {
                 $lookup: {
@@ -58,6 +59,7 @@ exports.viewrating = async (req, res) => {
             },
             
         ]);
+        console.log(data);
 
         res.status(200).json({
             msg: "ratings fetched successfully",data

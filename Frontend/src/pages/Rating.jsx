@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -8,12 +8,31 @@ const Rating = () => {
 
     const [rating, setRating] = useState("");
     const [description, setDescription] = useState("");
+    const [data, setData] = useState([]);
+
+
+    const fetchRatings = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_URL}/viewrating`
+            );
+            console.log(response.data.data);
+            setData(response.data.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchRatings();
+    }, []);
 
     const giverating = async (e) => {
         e.preventDefault();
 
         try {
-            const token = Cookies.get("token"); 
+            const token = Cookies.get("token");
 
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}/getrating`,
@@ -24,17 +43,17 @@ const Rating = () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}` 
+                        Authorization: `Bearer ${token}`
                     }
                 }
             );
 
-            console.log(response.data);
             alert("Rating submitted");
 
             setRating("");
             setDescription("");
 
+            fetchRatings();
         } catch (error) {
             console.log(error);
             alert("Error submitting rating");
@@ -43,7 +62,36 @@ const Rating = () => {
 
     return (
         <div style={{ padding: "20px" }}>
-            <h2>Give Rating</h2>
+
+            <h2>All Ratings</h2>
+
+            {data.length === 0 ? (
+                <p>No ratings found</p>
+            ) : (
+                data.map((item, index) => (
+                    <div
+                        key={index}
+                        style={{
+                            border: "1px solid #ddd",
+                            padding: "10px",
+                            marginBottom: "10px",
+                            borderRadius: "8px"
+                        }}
+                    >
+                        <h3>⭐ Rating: {item.rating}</h3>
+                        <p>{item.description}</p>
+
+                        <hr />
+
+                        <p><b>👨‍⚕️ Doctor:</b> {item.doctor?.name}</p>
+                        <p><b>👤 User:</b> {item.user?.name}</p>
+                    </div>
+                ))
+            )}
+
+            <hr />
+
+            <h2>Add Rating</h2>
 
             <form onSubmit={giverating}>
 
@@ -67,6 +115,7 @@ const Rating = () => {
                 <button type="submit">Submit</button>
 
             </form>
+
         </div>
     );
 };
