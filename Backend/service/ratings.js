@@ -5,7 +5,9 @@ let ratings = require('../model/doctorRating');
 
 exports.getrating = async (req, res) => {
     try {
+        console.log("heelo");
         let user=req.user;
+        console.log(user);
         let { doctorId, userId, rating, description } = req.body;
 
         let newRating = new ratings({

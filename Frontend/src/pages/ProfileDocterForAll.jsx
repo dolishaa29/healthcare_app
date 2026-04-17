@@ -76,6 +76,12 @@ const ProfileDocterForAll = () => {
             </div>
           </div>
           <button 
+           onClick={() => id && navigate(`/rating/${id}`)}            
+         className="px-6 py-2 text-sm font-bold text-slate-500 hover:text-purple-600 bg-white border border-slate-200 rounded-full hover:border-purple-200 hover:bg-purple-50 transition-all shadow-sm"
+          >
+            Rating
+          </button>
+          <button 
             onClick={() => navigate(-1)}
             className="px-6 py-2 text-sm font-bold text-slate-500 hover:text-purple-600 bg-white border border-slate-200 rounded-full hover:border-purple-200 hover:bg-purple-50 transition-all shadow-sm"
           >
