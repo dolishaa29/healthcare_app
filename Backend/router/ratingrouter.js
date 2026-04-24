@@ -4,6 +4,6 @@ let router=express.Router();
 let auth=require('../middleware/user')
 
 router.post('/getrating',auth,getrating);
-router.get('/viewrating',viewrating);
+router.get('/viewrating/:doctorId',viewrating);
 
 module.exports=router;

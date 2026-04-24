@@ -14,7 +14,7 @@ const Rating = () => {
     const fetchRatings = async () => {
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_API_URL}/viewrating`
+                `${import.meta.env.VITE_API_URL}/viewrating/${doctorId}`
             );
             console.log(response.data.data);
             setData(response.data.data);

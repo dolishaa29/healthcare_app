@@ -33,15 +33,30 @@ exports.getrating = async (req, res) => {
 
 exports.viewrating = async (req, res) => {
     try {
-        console.log('heyy');
-        con
+        const { doctorId } = req.params;
 
-        res.status(200).json({
-            msg: "ratings fetched successfully",data
-        });
+        let data = await ratings.aggregate([
+            {
+                $match: {
+                    doctorId: doctorId   
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: "$user"
+            }
+        ]);
+
+        res.json({ data });
 
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ msg: "internal server error" });
+        res.status(500).json({ msg: "error" });
     }
 };
