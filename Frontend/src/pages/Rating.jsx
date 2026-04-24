@@ -10,14 +10,14 @@ const Rating = () => {
     const [description, setDescription] = useState("");
     const [data, setData] = useState([]);
 
-
+    // ✅ FETCH RATINGS
     const fetchRatings = async () => {
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_API_URL}/viewrating/${doctorId}`
             );
-            console.log(response.data.data);
-            setData(response.data.data);
+
+            setData(response.data.data || []);
 
         } catch (error) {
             console.log(error);
@@ -25,16 +25,19 @@ const Rating = () => {
     };
 
     useEffect(() => {
-        fetchRatings();
-    }, []);
+        if (doctorId) {
+            fetchRatings();
+        }
+    }, [doctorId]);
 
+    // ✅ SUBMIT RATING
     const giverating = async (e) => {
         e.preventDefault();
 
         try {
             const token = Cookies.get("token");
 
-            const response = await axios.post(
+            await axios.post(
                 `${import.meta.env.VITE_API_URL}/getrating`,
                 {
                     doctorId,
@@ -54,6 +57,7 @@ const Rating = () => {
             setDescription("");
 
             fetchRatings();
+
         } catch (error) {
             console.log(error);
             alert("Error submitting rating");
@@ -69,12 +73,13 @@ const Rating = () => {
                 <p>No ratings found</p>
             ) : (
                 data.map((i) => (
-                    <div >
-                        <h3> Rating: {i.rating}</h3>
+                    <div key={i._id} style={{ border: "1px solid #ddd", marginBottom: "10px", padding: "10px" }}>
+                        <h3>Rating: {i.rating}</h3>
                         <p>{i.description}</p>
-                        <p><b> User:</b> {i.user.name}</p>
-                        <p><b>User Email:</b>{i.user.email}</p>
-                        <p><b>User Address:</b>{i.user.address}</p>
+
+                        <p><b>User:</b> {i.user?.name}</p>
+                        <p><b>Email:</b> {i.user?.email}</p>
+                        <p><b>Address:</b> {i.user?.address}</p>
                     </div>
                 ))
             )}
@@ -87,7 +92,7 @@ const Rating = () => {
 
                 <input
                     type="number"
-                    placeholder="Rating (1-5)"
+                    placeholder="Rating"
                     value={rating}
                     onChange={(e) => setRating(e.target.value)}
                 />

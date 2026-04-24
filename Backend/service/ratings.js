@@ -31,6 +31,7 @@ exports.getrating = async (req, res) => {
 };
 
 
+
 exports.viewrating = async (req, res) => {
     try {
         const { doctorId } = req.params;
@@ -38,7 +39,7 @@ exports.viewrating = async (req, res) => {
         let data = await ratings.aggregate([
             {
                 $match: {
-                    doctorId: doctorId   
+                    doctorId: doctorId
                 }
             },
             {
@@ -50,13 +51,22 @@ exports.viewrating = async (req, res) => {
                 }
             },
             {
-                $unwind: "$user"
+                $unwind: {
+                    path: "$user",
+                    
+                }
             }
         ]);
 
-        res.status(200).json({status:true , msg:"data fetched successfully" ,data:data});
+        console.log("TOTAL RETURNED:", data.length);
+
+        res.status(200).json({
+            status: true,
+            data:data
+        });
 
     } catch (err) {
+        console.log(err);
         res.status(500).json({ msg: "error" });
     }
 };
