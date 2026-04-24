@@ -83,8 +83,9 @@ const Rating = () => {
 
                         <hr />
 
-                        <p><b> Doctor:</b> {item.doctor?.name}</p>
                         <p><b> User:</b> {item.user?.name}</p>
+                        <p><b>User Email:</b>{item.user.email}</p>
+                        <p><b>User Address:</b>{item.user.address}</p>
                     </div>
                 ))
             )}
