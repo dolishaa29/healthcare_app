@@ -4,7 +4,7 @@ const ViewRating = () => {
   
   return (
     <div>
-      
+      console.log("hii")
     </div>
   )
 }

@@ -78,13 +78,13 @@ const Rating = () => {
                             borderRadius: "8px"
                         }}
                     >
-                        <h3>⭐ Rating: {item.rating}</h3>
+                        <h3> Rating: {item.rating}</h3>
                         <p>{item.description}</p>
 
                         <hr />
 
-                        <p><b>👨‍⚕️ Doctor:</b> {item.doctor?.name}</p>
-                        <p><b>👤 User:</b> {item.user?.name}</p>
+                        <p><b> Doctor:</b> {item.doctor?.name}</p>
+                        <p><b> User:</b> {item.user?.name}</p>
                     </div>
                 ))
             )}
