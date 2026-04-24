@@ -54,7 +54,7 @@ exports.viewrating = async (req, res) => {
             }
         ]);
 
-        res.json({ data });
+        res.status(200).json({status:true , msg:"data fetched successfully" ,data:data});
 
     } catch (err) {
         res.status(500).json({ msg: "error" });

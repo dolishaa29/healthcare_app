@@ -68,24 +68,13 @@ const Rating = () => {
             {data.length === 0 ? (
                 <p>No ratings found</p>
             ) : (
-                data.map((item, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            border: "1px solid #ddd",
-                            padding: "10px",
-                            marginBottom: "10px",
-                            borderRadius: "8px"
-                        }}
-                    >
-                        <h3> Rating: {item.rating}</h3>
-                        <p>{item.description}</p>
-
-                        <hr />
-
-                        <p><b> User:</b> {item.user?.name}</p>
-                        <p><b>User Email:</b>{item.user.email}</p>
-                        <p><b>User Address:</b>{item.user.address}</p>
+                data.map((i) => (
+                    <div >
+                        <h3> Rating: {i.rating}</h3>
+                        <p>{i.description}</p>
+                        <p><b> User:</b> {i.user.name}</p>
+                        <p><b>User Email:</b>{i.user.email}</p>
+                        <p><b>User Address:</b>{i.user.address}</p>
                     </div>
                 ))
             )}
