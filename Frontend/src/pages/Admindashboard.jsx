@@ -53,6 +53,7 @@ const Admindashboard = () => {
       <Loader2 className="animate-spin text-indigo-600" size={35} />
     </div>
   );
+  
 
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">

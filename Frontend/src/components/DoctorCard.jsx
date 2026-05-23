@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -8,6 +8,27 @@ const DoctorCard = ({ doctor, image }) => {
   const [isBooking, setIsBooking] = useState(false);
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [ratings, setRatings] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/viewrating/${doctor._id}`);
+        if (response.data.status && response.data.data) {
+          const data = response.data.data;
+          setRatings(data);
+          if (data.length > 0) {
+            const sum = data.reduce((acc, curr) => acc + curr.rating, 0);
+            setAverageRating((sum / data.length).toFixed(1));
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching ratings for doctor card:", err);
+      }
+    };
+    fetchRatings();
+  }, [doctor._id]);
 
   const handleAction = () => {
     if (!isBooking) setIsBooking(true);
@@ -73,9 +94,20 @@ const DoctorCard = ({ doctor, image }) => {
 
       <div className="px-7 pt-2 pb-7">
         <div className="flex flex-col mb-5">
-          <span className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">
-            {doctor.specialization || "Generalist"}
-          </span>
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase">
+              {doctor.specialization || "Generalist"}
+            </span>
+            {averageRating > 0 && (
+              <div className="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-100/50">
+                <svg className="w-3.5 h-3.5 fill-amber-400 text-amber-400" viewBox="0 0 24 24">
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                </svg>
+                <span className="text-[11px] font-extrabold text-amber-700">{averageRating}</span>
+                <span className="text-[9px] font-semibold text-amber-600/70">({ratings.length})</span>
+              </div>
+            )}
+          </div>
           <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
             Dr. {doctor.name}
           </h3>

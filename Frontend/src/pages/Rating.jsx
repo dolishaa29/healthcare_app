@@ -77,9 +77,7 @@ const Rating = () => {
                         <h3>Rating: {i.rating}</h3>
                         <p>{i.description}</p>
 
-                        <p><b>User:</b> {i.user?.name}</p>
-                        <p><b>Email:</b> {i.user?.email}</p>
-                        <p><b>Address:</b> {i.user?.address}</p>
+                        <p><b>User:</b> {i.userId}</p>
                     </div>
                 ))
             )}

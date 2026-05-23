@@ -10,6 +10,8 @@ const ProfileDocterForAll = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [ratings, setRatings] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
 
   const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -33,8 +35,25 @@ const ProfileDocterForAll = () => {
     }
   };
 
+  const fetchRatings = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/viewrating/${id}`);
+      if (response.data.status && response.data.data) {
+        const data = response.data.data;
+        setRatings(data);
+        if (data.length > 0) {
+          const sum = data.reduce((acc, curr) => acc + curr.rating, 0);
+          setAverageRating((sum / data.length).toFixed(1));
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching ratings:", err);
+    }
+  };
+
   useEffect(() => {
      fetchDoctorProfile();
+     fetchRatings();
   }, [id]);
 
   const infoLabelStyle = "block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1";
@@ -67,8 +86,16 @@ const ProfileDocterForAll = () => {
               )}
             </div>
             <div>
-              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
                 Dr. {doctor?.name}
+                {averageRating > 0 && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-50 text-amber-600 text-xs font-black border border-amber-100/50 shadow-sm">
+                    <svg className="w-3.5 h-3.5 fill-amber-400 text-amber-400" viewBox="0 0 24 24">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                    {averageRating} ({ratings.length})
+                  </span>
+                )}
               </h1>
               <span className="inline-flex items-center px-3 py-1 mt-2 rounded-full bg-blue-50 text-blue-600 text-[11px] font-bold uppercase tracking-wider border border-blue-100">
                 {doctor?.specialization}
@@ -152,6 +179,8 @@ const ProfileDocterForAll = () => {
                  {doctor?.HospitalAddress || doctor?.clinicAddress || "Address not specified."}
                </div>
             </section>
+
+
 
           </div>
         )}

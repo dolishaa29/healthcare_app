@@ -12,7 +12,7 @@ exports.getrating = async (req, res) => {
 
         let newRating = new ratings({
             userId:user._id,
-             doctorId,
+            doctorId,
             rating,
             description
         });
@@ -31,38 +31,17 @@ exports.getrating = async (req, res) => {
 };
 
 
-
 exports.viewrating = async (req, res) => {
     try {
-        const { doctorId } = req.params;
+        const doctorId = req.params.doctorId;
+        console.log("Doctor ID:", doctorId);
+        let data = await ratings.find({ doctorId: doctorId });
 
-        let data = await ratings.aggregate([
-            {
-                $match: {
-                    doctorId: doctorId
-                }
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "user"
-                }
-            },
-            {
-                $unwind: {
-                    path: "$user",
-                    
-                }
-            }
-        ]);
-
-        console.log("TOTAL RETURNED:", data.length);
-
+        console.log("Fetched Data:", data);
+        
         res.status(200).json({
             status: true,
-            data:data
+            data: data
         });
 
     } catch (err) {
