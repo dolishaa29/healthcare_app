@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   CalendarPlus, LayoutList, LogOut, Loader2,
-  Menu, X, LayoutDashboard, ChevronRight,User, Bot
+  Menu, X, LayoutDashboard, ChevronRight, User
 } from 'lucide-react';
+import HealthBot from '../components/bot';
 
 const Userdashboard = () => {
   const [data, setData] = useState({ email: "", name: "", contact: "", address: "" });
@@ -63,7 +64,6 @@ const Userdashboard = () => {
           <SidebarLink icon={<LayoutList size={20}/>} label="My Appointments" onClick={() => navigate('/userviewapp')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<CalendarPlus size={20}/>} label="View Doctor/Appointments" onClick={() => navigate('/ViewDoctorss')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<User size={20}/>} label="Profile" onClick={() => navigate('/userprofile')} isExpanded={isSidebarOpen} />
-          <SidebarLink icon={<Bot size={20}/>} label="Health Bot" onClick={() => navigate('/Bot')} isExpanded={isSidebarOpen} />
            
         </nav>
 
@@ -105,10 +105,11 @@ const Userdashboard = () => {
                 onClick={() => navigate('/userviewapp')}
               />
             </section>
-
-          </div>
+            </div>
         </div>
       </main>
+
+      <HealthBot />
     </div>
   );
 };

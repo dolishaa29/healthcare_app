@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "public")));
 
-let { health } = require("./dbconnection");
+let health = require("./dbconnection");
 
 app.use("/", require("./router/adminrouter"));
 app.use("/", require("./router/doctorrouter"));
