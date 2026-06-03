@@ -33,6 +33,7 @@ app.use("/", require("./router/doctorrouter"));
 app.use("/", require("./router/userrouter"));
 app.use("/", require("./router/appointrouter"));
 app.use("/", require("./router/ratingrouter"));
+app.use("/", require("./router/botrouter"));
 
 
 

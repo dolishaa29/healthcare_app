@@ -26,10 +26,13 @@ const DoctorProfile = () => {
         headers: { Authorization: `Bearer ${Cookies.get("emstoken")}` },
         withCredentials: true,
       });
-      setDoctor(data.doctors);
-      if (data.doctors.image) {
-        const filename = data.doctors.image.split(/[\\/]/).pop();
-        setImagePreview(`${API_BASE_URL}/images/${filename}`);
+      
+      if (data && data.doctors) {
+        setDoctor(data.doctors);
+
+        if (data.doctors.image) {
+          setImagePreview(data.doctors.image);
+        }
       }
     } catch (err) {
       setError("Failed to fetch profile details.");
@@ -41,23 +44,21 @@ const DoctorProfile = () => {
   useEffect(() => { fetchDoctorProfile(); }, []);
 
   const handleChange = (e) => {
-    try{
-    const { name, value, type, files } = e.target;
-    
-    if (type === "file") {
-      const file = files[0];
-      if (file) {
-        setImageFile(file); 
-        setImagePreview(URL.createObjectURL(file)); 
+    try {
+      const { name, value, type, files } = e.target;
+      
+      if (type === "file") {
+        const file = files[0];
+        if (file) {
+          setImageFile(file); 
+          setImagePreview(URL.createObjectURL(file)); 
+        }
+      } else {
+        setDoctor((prev) => ({ ...prev, [name]: value }));
       }
-    } else {
-      setDoctor((prev) => ({ ...prev, [name]: value }));
+    } catch(err) {
+      console.log(err);
     }
-  }
-  catch(err)
-  {
-    console.log(err);
-  }
   };
 
   const handleSubmit = async (e) => {
@@ -79,21 +80,19 @@ const DoctorProfile = () => {
 
     if (imageFile) {
       formData.append("image", imageFile);
-    } else {
-      formData.append("image", doctor.image );
     }
 
     try {
       await axios.put(`${API_BASE_URL}/updatedoctor`, formData, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${Cookies.get("emstoken")}`,
-          'Content-Type': 'multipart/form-data' 
+          'Content-Type': 'multipart/form-data'
         },
         withCredentials: true,
       });
       alert("Profile Updated Successfully!");
-      setImageFile(null); 
-      fetchDoctorProfile(); 
+      setImageFile(null);
+      fetchDoctorProfile();
     } catch (err) {
       setError("Failed to update profile.");
     }

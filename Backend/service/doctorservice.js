@@ -6,6 +6,7 @@ let otps=require("../model/OTP");
 let bct=require("bcryptjs");
 let crypto=require("crypto");
 const nodemailer = require("nodemailer");
+const cloudinary=require("../config/cloudinary")
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -18,14 +19,14 @@ const transporter = nodemailer.createTransport({
 
 
 exports.doctorpermission=async(req,res)=>
-{   
+{
     console.log("Doctor permission request body:", req.body);
     let email=req.body.email;
     let contact=req.body.contact;
     let name=req.body.name;
     let specialization=req.body.specialization;
     let address=req.body.address;
-    let certificate=req.file.filename;
+    let certificate = req.file ? req.file.filename : "";
     let already = await rec2.findOne({ email: email });
 
 if (already && (already.permission === "pending" || already.permission === "approved")) {
@@ -196,29 +197,54 @@ exports.doctorviewapp=async(req,res)=>{
     return res.status(200).json({ success: true, appointments });
 }
 
-exports.doctorupdate=async(req,res)=>
-{
-    const doctor = req.doctor;
-    let image = req.file ? req.file.path : doctor.image;
-    console.log(image);
-    let updateData = {
-        name: req.body.name,
-        specialization:req.body.specialization,
-        contact: req.body.contact,
-        address: req.body.address,
-        gender: req.body.gender,
-        hospitalName: req.body.hospitalName,
-        HospitalAddress: req.body.HospitalAddress,
-        bio: req.body.bio,
-        experienceYears: req.body.experienceYears,
-        title: req.body.title,
-        institution: req.body.institution,
-        year: req.body.year,
-        image: image,
-    };
-    let updatedDoctor = await rec.findOneAndUpdate({ _id: doctor._id }, updateData, { new: true });
-    return res.status(200).json({ success: true, msg: "doctor profile updated successfully", doctor: updatedDoctor });
-}
+exports.doctorupdate = async (req, res) => {
+    try {
+        const doctor = req.doctor;
+        let image = doctor.image;
+
+        if (req.file) {
+            try {
+                const result = await cloudinary.uploader.upload(req.file.path);
+                if (result && result.secure_url) {
+                    image = result.secure_url;
+                }
+            } catch (uploadErr) {
+                console.log("Cloudinary upload error:", uploadErr);
+            }
+        }
+
+        let updateData = {
+            name: req.body.name,
+            specialization: req.body.specialization,
+            contact: req.body.contact,
+            address: req.body.address,
+            gender: req.body.gender,
+            hospitalName: req.body.hospitalName,
+            HospitalAddress: req.body.HospitalAddress,
+            bio: req.body.bio,
+            experienceYears: req.body.experienceYears,
+            title: req.body.title,
+            institution: req.body.institution,
+            year: req.body.year,
+            image: image,
+        };
+        let updatedDoctor = await rec.findOneAndUpdate({ _id: doctor._id }, updateData, { new: true });
+
+        if (!updatedDoctor) {
+            return res.status(444).json({ success: false, msg: "Doctor not found" });
+        }
+
+        return res.status(200).json({
+            success: true,
+            msg: "Doctor profile updated successfully",
+            doctors: updatedDoctor
+        });
+
+    } catch (error) {
+        console.error("Error in doctorupdate:", error);
+        return res.status(500).json({ success: false, msg: "Internal server error" });
+    }
+};
 
 exports.changePassword=async(req,res)=>
 {

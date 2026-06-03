@@ -40,10 +40,9 @@ const UserProfile = () => {
 
       const userData = response.data.user;
       setUser(userData);
-      
+
       if (userData.image) {
-        const filename = userData.image.split(/[\\/]/).pop();
-        setImagePreview(`${API_BASE_URL}/images/${filename}`);
+        setImagePreview(userData.image);
       }
     } catch (err) {
       setError("Failed to fetch profile details.");
@@ -91,21 +90,19 @@ const UserProfile = () => {
 
     if (imageFile) {
       formData.append("image", imageFile);
-    } else {
-      formData.append("image", user.image );
     }
 
     try {
       await axios.put(`${API_BASE_URL}/updateuser`, formData, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
-          'Content-Type': 'multipart/form-data' 
+          'Content-Type': 'multipart/form-data'
         },
         withCredentials: true,
       });
       alert("Profile Updated Successfully!");
       setImageFile(null);
-      fetchUserProfile(); 
+      fetchUserProfile();
     } catch (err) {
       setError("Failed to update profile.");
       console.error(err);

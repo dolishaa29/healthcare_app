@@ -2,19 +2,11 @@ let express=require("express");
 let auths=require("../middleware/doctor");
 let router=express.Router();
 const { doctorregister , doctorlogin,doctorlogout,doctorprofile, doctorlist, doctorpermission, doctorrequest, doctorpermissionupdate, doctorDashboard, doctorviewapp, doctorupdate, changePassword, doctorprofileview, doctorforgotpassword, doctorverifyotp, deletedoctor} = require("../controller/doctorcontroller");
-
-const multer = require("multer");
 const { blockdoctor } = require("../service/doctorservice");
-let upload =multer({ 
-    storage:multer.diskStorage({
-        destination:(req, file, cb)=>{
-            cb(null,"./public/images");
-        },
-        filename:(req,file,cb)=>{
-            cb(null, file.originalname);
-        }
-    })
-})
+const upload = require("../middleware/multer"); 
+const cloudinary = require("../config/cloudinary");
+
+
 
 router.post("/doctorregister",doctorregister);
 router.post("/doctorlogin",doctorlogin);

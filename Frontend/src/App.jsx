@@ -26,6 +26,7 @@ import Viewuserall from './pages/Viewuserall';
 import UserProfile from './pages/UserProfile';
 import Changepassuser from './pages/Changepassuser';
 import Rating from './pages/Rating';
+import Bot from './components/bot';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
         <Route path='/userprofile' element={<UserProfile/>}/>
         <Route path='/changepassworduser' element={<Changepassuser/>}/>
         <Route path='/rating/:doctorId' element={<Rating/>}/>
+        <Route path='/Bot' element={<Bot/>}/>
       </Routes>
       </BrowserRouter>
     </div>

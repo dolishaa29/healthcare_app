@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { 
   CalendarPlus, LayoutList, LogOut, Loader2,
-  Menu, X, LayoutDashboard, ChevronRight,User
+  Menu, X, LayoutDashboard, ChevronRight,User, Bot
 } from 'lucide-react';
 
 const Userdashboard = () => {
@@ -63,6 +63,7 @@ const Userdashboard = () => {
           <SidebarLink icon={<LayoutList size={20}/>} label="My Appointments" onClick={() => navigate('/userviewapp')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<CalendarPlus size={20}/>} label="View Doctor/Appointments" onClick={() => navigate('/ViewDoctorss')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<User size={20}/>} label="Profile" onClick={() => navigate('/userprofile')} isExpanded={isSidebarOpen} />
+          <SidebarLink icon={<Bot size={20}/>} label="Health Bot" onClick={() => navigate('/Bot')} isExpanded={isSidebarOpen} />
            
         </nav>
 
