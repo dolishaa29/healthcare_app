@@ -2,7 +2,6 @@ import { io } from "socket.io-client";
 
 let socket = null;
 
-// returns a singleton, authenticated socket connection shared by the chat pages
 export const getSocket = (token, role) => {
   if (socket && socket.connected) return socket;
 

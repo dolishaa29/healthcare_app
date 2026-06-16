@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import {
   CalendarPlus, LayoutList, LogOut, Loader2,
-  Menu, X, LayoutDashboard, ChevronRight, User, MessageCircle
+  Menu, X, LayoutDashboard, ChevronRight, User, MessageCircle, FileText
 } from 'lucide-react';
 import HealthBot from '../components/bot';
 
@@ -65,6 +65,7 @@ const Userdashboard = () => {
           <SidebarLink icon={<CalendarPlus size={20}/>} label="View Doctor/Appointments" onClick={() => navigate('/ViewDoctorss')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<User size={20}/>} label="Profile" onClick={() => navigate('/userprofile')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<MessageCircle size={20}/>} label="Messages" onClick={() => navigate('/userchat')} isExpanded={isSidebarOpen} />
+          <SidebarLink icon={<FileText size={20}/>} label="Report Analysis" onClick={()=>navigate('/ReportAnalysis')} isExpanded={isSidebarOpen}/>
         </nav>
 
         <div className="p-5 border-t border-slate-50">

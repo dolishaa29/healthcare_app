@@ -3,7 +3,6 @@ import axios from "axios";
 import { Send, ArrowLeft } from "lucide-react";
 import { getSocket } from "../socket";
 
-// shared real-time chat panel used by both the user side and the doctor side
 const ChatWindow = ({ role, token, userId, doctorId, otherName, historyUrl, onBack }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");

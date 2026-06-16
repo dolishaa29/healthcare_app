@@ -31,6 +31,7 @@ import Rating from './pages/Rating';
 import Bot from './components/bot';
 import UserChat from './pages/UserChat';
 import DoctorChat from './pages/DoctorChat';
+import ReportAnalysis from './pages/ReportAnalysis';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
         <Route path='/Bot' element={<Bot/>}/>
         <Route path='/userchat' element={<Userpri><UserChat/></Userpri>}/>
         <Route path='/doctorchat' element={<Doctorpri><DoctorChat/></Doctorpri>}/>
+        <Route path='/ReportAnalysis' element={<ReportAnalysis/>}/>
       </Routes>
       </BrowserRouter>
     </div>

@@ -16,7 +16,6 @@ function initChatSocket(server) {
         },
     });
 
-    // authenticate every socket connection using the same JWT used for REST calls
     io.use(async (socket, next) => {
         try {
             const { token, role } = socket.handshake.auth || {};
@@ -55,6 +54,7 @@ function initChatSocket(server) {
             socket.join(roomId(userId, doctorId));
         });
 
+        
         socket.on("sendMessage", async ({ userId, doctorId, text }) => {
             try {
                 if (!userId || !doctorId || !text || !text.trim()) return;

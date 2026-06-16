@@ -4,7 +4,7 @@ let appointmentnew = require("../model/Appointment/appointment");
 exports.getUserConversations = async (req, res) => {
     try {
         const user = req.user;
-        let appointments = await appointmentnew.find({ userid: user._id.toString() });
+        let appointments = await appointmentnew.find({ userid: user._id.toString()});
 
         let seen = new Set();
         let conversations = [];
@@ -41,11 +41,11 @@ exports.getDoctorConversations = async (req, res) => {
     }
 };
 
+
 exports.getHistoryForUser = async (req, res) => {
     try {
         const user = req.user;
         const doctorId = req.params.doctorId;
-
         let messages = await Message.find({ userId: user._id.toString(), doctorId }).sort({ createdAt: 1 });
         return res.status(200).json({ success: true, messages });
     } catch (err) {
@@ -57,7 +57,6 @@ exports.getHistoryForDoctor = async (req, res) => {
     try {
         const doctor = req.doctor;
         const userId = req.params.userId;
-
         let messages = await Message.find({ userId, doctorId: doctor._id.toString() }).sort({ createdAt: 1 });
         return res.status(200).json({ success: true, messages });
     } catch (err) {
@@ -65,7 +64,7 @@ exports.getHistoryForDoctor = async (req, res) => {
     }
 };
 
-// used internally by the socket server when a message is sent in real time
+
 exports.saveMessage = async ({ userId, doctorId, senderRole, text }) => {
     let message = new Message({ userId, doctorId, senderRole, text });
     await message.save();
