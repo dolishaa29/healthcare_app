@@ -11,9 +11,8 @@ if (!GEMINI_API_KEY) {
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-// One endpoint for the whole report chat:
-// - send a PDF file -> starts a new report thread with the AI's analysis as the first bot message.
-// - send { text, reportId } -> asks a follow-up question inside that thread.
+
+
 exports.handleReport = async (req, res) => {
   try {
     if (!GEMINI_API_KEY) {
@@ -67,9 +66,8 @@ exports.handleReport = async (req, res) => {
   }
 };
 
-// One endpoint for fetching reports:
-// - no query -> list of all the user's report threads.
-// - ?id=<reportId> -> the full thread (messages included) for that report.
+
+
 exports.getReports = async (req, res) => {
   try {
     if (req.query.id) {

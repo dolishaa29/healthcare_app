@@ -5,7 +5,7 @@ const { handleReport, getReports } = require("../service/reportanalysis");
 
 let router = express.Router();
 
-router.post("/report", userAuth, upload.single("file"), async (req, res) => { await handleReport(req, res); });
-router.get("/report", userAuth, async (req, res) => { await getReports(req, res); });
+router.post("/report", userAuth, upload.single("file"), handleReport);
+router.get("/report", userAuth,getReports);
 
 module.exports = router;
