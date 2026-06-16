@@ -280,7 +280,9 @@ exports.updateuser=async(req,res)=>
 
         if (req.file) {
             try {
-                const result = await cloudinary.uploader.upload(req.file.path);
+                const result = await cloudinary.uploadBuffer(req.file.buffer, {
+                    folder: "user-images",
+                });
                 if (result && result.secure_url) {
                     image = result.secure_url;
                 }

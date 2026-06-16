@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import {
   CalendarPlus, LayoutList, LogOut, Loader2,
-  Menu, X, LayoutDashboard, ChevronRight, User
+  Menu, X, LayoutDashboard, ChevronRight, User, MessageCircle
 } from 'lucide-react';
 import HealthBot from '../components/bot';
 
@@ -64,7 +64,7 @@ const Userdashboard = () => {
           <SidebarLink icon={<LayoutList size={20}/>} label="My Appointments" onClick={() => navigate('/userviewapp')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<CalendarPlus size={20}/>} label="View Doctor/Appointments" onClick={() => navigate('/ViewDoctorss')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<User size={20}/>} label="Profile" onClick={() => navigate('/userprofile')} isExpanded={isSidebarOpen} />
-           
+          <SidebarLink icon={<MessageCircle size={20}/>} label="Messages" onClick={() => navigate('/userchat')} isExpanded={isSidebarOpen} />
         </nav>
 
         <div className="p-5 border-t border-slate-50">
@@ -99,9 +99,9 @@ const Userdashboard = () => {
                 icon={<CalendarPlus className="text-indigo-600"/>} 
                 onClick={() => navigate('/Appointment')}
               />
-              <ActionButton 
-                title="View My History" 
-                icon={<LayoutList className="text-indigo-600"/>} 
+              <ActionButton
+                title="View My History"
+                icon={<LayoutList className="text-indigo-600"/>}
                 onClick={() => navigate('/userviewapp')}
               />
             </section>

@@ -26,7 +26,20 @@ exports.doctorpermission=async(req,res)=>
     let name=req.body.name;
     let specialization=req.body.specialization;
     let address=req.body.address;
-    let certificate = req.file ? req.file.filename : "";
+    let certificate = "";
+
+    if (req.file) {
+        try {
+            const result = await cloudinary.uploadBuffer(req.file.buffer, {
+                folder: "doctor-certificates",
+            });
+            certificate = result.secure_url;
+        } catch (uploadErr) {
+            console.log("Cloudinary upload error:", uploadErr);
+            return res.status(500).json({ success: false, msg: "certificate upload failed" });
+        }
+    }
+
     let already = await rec2.findOne({ email: email });
 
 if (already && (already.permission === "pending" || already.permission === "approved")) {
@@ -204,7 +217,9 @@ exports.doctorupdate = async (req, res) => {
 
         if (req.file) {
             try {
-                const result = await cloudinary.uploader.upload(req.file.path);
+                const result = await cloudinary.uploadBuffer(req.file.buffer, {
+                    folder: "doctor-images",
+                });
                 if (result && result.secure_url) {
                     image = result.secure_url;
                 }

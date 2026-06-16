@@ -3,13 +3,10 @@ import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Userpri = ({ children }) => {
-  const token = Cookies.get("emtoken");
+  const token = Cookies.get("token");
 
   if (!token) {
-    return <>
-     
-    <Navigate to="/Adminlogin"/>
-    </>
+    return <Navigate to="/" />;
   }
 
   return children;

@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  CalendarCheck, 
-  LogOut, 
-  Loader2, 
-  Menu, 
-  X, 
+import {
+  LayoutDashboard,
+  CalendarCheck,
+  LogOut,
+  Loader2,
+  Menu,
+  X,
   ChevronRight,
   User,
+  MessageCircle,
 } from 'lucide-react';
 
 const Docterdashboard = () => {
@@ -46,6 +47,7 @@ const Docterdashboard = () => {
   const menuItems = [
     { name: 'View Appointments', path: '/doctorviewapp', icon: <CalendarCheck size={20} /> },
     { name: 'Profile', path: '/doctorprofile', icon: <User size={20} /> },
+    { name: 'Messages', path: '/doctorchat', icon: <MessageCircle size={20} /> },
   ];
 
   const handleLogout = () => {
@@ -112,10 +114,10 @@ const Docterdashboard = () => {
 
         <div className="flex-1 overflow-y-auto px-10 pb-10">
           <div className="max-w-4xl space-y-10">
-            <section>
-              <ActionButton 
-                title="View Scheduled Appointments" 
-                icon={<CalendarCheck className="text-indigo-600"/>} 
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <ActionButton
+                title="View Scheduled Appointments"
+                icon={<CalendarCheck className="text-indigo-600"/>}
                 onClick={() => navigate('/doctorviewapp')}
               />
             </section>

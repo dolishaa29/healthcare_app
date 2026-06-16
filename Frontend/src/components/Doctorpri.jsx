@@ -3,13 +3,10 @@ import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Doctorpri = ({ children }) => {
-  const token = Cookies.get("emtoken");
+  const token = Cookies.get("emstoken");
 
   if (!token) {
-    return <>
-     
-    <Navigate to="/Adminlogin"/>
-    </>
+    return <Navigate to="/" />;
   }
 
   return children;

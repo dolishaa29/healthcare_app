@@ -119,9 +119,9 @@ const DoctorRequest = () => {
                           </span>
                         </td>
                         <td className="px-6 py-5">
-                          <a 
-                            href={`${import.meta.env.VITE_API_URL}/images/${doc.certificate}`} 
-                            target="_blank" 
+                          <a
+                            href={doc.certificate}
+                            target="_blank"
                             rel="noreferrer"
                             className="text-[10px] font-black text-blue-500 hover:text-blue-700 underline tracking-tighter"
                           >

@@ -14,6 +14,8 @@ import Appointment from './pages/Appointment';
 import ViewAppointment from './pages/ViewAppointment';
 import Login from './pages/Login';
 import PrivateRoute from './components/priroutes';
+import Userpri from './components/Userpri';
+import Doctorpri from './components/Doctorpri';
 import Userviewapp from './pages/Userviewapp';
 import Doctorviewapp from './pages/Doctorviewapp';
 import Adminregister from './pages/Adminregister';
@@ -27,6 +29,8 @@ import UserProfile from './pages/UserProfile';
 import Changepassuser from './pages/Changepassuser';
 import Rating from './pages/Rating';
 import Bot from './components/bot';
+import UserChat from './pages/UserChat';
+import DoctorChat from './pages/DoctorChat';
 
 function App() {
   return (
@@ -37,9 +41,9 @@ function App() {
         <Route path='/' element={<Login/>}/>
         <Route path='/Admindashboard' element={<PrivateRoute><Admindashboard/></PrivateRoute>}/>
         <Route path='/Doctorregister' element={<Doctorregister/>}/>
-        <Route path='/Doctordashboard' element={<Docterdashboard/>}/>
+        <Route path='/Doctordashboard' element={<Doctorpri><Docterdashboard/></Doctorpri>}/>
         <Route path='/Userregister' element={<Userregister/>}/>
-        <Route path='/Userdashboard' element={<Userdashboard/>}/>
+        <Route path='/Userdashboard' element={<Userpri><Userdashboard/></Userpri>}/>
         <Route path='/Viewusers' element={<Viewusers/>}/>
         <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
         <Route path='/Doctorrequest' element={<DoctorRequest/>}/>
@@ -60,6 +64,8 @@ function App() {
         <Route path='/changepassworduser' element={<Changepassuser/>}/>
         <Route path='/rating/:doctorId' element={<Rating/>}/>
         <Route path='/Bot' element={<Bot/>}/>
+        <Route path='/userchat' element={<Userpri><UserChat/></Userpri>}/>
+        <Route path='/doctorchat' element={<Doctorpri><DoctorChat/></Doctorpri>}/>
       </Routes>
       </BrowserRouter>
     </div>

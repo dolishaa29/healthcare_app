@@ -1,14 +1,9 @@
 const multer = require("multer");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./Backend/public/images/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
+// Files are kept in memory and streamed straight to cloudinary (see
+// config/cloudinary.js#uploadBuffer) instead of being written to local
+// disk, since the server's filesystem isn't guaranteed to persist
+// (e.g. ephemeral containers) or to be writable relative to process cwd.
+const upload = multer({ storage: multer.memoryStorage() });
 
 module.exports = upload;
