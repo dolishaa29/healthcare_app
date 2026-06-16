@@ -31,6 +31,7 @@ app.use("/", require("./router/appointrouter"));
 app.use("/", require("./router/ratingrouter"));
 app.use("/", require("./router/botrouter"));
 app.use("/", require("./router/chatrouter"));
+app.use("/", require("./router/reportanalysis"));
 
 const PORT = process.env.PORT || 5000;
 

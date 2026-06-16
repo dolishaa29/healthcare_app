@@ -67,7 +67,7 @@ function App() {
         <Route path='/Bot' element={<Bot/>}/>
         <Route path='/userchat' element={<Userpri><UserChat/></Userpri>}/>
         <Route path='/doctorchat' element={<Doctorpri><DoctorChat/></Doctorpri>}/>
-        <Route path='/ReportAnalysis' element={<ReportAnalysis/>}/>
+        <Route path='/ReportAnalysis' element={<Userpri><ReportAnalysis/></Userpri>}/>
       </Routes>
       </BrowserRouter>
     </div>
