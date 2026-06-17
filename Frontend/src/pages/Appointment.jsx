@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { CheckCircle2, ChevronLeft, Loader2, Send, FileText, CalendarCheck, Search } from "lucide-react";
+import { CheckCircle2, ChevronLeft, Loader2, Send, FileText, CalendarCheck, Search, Building2 } from "lucide-react";
 
 const Appointment = () => {
   const [doctors, setDoctors] = useState([]);
@@ -74,7 +74,7 @@ const Appointment = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#FDFBFF] flex items-center justify-center p-10">
+      <div className="h-full overflow-y-auto bg-[#FDFBFF] flex items-center justify-center p-10">
         <div className="text-center max-w-md">
           <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-100">
             <CheckCircle2 className="text-green-500" size={44} strokeWidth={1.5} />
@@ -103,12 +103,12 @@ const Appointment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFBFF] px-6 py-10 md:px-10">
-      {/* Page header */}
-      <div className="mb-8 flex items-start justify-between flex-wrap gap-4">
+    <div className="h-full overflow-y-auto bg-[#FDFBFF] px-5 py-8 md:px-8 lg:px-10">
+
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Healthcare</p>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tighter leading-tight">
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter leading-tight">
             Book an{" "}
             <span className="bg-gradient-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
               Appointment
@@ -116,19 +116,17 @@ const Appointment = () => {
           </h1>
         </div>
 
-        {/* Step indicator */}
-        <div className="flex items-center gap-3 bg-white border border-slate-100 rounded-2xl px-5 py-3 shadow-sm self-center">
+        <div className="flex items-center gap-3 bg-white border border-slate-100 rounded-2xl px-5 py-3 shadow-sm self-start sm:self-center shrink-0">
           <StepDot active={step >= 1} done={step > 1} label="1" text="Choose Doctor" />
-          <div className={`w-10 h-0.5 rounded-full transition-all ${step > 1 ? "bg-indigo-500" : "bg-slate-200"}`} />
+          <div className={`w-8 md:w-12 h-0.5 rounded-full transition-all ${step > 1 ? "bg-indigo-500" : "bg-slate-200"}`} />
           <StepDot active={step >= 2} done={false} label="2" text="Your Reason" />
         </div>
       </div>
 
       {step === 1 ? (
         <>
-          {/* Search */}
           <div className="relative mb-7 max-w-sm">
-            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
             <input
               type="text"
               placeholder="Search by name or specialization..."
@@ -139,7 +137,7 @@ const Appointment = () => {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[1, 2, 3, 4, 5, 6].map((n) => (
                 <SkeletonCard key={n} />
               ))}
@@ -160,7 +158,7 @@ const Appointment = () => {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {filtered.map((doc) => (
                 <DoctorSelectCard
                   key={doc._id}
@@ -177,7 +175,7 @@ const Appointment = () => {
           )}
         </>
       ) : (
-        <div className="max-w-xl">
+        <div className="max-w-2xl mx-auto lg:mx-0">
           <button
             onClick={() => setStep(1)}
             className="flex items-center gap-1.5 text-slate-400 text-xs font-bold uppercase tracking-widest hover:text-indigo-600 transition-colors mb-7"
@@ -186,9 +184,8 @@ const Appointment = () => {
             Back to Doctors
           </button>
 
-          {/* Selected doctor preview */}
           <div className="bg-white border border-slate-100 rounded-3xl p-5 flex items-center gap-4 mb-5 shadow-sm">
-            <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 shrink-0">
+            <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 shrink-0">
               {getImageUrl(selectedDoctor?.image) ? (
                 <img
                   src={getImageUrl(selectedDoctor.image)}
@@ -197,7 +194,7 @@ const Appointment = () => {
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                  <span className="text-indigo-400 font-black text-xl">
+                  <span className="text-indigo-400 font-black text-2xl">
                     {selectedDoctor?.name?.[0]}
                   </span>
                 </div>
@@ -207,22 +204,25 @@ const Appointment = () => {
               <p className="text-[10px] font-bold text-indigo-500 tracking-widest uppercase">
                 {selectedDoctor?.specialization || "Specialist"}
               </p>
-              <p className="font-extrabold text-slate-900 tracking-tight">Dr. {selectedDoctor?.name}</p>
-              <p className="text-xs text-slate-400 truncate">
-                {selectedDoctor?.hospitalName}
-                {selectedDoctor?.clinicAddress ? ` • ${selectedDoctor.clinicAddress}` : ""}
-              </p>
+              <p className="font-extrabold text-slate-900 tracking-tight text-base">Dr. {selectedDoctor?.name}</p>
+              {selectedDoctor?.hospitalName && (
+                <p className="text-xs text-slate-400 truncate flex items-center gap-1 mt-0.5">
+                  <Building2 size={10} />
+                  {selectedDoctor.hospitalName}
+                  {selectedDoctor.clinicAddress ? ` • ${selectedDoctor.clinicAddress}` : ""}
+                </p>
+              )}
             </div>
             {selectedDoctor?.experienceYears && (
-              <div className="bg-indigo-50 px-3 py-1.5 rounded-xl shrink-0">
+              <div className="bg-indigo-50 px-3 py-2 rounded-xl shrink-0 text-center">
                 <p className="text-[10px] font-black text-indigo-600">
-                  {selectedDoctor.experienceYears}Y+ EXP
+                  {selectedDoctor.experienceYears}Y+
                 </p>
+                <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-wider">Exp</p>
               </div>
             )}
           </div>
 
-          {/* Reason card */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
               Reason for Visit
@@ -275,7 +275,7 @@ const Appointment = () => {
 const StepDot = ({ active, done, label, text }) => (
   <div className="flex items-center gap-2">
     <div
-      className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black transition-all
+      className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all
         ${active ? "bg-indigo-600 text-white shadow-md shadow-indigo-200" : "bg-slate-100 text-slate-400"}`}
     >
       {done ? "✓" : label}
@@ -288,12 +288,12 @@ const StepDot = ({ active, done, label, text }) => (
 
 const SkeletonCard = () => (
   <div className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden animate-pulse">
-    <div className="h-48 bg-slate-100" />
-    <div className="p-5 space-y-2.5">
+    <div className="h-52 bg-slate-100" />
+    <div className="p-5 space-y-3">
       <div className="h-2.5 bg-slate-100 rounded-full w-1/3" />
       <div className="h-4 bg-slate-100 rounded-full w-2/3" />
       <div className="h-2.5 bg-slate-100 rounded-full w-full" />
-      <div className="h-10 bg-slate-100 rounded-2xl mt-5" />
+      <div className="h-11 bg-slate-100 rounded-2xl mt-4" />
     </div>
   </div>
 );
@@ -301,9 +301,10 @@ const SkeletonCard = () => (
 const DoctorSelectCard = ({ doctor, imageUrl, onSelect }) => (
   <div
     onClick={onSelect}
-    className="group bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-50/80 hover:border-indigo-100 transition-all duration-300 overflow-hidden cursor-pointer active:scale-[0.98]"
+    className="group bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-50 hover:border-indigo-100 hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer flex flex-col"
   >
-    <div className="relative h-48 overflow-hidden">
+    {/* Image */}
+    <div className="relative h-52 overflow-hidden shrink-0">
       {imageUrl ? (
         <img
           src={imageUrl}
@@ -311,27 +312,36 @@ const DoctorSelectCard = ({ doctor, imageUrl, onSelect }) => (
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       ) : (
-        <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center">
-          <span className="text-6xl font-black text-indigo-200">{doctor.name?.[0]}</span>
+        <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center">
+          <span className="text-7xl font-black text-indigo-200">{doctor.name?.[0]}</span>
         </div>
       )}
+
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent" />
+
       {doctor.experienceYears && (
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-xl shadow-sm border border-white/50">
-          <p className="text-[10px] font-black text-slate-800">{doctor.experienceYears}Y+ EXP</p>
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2.5 py-1.5 rounded-xl shadow-sm">
+          <p className="text-[10px] font-black text-slate-800 leading-none">{doctor.experienceYears}Y+</p>
+          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Exp</p>
         </div>
       )}
     </div>
-    <div className="p-5">
-      <p className="text-[10px] font-bold text-indigo-500 tracking-widest uppercase mb-1">
+
+    {/* Info */}
+    <div className="p-5 flex flex-col flex-1">
+      <span className="text-[10px] font-bold text-indigo-500 tracking-[0.18em] uppercase mb-1">
         {doctor.specialization || "General"}
-      </p>
-      <h3 className="font-extrabold text-slate-900 tracking-tight text-[15px] mb-0.5">Dr. {doctor.name}</h3>
-      <p className="text-[11px] text-slate-400 truncate mb-4">
-        {doctor.hospitalName || "Partner Health"}
-      </p>
-      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-widest group-hover:opacity-90 transition-all shadow-lg shadow-indigo-100/50">
-        Select Doctor
-      </button>
+      </span>
+      <h3 className="font-extrabold text-slate-900 tracking-tight text-base leading-tight mb-1">
+        Dr. {doctor.name}
+      </h3>
+
+      <div className="mt-auto pt-3">
+        <button className="w-full py-3.5 rounded-2xl bg-linear-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-widest group-hover:shadow-lg group-hover:shadow-indigo-200 transition-all">
+          Select Doctor
+        </button>
+      </div>
     </div>
   </div>
 );
