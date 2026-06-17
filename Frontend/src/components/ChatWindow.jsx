@@ -3,12 +3,47 @@ import axios from "axios";
 import { Send, ArrowLeft } from "lucide-react";
 import { getSocket } from "../socket";
 
-const ChatWindow = ({ role, token, userId, doctorId, otherName, historyUrl, onBack }) => {
+const getInitials = (email = "") => email.split("@")[0].slice(0, 2).toUpperCase();
+
+const formatTime = (ts) => {
+  if (!ts) return "";
+  const d = new Date(ts);
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+};
+
+const formatDateLabel = (ts) => {
+  if (!ts) return null;
+  const d = new Date(ts);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  if (d.toDateString() === today.toDateString()) return "Today";
+  if (d.toDateString() === yesterday.toDateString()) return "Yesterday";
+  return d.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" });
+};
+
+const groupByDate = (messages) => {
+  const groups = [];
+  let lastLabel = null;
+  for (const m of messages) {
+    const label = formatDateLabel(m.createdAt || m.timestamp);
+    if (label && label !== lastLabel) {
+      groups.push({ type: "divider", label });
+      lastLabel = label;
+    }
+    groups.push({ type: "message", data: m });
+  }
+  return groups;
+};
+
+const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, historyUrl, onBack }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
   const bottomRef = useRef(null);
   const socketRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     let active = true;
@@ -55,61 +90,150 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, historyUrl, onBa
     if (!text.trim()) return;
     socketRef.current?.emit("sendMessage", { userId, doctorId, text });
     setText("");
+    inputRef.current?.focus();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      handleSend(e);
+    }
+  };
+
+  const grouped = groupByDate(messages);
+  const color = otherColor || "from-violet-500 to-indigo-500";
+
   return (
-    <div className="flex flex-col h-[78vh] w-full bg-white/80 backdrop-blur-xl rounded-[2rem] border border-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] overflow-hidden">
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-100 bg-white/60 shrink-0">
+    <div className="flex flex-col h-full bg-white">
+      {/* Header */}
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-100 bg-white shrink-0">
         {onBack && (
-          <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-100 transition-colors">
+          <button
+            onClick={onBack}
+            className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500"
+          >
             <ArrowLeft size={18} />
           </button>
         )}
-        <div>
-          <p className="text-[10px] font-bold text-purple-500 uppercase tracking-widest">Chatting with</p>
-          <h2 className="text-lg font-extrabold text-slate-800">{otherName}</h2>
+
+        {/* Avatar */}
+        <div
+          className={`w-10 h-10 rounded-xl shrink-0 flex items-center justify-center bg-linear-to-br ${color} shadow-sm`}
+        >
+          <span className="text-white text-xs font-bold">{getInitials(otherName)}</span>
+        </div>
+
+        <div className="min-w-0">
+          <h2 className="text-sm font-bold text-slate-800 truncate">
+            {otherName?.split("@")[0]}
+          </h2>
+          <p className="text-[11px] text-slate-400 font-medium">Doctor</p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1 bg-slate-50">
         {loading ? (
           <div className="flex justify-center py-10">
-            <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+            <div className="w-7 h-7 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
           </div>
         ) : messages.length === 0 ? (
-          <p className="text-center text-slate-400 text-sm py-10">No messages yet. Say hello!</p>
-        ) : (
-          messages.map((m) => (
-            <div key={m._id} className={`flex ${m.senderRole === role ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[70%] px-4 py-2.5 rounded-2xl text-sm font-medium ${
-                  m.senderRole === role
-                    ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white"
-                    : "bg-slate-100 text-slate-700"
-                }`}
-              >
-                {m.text}
-              </div>
+          <div className="flex flex-col items-center justify-center h-full py-16 text-center">
+            <div
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-linear-to-br ${color} shadow mb-3`}
+            >
+              <span className="text-white text-lg font-bold">{getInitials(otherName)}</span>
             </div>
-          ))
+            <p className="text-slate-600 font-semibold text-sm">
+              {otherName?.split("@")[0]}
+            </p>
+            <p className="text-slate-400 text-xs mt-1">No messages yet — say hello!</p>
+          </div>
+        ) : (
+          grouped.map((item, i) =>
+            item.type === "divider" ? (
+              <div key={`d-${i}`} className="flex items-center gap-3 py-2">
+                <div className="flex-1 h-px bg-slate-200" />
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                  {item.label}
+                </span>
+                <div className="flex-1 h-px bg-slate-200" />
+              </div>
+            ) : (
+              <MessageBubble
+                key={item.data._id || i}
+                m={item.data}
+                role={role}
+                otherName={otherName}
+                color={color}
+              />
+            )
+          )
         )}
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleSend} className="flex items-center gap-3 px-6 py-4 border-t border-slate-100 bg-white/60 shrink-0">
-        <input
+      {/* Input */}
+      <form
+        onSubmit={handleSend}
+        className="flex items-end gap-3 px-5 py-3.5 border-t border-slate-100 bg-white shrink-0"
+      >
+        <textarea
+          ref={inputRef}
+          rows={1}
           value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400"
+          onChange={(e) => {
+            setText(e.target.value);
+            e.target.style.height = "auto";
+            e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder="Type a message…"
+          className="flex-1 resize-none overflow-hidden px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all leading-relaxed"
+          style={{ minHeight: "42px", maxHeight: "120px" }}
         />
         <button
           type="submit"
-          className="p-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:opacity-90 transition-all active:scale-95"
+          disabled={!text.trim()}
+          className="w-10 h-10 shrink-0 flex items-center justify-center rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
         >
-          <Send size={18} />
+          <Send size={16} />
         </button>
       </form>
+    </div>
+  );
+};
+
+const MessageBubble = ({ m, role, otherName, color }) => {
+  const isSelf = m.senderRole === role;
+  const time = formatTime(m.createdAt || m.timestamp);
+
+  return (
+    <div className={`flex items-end gap-2 ${isSelf ? "flex-row-reverse" : "flex-row"}`}>
+      {/* Other avatar */}
+      {!isSelf && (
+        <div
+          className={`w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-linear-to-br ${color} shadow-sm mb-0.5`}
+        >
+          <span className="text-white text-[10px] font-bold">
+            {(otherName || "").split("@")[0].slice(0, 2).toUpperCase()}
+          </span>
+        </div>
+      )}
+
+      <div className={`flex flex-col gap-0.5 max-w-[65%] ${isSelf ? "items-end" : "items-start"}`}>
+        <div
+          className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+            isSelf
+              ? "bg-indigo-600 text-white rounded-br-sm"
+              : "bg-white text-slate-800 border border-slate-100 shadow-sm rounded-bl-sm"
+          }`}
+        >
+          {m.text}
+        </div>
+        {time && (
+          <span className="text-[10px] text-slate-400 px-1">{time}</span>
+        )}
+      </div>
     </div>
   );
 };

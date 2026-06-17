@@ -32,7 +32,6 @@ const UserLayout = () => {
 
         <nav className="flex-1 px-3 space-y-1.5">
           <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard" active={location.pathname === '/Userdashboard'} onClick={() => navigate('/Userdashboard')} isExpanded={isSidebarOpen} />
-          <SidebarLink icon={<CalendarPlus size={20} />} label="Book Appointment" active={location.pathname === '/Appointment'} onClick={() => navigate('/Appointment')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<LayoutList size={20} />} label="My Appointments" active={location.pathname === '/userviewapp'} onClick={() => navigate('/userviewapp')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<CalendarPlus size={20} />} label="View Doctors" active={location.pathname === '/ViewDoctorss'} onClick={() => navigate('/ViewDoctorss')} isExpanded={isSidebarOpen} />
           <SidebarLink icon={<User size={20} />} label="Profile" active={location.pathname === '/userprofile'} onClick={() => navigate('/userprofile')} isExpanded={isSidebarOpen} />
@@ -51,7 +50,7 @@ const UserLayout = () => {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto min-w-0">
+      <main className="flex-1 min-w-0 overflow-hidden">
         <Outlet />
       </main>
 

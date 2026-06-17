@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import { Stethoscope, FileText, Send, Loader2, ChevronDown } from "lucide-react";
+import { CheckCircle2, ChevronLeft, Loader2, Send, FileText, CalendarCheck, Search } from "lucide-react";
 
 const Appointment = () => {
   const [doctors, setDoctors] = useState([]);
-  const [doctorid, setDoctorid] = useState("");
-  const [doctormail, setDoctormail] = useState("");
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchDoctors = async () => {
-      setLoading(true);
       try {
         const response = await axios.get(import.meta.env.VITE_API_URL + "/viewdoctors");
-        if (response.status === 200) {
-          setDoctors(response.data.doctors);
-        } else {
-          setMessage("Failed to fetch doctors");
-        }
+        if (response.status === 200) setDoctors(response.data.doctors);
       } catch (err) {
-        console.error("Fetch Error:", err.response ? err.response.data : err.message);
-        setMessage(err.response?.data?.message || "Error while fetching doctors");
+        setError("Failed to load doctors. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -35,131 +28,312 @@ const Appointment = () => {
     fetchDoctors();
   }, []);
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    const filename = imagePath.split(/[\\/]/).pop();
+    return `${import.meta.env.VITE_API_URL}/images/${filename}`;
+  };
+
+  const filtered = doctors.filter(
+    (d) =>
+      d.name?.toLowerCase().includes(search.toLowerCase()) ||
+      d.specialization?.toLowerCase().includes(search.toLowerCase())
+  );
+
   const sendAppointmentRequest = async () => {
-    if (!doctorid || !description) {
-      setMessage("Please fill all fields");
+    if (!description.trim()) {
+      setError("Please describe your reason for visit");
       return;
     }
     setSubmitting(true);
+    setError("");
     try {
       const res = await axios.post(
         import.meta.env.VITE_API_URL + "/appointrequest",
-        { doctorid, description },
+        { doctorid: selectedDoctor._id, description },
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${Cookies.get("token")}`,
+            Authorization: `Bearer ${Cookies.get("token")}`,
           },
           withCredentials: true,
         }
       );
-
       if (res.data.success) {
-        setMessage("Appointment Request Sent Successfully");
+        setSuccess(true);
         setDescription("");
       } else {
-        setMessage(res.data.message || "Request Failed");
+        setError(res.data.message || "Request failed");
       }
-    } catch (error) {
-      console.error(error);
-      setMessage("Error while sending appointment request");
+    } catch {
+      setError("Error sending appointment request");
     } finally {
       setSubmitting(false);
     }
   };
 
+  if (success) {
+    return (
+      <div className="min-h-screen bg-[#FDFBFF] flex items-center justify-center p-10">
+        <div className="text-center max-w-md">
+          <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-100">
+            <CheckCircle2 className="text-green-500" size={44} strokeWidth={1.5} />
+          </div>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tighter mb-3">Request Sent!</h2>
+          <p className="text-slate-400 text-sm mb-1">Your appointment request has been sent to</p>
+          <p className="text-indigo-600 font-extrabold text-xl mb-3">Dr. {selectedDoctor?.name}</p>
+          <p className="text-slate-400 text-xs mb-10 leading-relaxed">
+            You'll be notified once the doctor confirms your appointment. You can track status in{" "}
+            <span className="font-bold text-slate-500">My Appointments</span>.
+          </p>
+          <button
+            onClick={() => {
+              setSuccess(false);
+              setSelectedDoctor(null);
+              setStep(1);
+              setSearch("");
+            }}
+            className="px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 hover:opacity-90 transition-all active:scale-[0.98]"
+          >
+            Book Another Appointment
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans overflow-hidden py-10">
-      
-      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
-      <div className="relative z-10 w-full max-w-[500px] p-10 bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(147,51,234,0.1)] mx-4">
-        
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
-            Book <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Appointment</span>
+    <div className="min-h-screen bg-[#FDFBFF] px-6 py-10 md:px-10">
+      {/* Page header */}
+      <div className="mb-8 flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Healthcare</p>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter leading-tight">
+            Book an{" "}
+            <span className="bg-gradient-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
+              Appointment
+            </span>
           </h1>
-          <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-2">Consult with Specialists</p>
         </div>
 
-        <div className="space-y-5">
-          <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Select Doctor</label>
-            <div className="relative group">
-              <select
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 appearance-none focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm cursor-pointer disabled:opacity-50"
-                disabled={loading}
-                onChange={(e) => {
-                  const doc = doctors.find((d) => d._id === e.target.value);
-                  if (doc) {
-                    setDoctorid(doc._id);
-                    setDoctormail(doc.email);
-                  }
-                }}
-              >
-                <option value="">Choose a Specialist</option>
-                {doctors.map((doc) => (
-                  <option key={doc._id} value={doc._id}>{doc.name}</option>
-                ))}
-              </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover:text-purple-500 transition-colors">
-                {loading ? <Loader2 size={18} className="animate-spin" /> : <ChevronDown size={18} />}
+        {/* Step indicator */}
+        <div className="flex items-center gap-3 bg-white border border-slate-100 rounded-2xl px-5 py-3 shadow-sm self-center">
+          <StepDot active={step >= 1} done={step > 1} label="1" text="Choose Doctor" />
+          <div className={`w-10 h-0.5 rounded-full transition-all ${step > 1 ? "bg-indigo-500" : "bg-slate-200"}`} />
+          <StepDot active={step >= 2} done={false} label="2" text="Your Reason" />
+        </div>
+      </div>
+
+      {step === 1 ? (
+        <>
+          {/* Search */}
+          <div className="relative mb-7 max-w-sm">
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
+            <input
+              type="text"
+              placeholder="Search by name or specialization..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all shadow-sm"
+            />
+          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <SkeletonCard key={n} />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-32 text-slate-300">
+              <CalendarCheck size={52} strokeWidth={1} />
+              <p className="mt-4 font-bold text-slate-400 text-base">
+                {search ? "No doctors match your search" : "No doctors available"}
+              </p>
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="mt-3 text-xs text-indigo-500 font-bold hover:underline"
+                >
+                  Clear search
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {filtered.map((doc) => (
+                <DoctorSelectCard
+                  key={doc._id}
+                  doctor={doc}
+                  imageUrl={getImageUrl(doc.image)}
+                  onSelect={() => {
+                    setSelectedDoctor(doc);
+                    setStep(2);
+                    setError("");
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="max-w-xl">
+          <button
+            onClick={() => setStep(1)}
+            className="flex items-center gap-1.5 text-slate-400 text-xs font-bold uppercase tracking-widest hover:text-indigo-600 transition-colors mb-7"
+          >
+            <ChevronLeft size={14} strokeWidth={2.5} />
+            Back to Doctors
+          </button>
+
+          {/* Selected doctor preview */}
+          <div className="bg-white border border-slate-100 rounded-3xl p-5 flex items-center gap-4 mb-5 shadow-sm">
+            <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 shrink-0">
+              {getImageUrl(selectedDoctor?.image) ? (
+                <img
+                  src={getImageUrl(selectedDoctor.image)}
+                  alt={selectedDoctor.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+                  <span className="text-indigo-400 font-black text-xl">
+                    {selectedDoctor?.name?.[0]}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] font-bold text-indigo-500 tracking-widest uppercase">
+                {selectedDoctor?.specialization || "Specialist"}
+              </p>
+              <p className="font-extrabold text-slate-900 tracking-tight">Dr. {selectedDoctor?.name}</p>
+              <p className="text-xs text-slate-400 truncate">
+                {selectedDoctor?.hospitalName}
+                {selectedDoctor?.clinicAddress ? ` • ${selectedDoctor.clinicAddress}` : ""}
+              </p>
+            </div>
+            {selectedDoctor?.experienceYears && (
+              <div className="bg-indigo-50 px-3 py-1.5 rounded-xl shrink-0">
+                <p className="text-[10px] font-black text-indigo-600">
+                  {selectedDoctor.experienceYears}Y+ EXP
+                </p>
               </div>
-              <Stethoscope size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 hidden md:block" />
-
-            </div>
+            )}
           </div>
 
-          <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 mb-1">Reason for Visit</label>
+          {/* Reason card */}
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
+              Reason for Visit
+            </label>
             <div className="relative">
-              <textarea 
-                placeholder="Describe your symptoms or health concern..." 
+              <textarea
+                placeholder="Describe your symptoms or health concern in detail. The more specific you are, the better the doctor can prepare for your visit."
                 value={description}
-                onChange={(e) => setDescription(e.target.value)} 
-                required
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm h-32 resize-none"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  if (error) setError("");
+                }}
+                className="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all resize-none h-40"
               />
-              <FileText size={18} className="absolute right-4 top-4 text-slate-200" />
+              <FileText size={16} className="absolute right-4 top-4 text-slate-200 pointer-events-none" />
             </div>
+            <p className="text-[10px] text-slate-300 mt-2 ml-1 text-right">{description.length} characters</p>
           </div>
 
-          <button 
+          {error && (
+            <p className="text-red-500 text-xs font-bold mt-3 ml-1 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
+              {error}
+            </p>
+          )}
+
+          <button
             onClick={sendAppointmentRequest}
-            disabled={submitting || loading}
-            className="w-full py-4 mt-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-2"
+            disabled={submitting || !description.trim()}
+            className="w-full mt-5 py-4 bg-gradient-to-r from-purple-600 to-indigo-500 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>
-                <Loader2 size={20} className="animate-spin" />
+                <Loader2 size={18} className="animate-spin" />
                 Processing...
               </>
             ) : (
               <>
-                <Send size={18} />
-                Send Request
+                <Send size={16} />
+                Send Appointment Request
               </>
             )}
           </button>
         </div>
-
-        {message && (
-          <p className={`text-center text-xs mt-4 font-bold ${message.includes('Successfully') ? 'text-green-500' : 'text-red-500'}`}>
-            {message}
-          </p>
-        )}
-
-        <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center">
-            <button 
-              onClick={() => navigate('/Userdashboard')} 
-              className="text-slate-400 text-xs font-bold uppercase tracking-widest hover:text-purple-600 transition-colors"
-            >
-              Back to Dashboard
-            </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
+
+const StepDot = ({ active, done, label, text }) => (
+  <div className="flex items-center gap-2">
+    <div
+      className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black transition-all
+        ${active ? "bg-indigo-600 text-white shadow-md shadow-indigo-200" : "bg-slate-100 text-slate-400"}`}
+    >
+      {done ? "✓" : label}
+    </div>
+    <span className={`text-[11px] font-bold hidden sm:block ${active ? "text-slate-700" : "text-slate-300"}`}>
+      {text}
+    </span>
+  </div>
+);
+
+const SkeletonCard = () => (
+  <div className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden animate-pulse">
+    <div className="h-48 bg-slate-100" />
+    <div className="p-5 space-y-2.5">
+      <div className="h-2.5 bg-slate-100 rounded-full w-1/3" />
+      <div className="h-4 bg-slate-100 rounded-full w-2/3" />
+      <div className="h-2.5 bg-slate-100 rounded-full w-full" />
+      <div className="h-10 bg-slate-100 rounded-2xl mt-5" />
+    </div>
+  </div>
+);
+
+const DoctorSelectCard = ({ doctor, imageUrl, onSelect }) => (
+  <div
+    onClick={onSelect}
+    className="group bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-50/80 hover:border-indigo-100 transition-all duration-300 overflow-hidden cursor-pointer active:scale-[0.98]"
+  >
+    <div className="relative h-48 overflow-hidden">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={doctor.name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      ) : (
+        <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center">
+          <span className="text-6xl font-black text-indigo-200">{doctor.name?.[0]}</span>
+        </div>
+      )}
+      {doctor.experienceYears && (
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-xl shadow-sm border border-white/50">
+          <p className="text-[10px] font-black text-slate-800">{doctor.experienceYears}Y+ EXP</p>
+        </div>
+      )}
+    </div>
+    <div className="p-5">
+      <p className="text-[10px] font-bold text-indigo-500 tracking-widest uppercase mb-1">
+        {doctor.specialization || "General"}
+      </p>
+      <h3 className="font-extrabold text-slate-900 tracking-tight text-[15px] mb-0.5">Dr. {doctor.name}</h3>
+      <p className="text-[11px] text-slate-400 truncate mb-4">
+        {doctor.hospitalName || "Partner Health"}
+      </p>
+      <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-widest group-hover:opacity-90 transition-all shadow-lg shadow-indigo-100/50">
+        Select Doctor
+      </button>
+    </div>
+  </div>
+);
 
 export default Appointment;

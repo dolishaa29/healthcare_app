@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { MessageCircle, Stethoscope } from "lucide-react";
+import { MessageCircle, Search, Stethoscope } from "lucide-react";
 import ChatWindow from "../components/ChatWindow";
+
+const getInitials = (email = "") => email.split("@")[0].slice(0, 2).toUpperCase();
+
+const avatarColors = [
+  "from-violet-500 to-indigo-500",
+  "from-sky-500 to-blue-600",
+  "from-emerald-500 to-teal-600",
+  "from-rose-500 to-pink-600",
+  "from-amber-500 to-orange-500",
+];
+
+const getAvatarColor = (id = "") =>
+  avatarColors[id.charCodeAt(id.length - 1) % avatarColors.length];
 
 const UserChat = () => {
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(null);
+  const [search, setSearch] = useState("");
 
   const token = Cookies.get("token");
   const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -29,64 +43,118 @@ const UserChat = () => {
     fetchConversations();
   }, [API_BASE_URL, token]);
 
-  return (
-    <div className="min-h-screen w-full bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans p-6 md:p-10">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-8">
-          Mess<span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">ages</span>
-        </h1>
+  const filtered = conversations.filter((c) =>
+    c.doctormail?.toLowerCase().includes(search.toLowerCase())
+  );
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-1 bg-white/80 backdrop-blur-xl rounded-[2rem] border border-white shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)] p-4 h-[78vh] overflow-y-auto">
-            {loading ? (
-              <div className="flex justify-center py-10">
-                <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+  return (
+    <div className="flex h-full overflow-hidden bg-white">
+      <aside className="w-72 shrink-0 flex flex-col border-r border-slate-100 bg-white">
+        <div className="px-4 pt-5 pb-3 border-b border-slate-100">
+          <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-0.5">
+            Inbox
+          </p>
+          <h1 className="text-lg font-black text-slate-900 tracking-tight mb-3">
+            Messages
+          </h1>
+          <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 border border-slate-100">
+            <Search size={13} className="text-slate-400 shrink-0" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search doctors…"
+              className="flex-1 bg-transparent text-sm text-slate-700 placeholder-slate-400 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto py-2 px-2">
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <div className="w-6 h-6 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center px-4 py-12">
+              <div className="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
+                <MessageCircle size={18} className="text-slate-300" strokeWidth={1.5} />
               </div>
-            ) : conversations.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center px-4">
-                <MessageCircle size={36} className="text-slate-300 mb-3" />
-                <p className="text-slate-500 font-medium text-sm">No conversations yet.</p>
-                <p className="text-slate-400 text-xs mt-1">Book an appointment to start chatting with a doctor.</p>
-              </div>
-            ) : (
-              conversations.map((c) => (
+              <p className="text-slate-500 font-semibold text-sm">
+                {search ? "No results" : "No conversations yet"}
+              </p>
+              <p className="text-slate-400 text-xs mt-1 leading-relaxed">
+                {search
+                  ? "Try a different name."
+                  : "Book an appointment to start chatting."}
+              </p>
+            </div>
+          ) : (
+            filtered.map((c) => {
+              const isActive = active?.doctorId === c.doctorId;
+              const color = getAvatarColor(c.doctorId);
+              return (
                 <button
                   key={c.doctorId}
                   onClick={() => setActive(c)}
-                  className={`w-full flex items-center gap-3 p-4 rounded-2xl text-left transition-all ${
-                    active?.doctorId === c.doctorId ? "bg-purple-50 border border-purple-200" : "hover:bg-slate-50"
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all mb-0.5 ${
+                    isActive
+                      ? "bg-indigo-600 shadow-sm shadow-indigo-200"
+                      : "hover:bg-slate-50"
                   }`}
                 >
-                  <div className="p-2.5 bg-purple-100 text-purple-600 rounded-xl">
-                    <Stethoscope size={18} />
+                  <div
+                    className={`w-9 h-9 rounded-xl shrink-0 flex items-center justify-center bg-linear-to-br ${color}`}
+                  >
+                    <span className="text-white text-xs font-bold">
+                      {getInitials(c.doctormail)}
+                    </span>
                   </div>
                   <div className="min-w-0">
-                    <p className="font-bold text-slate-800 text-sm truncate">{c.doctormail}</p>
-                    <p className="text-[10px] text-slate-400 uppercase tracking-widest">Doctor</p>
+                    <p
+                      className={`font-semibold text-sm truncate ${
+                        isActive ? "text-white" : "text-slate-800"
+                      }`}
+                    >
+                      {c.doctormail?.split("@")[0]}
+                    </p>
+                    <p
+                      className={`text-[11px] mt-0.5 ${
+                        isActive ? "text-indigo-200" : "text-slate-400"
+                      }`}
+                    >
+                      <Stethoscope size={10} className="inline mr-1 mb-0.5" />
+                      Doctor
+                    </p>
                   </div>
                 </button>
-              ))
-            )}
-          </div>
-
-          <div className="md:col-span-2">
-            {active ? (
-              <ChatWindow
-                role="user"
-                token={token}
-                userId={active.userId}
-                doctorId={active.doctorId}
-                otherName={active.doctormail}
-                historyUrl={`${API_BASE_URL}/chat/user/history/${active.doctorId}`}
-              />
-            ) : (
-              <div className="h-[78vh] flex items-center justify-center bg-white/40 backdrop-blur-md rounded-[2rem] border border-white/50 border-dashed">
-                <p className="text-slate-400 font-medium">Select a conversation to start chatting</p>
-              </div>
-            )}
-          </div>
+              );
+            })
+          )}
         </div>
-      </div>
+      </aside>
+
+      <main className="flex-1 min-w-0 overflow-hidden">
+        {active ? (
+          <ChatWindow
+            role="user"
+            token={token}
+            userId={active.userId}
+            doctorId={active.doctorId}
+            otherName={active.doctormail}
+            otherColor={getAvatarColor(active.doctorId)}
+            historyUrl={`${API_BASE_URL}/chat/user/history/${active.doctorId}`}
+          />
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center bg-slate-50">
+            <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center mb-4">
+              <MessageCircle size={24} className="text-slate-300" strokeWidth={1.5} />
+            </div>
+            <p className="text-slate-600 font-semibold">Select a conversation</p>
+            <p className="text-slate-400 text-sm mt-1">
+              Choose a doctor from the list to start chatting
+            </p>
+          </div>
+        )}
+      </main>
     </div>
   );
 };

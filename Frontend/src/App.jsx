@@ -10,7 +10,6 @@ import Viewdoctors from './pages/Viewdoctors';
 import DoctorRequest from './pages/Doctorrequest';
 import Approved from './pages/Approved';
 import RejectedDoctors from './pages/RejectedDoctors';
-import Appointment from './pages/Appointment';
 import ViewAppointment from './pages/ViewAppointment';
 import Login from './pages/Login';
 import PrivateRoute from './components/priroutes';
@@ -63,10 +62,8 @@ function App() {
         <Route path='/Bot' element={<Bot/>}/>
         <Route path='/doctorchat' element={<Doctorpri><DoctorChat/></Doctorpri>}/>
 
-        {/* User pages — all share the sidebar layout */}
         <Route element={<Userpri><UserLayout /></Userpri>}>
           <Route path='/Userdashboard' element={<Userdashboard/>}/>
-          <Route path='/Appointment' element={<Appointment/>}/>
           <Route path='/userviewapp' element={<Userviewapp/>}/>
           <Route path='/ViewDoctorss' element={<ViewDoctorss/>}/>
           <Route path='/userprofile' element={<UserProfile/>}/>

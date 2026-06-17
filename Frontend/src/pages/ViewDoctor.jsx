@@ -23,15 +23,16 @@ const ViewDoctorss = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#FDFBFF] w-full px-4 md:px-10 py-10">
+        <div className="h-full overflow-y-auto bg-[#FDFBFF] w-full px-4 md:px-10 py-10">
             <div className="w-full flex flex-col md:flex-row justify-between items-end mb-12 pb-6 border-b border-purple-50">
                 <div className="space-y-2">
                 <h2 className="text-5xl font-black text-gray-900 leading-tight">
-                        Our Expert <br/>
+                        Find &amp; Book <br/>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-500">
                             Specialists
                         </span>
                     </h2>
+                    <p className="text-slate-400 text-sm mt-3">Browse our doctors and book an appointment directly from their card.</p>
                 </div>
             </div>
 
