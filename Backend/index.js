@@ -35,7 +35,6 @@ app.use("/", require("./router/reportanalysis"));
 
 const PORT = process.env.PORT || 5000;
 
-// wrap express in a raw http server so socket.io can share the same port
 let server = http.createServer(app);
 initChatSocket(server);
 
