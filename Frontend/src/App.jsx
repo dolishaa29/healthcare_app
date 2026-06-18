@@ -16,6 +16,7 @@ import PrivateRoute from './components/priroutes';
 import Userpri from './components/Userpri';
 import Doctorpri from './components/Doctorpri';
 import UserLayout from './components/UserLayout';
+import DoctorLayout from './components/DoctorLayout';
 import Userviewapp from './pages/Userviewapp';
 import Doctorviewapp from './pages/Doctorviewapp';
 import Adminregister from './pages/Adminregister';
@@ -42,7 +43,7 @@ function App() {
         <Route path='/' element={<Login/>}/>
         <Route path='/Admindashboard' element={<PrivateRoute><Admindashboard/></PrivateRoute>}/>
         <Route path='/Doctorregister' element={<Doctorregister/>}/>
-        <Route path='/Doctordashboard' element={<Doctorpri><Docterdashboard/></Doctorpri>}/>
+
         <Route path='/Userregister' element={<Userregister/>}/>
         <Route path='/Viewusers' element={<Viewusers/>}/>
         <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
@@ -51,16 +52,20 @@ function App() {
         <Route path='/Rejecteddoctors' element={<RejectedDoctors/>}/>
         <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
         <Route path='*' element={<h1>No Such Router Exist</h1>} />
-        <Route path='/doctorviewapp' element={<Doctorviewapp/>}/>
-        <Route path='/doctorprofile' element={<DoctorProfile/>}/>
-        <Route path='/changepassword' element={<Changepassworddoc/>}/>
+
         <Route path='/doctorprofileview/:id' element={<ProfileDocterForAll/>}/>
         <Route path='/forgotpassword/:role' element={<ForgotPassword/>}/>
         <Route path='/userbyid/:id' element={<Viewuserall/>}/>
         <Route path='/changepassworduser' element={<Changepassuser/>}/>
         <Route path='/rating/:doctorId' element={<Rating/>}/>
         <Route path='/Bot' element={<Bot/>}/>
-        <Route path='/doctorchat' element={<Doctorpri><DoctorChat/></Doctorpri>}/>
+        <Route element={<Doctorpri><DoctorLayout /></Doctorpri>}>
+          <Route path='/Doctordashboard' element={<Docterdashboard/>}/>
+          <Route path='/doctorviewapp' element={<Doctorviewapp/>}/>
+          <Route path='/doctorprofile' element={<DoctorProfile/>}/>
+          <Route path='/changepassword' element={<Changepassworddoc/>}/>
+          <Route path='/doctorchat' element={<DoctorChat/>}/>
+        </Route>
 
         <Route element={<Userpri><UserLayout /></Userpri>}>
           <Route path='/Userdashboard' element={<Userdashboard/>}/>

@@ -3,7 +3,10 @@ import axios from "axios";
 import { Send, ArrowLeft } from "lucide-react";
 import { getSocket } from "../socket";
 
-const getInitials = (email = "") => email.split("@")[0].slice(0, 2).toUpperCase();
+const getInitials = (name = "") => {
+  if (name.includes("@")) return name.split("@")[0].slice(0, 2).toUpperCase();
+  return name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "??";
+};
 
 const formatTime = (ts) => {
   if (!ts) return "";
@@ -38,7 +41,7 @@ const groupByDate = (messages) => {
   return result;
 };
 
-const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, historyUrl, onBack }) => {
+const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, otherRole, historyUrl, onBack }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
@@ -107,16 +110,15 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
 
   const grouped = groupByDate(messages);
   const avatarColor = otherColor || "from-violet-500 to-indigo-500";
+  const displayLabel = otherRole || (role === "user" ? "Doctor" : "Patient");
+  const displayName = otherName?.includes("@") ? otherName.split("@")[0] : otherName;
 
   return (
     <div className="flex flex-col h-full bg-white">
 
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-100 bg-white shrink-0">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-white shrink-0">
         {onBack && (
-          <button
-            onClick={onBack}
-            className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500"
-          >
+          <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500">
             <ArrowLeft size={18} />
           </button>
         )}
@@ -125,11 +127,12 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
           <span className="text-white text-xs font-bold">{getInitials(otherName)}</span>
         </div>
 
-        <div className="min-w-0">
-          <h2 className="text-sm font-bold text-slate-800 truncate">
-            {otherName?.split("@")[0]}
-          </h2>
-          <p className="text-[11px] text-slate-400 font-medium">Doctor</p>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-sm font-bold text-slate-800 truncate">{displayName}</h2>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+            <p className="text-[11px] text-slate-400 font-medium">{displayLabel}</p>
+          </div>
         </div>
       </div>
 
@@ -143,7 +146,7 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-linear-to-br ${avatarColor} shadow mb-3`}>
               <span className="text-white text-lg font-bold">{getInitials(otherName)}</span>
             </div>
-            <p className="text-slate-600 font-semibold text-sm">{otherName?.split("@")[0]}</p>
+            <p className="text-slate-600 font-semibold text-sm">{displayName}</p>
             <p className="text-slate-400 text-xs mt-1">No messages yet — say hello!</p>
           </div>
         ) : (
