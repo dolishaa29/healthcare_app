@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { LayoutList, Loader2, ChevronRight, Stethoscope } from 'lucide-react';
+import HealthBot from '../components/bot';
 
 const Userdashboard = () => {
   const [data, setData] = useState({ email: "", name: "", contact: "", address: "" });
@@ -45,7 +46,7 @@ const Userdashboard = () => {
           <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
             Welcome,{" "}
             <span className="bg-gradient-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
-              {data.name.split(" ")[0] || "there"}
+              {data.name?.split(" ")[0] || "there"}
             </span>
           </h1>
         </div>
@@ -71,6 +72,8 @@ const Userdashboard = () => {
           onClick={() => navigate('/userviewapp')}
         />
       </div>
+
+      <HealthBot />
     </div>
   );
 };

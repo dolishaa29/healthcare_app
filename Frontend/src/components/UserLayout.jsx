@@ -5,7 +5,6 @@ import {
   CalendarPlus, LayoutList, LogOut, Menu, X,
   LayoutDashboard, User, MessageCircle, FileText
 } from 'lucide-react';
-import HealthBot from './bot';
 
 const UserLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -53,8 +52,6 @@ const UserLayout = () => {
       <main className="flex-1 min-w-0 overflow-hidden">
         <Outlet />
       </main>
-
-      <HealthBot />
     </div>
   );
 };

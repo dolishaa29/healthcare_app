@@ -51,7 +51,7 @@ exports.userlogin=async(req,res)=>
     let data=await rec.findOne({email:email});
     if(!data)
     {
-        res.status(400).json({msg:"user not found"});
+        return res.status(400).json({msg:"user not found"});
     }
     if(data.userstatus==="block")
     {
@@ -65,13 +65,6 @@ exports.userlogin=async(req,res)=>
     if(pass)
     {
     let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{expiresIn:"1h"});
-    
-    res.cookie("token",token ,{
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        
-    });
     console.log("token:",token);
     res.status(200).json({msg:"user logged in successfully",token:token});
     }

@@ -7,40 +7,42 @@ const getInitials = (email = "") => email.split("@")[0].slice(0, 2).toUpperCase(
 
 const formatTime = (ts) => {
   if (!ts) return "";
-  const d = new Date(ts);
-  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 };
 
 const formatDateLabel = (ts) => {
   if (!ts) return null;
-  const d = new Date(ts);
+  const msgDate = new Date(ts);
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
 
-  if (d.toDateString() === today.toDateString()) return "Today";
-  if (d.toDateString() === yesterday.toDateString()) return "Yesterday";
-  return d.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" });
+  if (msgDate.toDateString() === today.toDateString()) return "Today";
+  if (msgDate.toDateString() === yesterday.toDateString()) return "Yesterday";
+  return msgDate.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" });
 };
 
 const groupByDate = (messages) => {
-  const groups = [];
+  const result = [];
   let lastLabel = null;
-  for (const m of messages) {
-    const label = formatDateLabel(m.createdAt || m.timestamp);
+
+  for (const msg of messages) {
+    const label = formatDateLabel(msg.createdAt || msg.timestamp);
     if (label && label !== lastLabel) {
-      groups.push({ type: "divider", label });
+      result.push({ type: "divider", label });
       lastLabel = label;
     }
-    groups.push({ type: "message", data: m });
+    result.push({ type: "message", data: msg });
   }
-  return groups;
+
+  return result;
 };
 
 const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, historyUrl, onBack }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
+
   const bottomRef = useRef(null);
   const socketRef = useRef(null);
   const inputRef = useRef(null);
@@ -48,7 +50,7 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
   useEffect(() => {
     let active = true;
 
-    const fetchHistory = async () => {
+    const loadHistory = async () => {
       setLoading(true);
       try {
         const res = await axios.get(historyUrl, {
@@ -57,27 +59,31 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
         });
         if (active) setMessages(res.data.messages || []);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load chat history:", err);
       } finally {
         if (active) setLoading(false);
       }
     };
-    fetchHistory();
+
+    loadHistory();
 
     const socket = getSocket(token, role);
     socketRef.current = socket;
     socket.emit("joinConversation", { userId, doctorId });
 
-    const handleReceive = (message) => {
-      if (message.userId === userId && message.doctorId === doctorId) {
+    const onNewMessage = (message) => {
+      const isThisConversation =
+        message.userId === userId && message.doctorId === doctorId;
+      if (isThisConversation) {
         setMessages((prev) => [...prev, message]);
       }
     };
-    socket.on("receiveMessage", handleReceive);
+
+    socket.on("receiveMessage", onNewMessage);
 
     return () => {
       active = false;
-      socket.off("receiveMessage", handleReceive);
+      socket.off("receiveMessage", onNewMessage);
     };
   }, [userId, doctorId, role, token, historyUrl]);
 
@@ -100,11 +106,11 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
   };
 
   const grouped = groupByDate(messages);
-  const color = otherColor || "from-violet-500 to-indigo-500";
+  const avatarColor = otherColor || "from-violet-500 to-indigo-500";
 
   return (
     <div className="flex flex-col h-full bg-white">
-      {/* Header */}
+
       <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-100 bg-white shrink-0">
         {onBack && (
           <button
@@ -115,10 +121,7 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
           </button>
         )}
 
-        {/* Avatar */}
-        <div
-          className={`w-10 h-10 rounded-xl shrink-0 flex items-center justify-center bg-linear-to-br ${color} shadow-sm`}
-        >
+        <div className={`w-10 h-10 rounded-xl shrink-0 flex items-center justify-center bg-linear-to-br ${avatarColor} shadow-sm`}>
           <span className="text-white text-xs font-bold">{getInitials(otherName)}</span>
         </div>
 
@@ -130,7 +133,6 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1 bg-slate-50">
         {loading ? (
           <div className="flex justify-center py-10">
@@ -138,14 +140,10 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
           </div>
         ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full py-16 text-center">
-            <div
-              className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-linear-to-br ${color} shadow mb-3`}
-            >
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-linear-to-br ${avatarColor} shadow mb-3`}>
               <span className="text-white text-lg font-bold">{getInitials(otherName)}</span>
             </div>
-            <p className="text-slate-600 font-semibold text-sm">
-              {otherName?.split("@")[0]}
-            </p>
+            <p className="text-slate-600 font-semibold text-sm">{otherName?.split("@")[0]}</p>
             <p className="text-slate-400 text-xs mt-1">No messages yet — say hello!</p>
           </div>
         ) : (
@@ -164,7 +162,7 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
                 m={item.data}
                 role={role}
                 otherName={otherName}
-                color={color}
+                color={avatarColor}
               />
             )
           )
@@ -172,7 +170,6 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, hist
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <form
         onSubmit={handleSend}
         className="flex items-end gap-3 px-5 py-3.5 border-t border-slate-100 bg-white shrink-0"
@@ -209,11 +206,8 @@ const MessageBubble = ({ m, role, otherName, color }) => {
 
   return (
     <div className={`flex items-end gap-2 ${isSelf ? "flex-row-reverse" : "flex-row"}`}>
-      {/* Other avatar */}
       {!isSelf && (
-        <div
-          className={`w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-linear-to-br ${color} shadow-sm mb-0.5`}
-        >
+        <div className={`w-7 h-7 rounded-lg shrink-0 flex items-center justify-center bg-linear-to-br ${color} shadow-sm mb-0.5`}>
           <span className="text-white text-[10px] font-bold">
             {(otherName || "").split("@")[0].slice(0, 2).toUpperCase()}
           </span>
@@ -230,9 +224,7 @@ const MessageBubble = ({ m, role, otherName, color }) => {
         >
           {m.text}
         </div>
-        {time && (
-          <span className="text-[10px] text-slate-400 px-1">{time}</span>
-        )}
+        {time && <span className="text-[10px] text-slate-400 px-1">{time}</span>}
       </div>
     </div>
   );

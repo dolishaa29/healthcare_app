@@ -139,11 +139,6 @@ if (data.doctorstatus === "block") {
     let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{
         expiresIn:"1d"
     });
-    res.cookie('emstoken', token , {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-    });
     return res.status(200).json({success: true,msg:'doctor login successfully',token});
  }
  else
