@@ -17,6 +17,7 @@ import Userpri from './components/Userpri';
 import Doctorpri from './components/Doctorpri';
 import UserLayout from './components/UserLayout';
 import DoctorLayout from './components/DoctorLayout';
+import AdminLayout from './components/AdminLayout';
 import Userviewapp from './pages/Userviewapp';
 import Doctorviewapp from './pages/Doctorviewapp';
 import Adminregister from './pages/Adminregister';
@@ -41,16 +42,18 @@ function App() {
       <Routes>
         <Route path='/hehe' element={<Adminregister/>}/>
         <Route path='/' element={<Login/>}/>
-        <Route path='/Admindashboard' element={<PrivateRoute><Admindashboard/></PrivateRoute>}/>
+        <Route element={<PrivateRoute><AdminLayout /></PrivateRoute>}>
+          <Route path='/Admindashboard' element={<Admindashboard/>}/>
+          <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
+          <Route path='/Viewusers' element={<Viewusers/>}/>
+          <Route path='/Doctorrequest' element={<DoctorRequest/>}/>
+          <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
+        </Route>
         <Route path='/Doctorregister' element={<Doctorregister/>}/>
 
         <Route path='/Userregister' element={<Userregister/>}/>
-        <Route path='/Viewusers' element={<Viewusers/>}/>
-        <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
-        <Route path='/Doctorrequest' element={<DoctorRequest/>}/>
         <Route path='/Approveddoctors' element={<Approved/>}/>
         <Route path='/Rejecteddoctors' element={<RejectedDoctors/>}/>
-        <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
         <Route path='*' element={<h1>No Such Router Exist</h1>} />
 
         <Route path='/doctorprofileview/:id' element={<ProfileDocterForAll/>}/>

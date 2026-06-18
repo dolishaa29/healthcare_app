@@ -72,15 +72,14 @@ const ViewAppointment = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans px-6 py-12 relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full pointer-events-none" />
-
-      <div className="relative z-10 max-w-6xl mx-auto">
+    <div className="h-full overflow-y-auto bg-[#FDFBFF] font-sans px-6 py-10 md:px-10">
+      <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
-              Appointment <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Manage</span>
+            <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Admin Portal</p>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
+              View{" "}
+              <span className="bg-linear-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">Appointments</span>
             </h1>
           </div>
 
@@ -101,7 +100,7 @@ const ViewAppointment = () => {
           </div>
         </div>
 
-        <div className="bg-white/70 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-[0_20px_50px_-15px_rgba(147,51,234,0.1)] overflow-hidden">
+        <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
@@ -129,7 +128,7 @@ const ViewAppointment = () => {
                         <p className="text-[10px] text-slate-400">{app.doctormail}</p>
                       </td>
                       <td className="px-6 py-5">
-                        <p className="text-xs text-slate-500 max-w-[200px] truncate">{app.description}</p>
+                        <p className="text-xs text-slate-500 max-w-50 truncate">{app.description}</p>
                       </td>
                       <td className="px-8 py-5">
                         <div className="flex items-center justify-center gap-2">
@@ -173,8 +172,8 @@ const ViewAppointment = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-slate-900/40 backdrop-blur-sm">
-          <div className="bg-white/90 backdrop-blur-xl p-8 w-full max-w-[400px] rounded-[2.5rem] border border-white shadow-2xl">
+        <div className="fixed inset-0 z-100 flex items-center justify-center px-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white/90 backdrop-blur-xl p-8 w-full max-w-100 rounded-[2.5rem] border border-white shadow-2xl">
             <h3 className="text-xl font-black text-slate-900 mb-2">Schedule Appointment</h3>
             <p className="text-slate-500 text-xs mb-6 uppercase tracking-widest font-bold">Assign Date & Time</p>
             
@@ -202,7 +201,7 @@ const ViewAppointment = () => {
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={confirmAppointment}
-                  className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-purple-100 hover:opacity-90 active:scale-95 transition-all"
+                  className="flex-1 py-3 bg-linear-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-purple-100 hover:opacity-90 active:scale-95 transition-all"
                 >
                   Confirm Slot
                 </button>

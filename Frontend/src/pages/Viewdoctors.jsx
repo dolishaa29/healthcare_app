@@ -52,27 +52,14 @@ const ViewDoctors = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans px-6 py-12">
-      
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-80 h-80 bg-purple-200/30 blur-[100px] rounded-full" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-blue-200/30 blur-[100px] rounded-full" />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-          <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
-              Medical <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Specialists</span>
-            </h1>
-          </div>
-          
-          <button 
-            onClick={() => navigate(-1)}
-            className="px-6 py-2 bg-white border border-slate-200 text-slate-600 text-xs font-bold rounded-xl hover:bg-slate-50 shadow-sm"
-          >
-            ← Back
-          </button>
+    <div className="h-full overflow-y-auto bg-[#FDFBFF] font-sans px-6 py-10 md:px-10">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-10">
+          <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Admin Portal</p>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
+            View{" "}
+            <span className="bg-linear-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">Doctors</span>
+          </h1>
         </div>
 
         {message && (
@@ -81,7 +68,7 @@ const ViewDoctors = () => {
           </div>
         )}
 
-        <div className="bg-white/70 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-[0_20px_50px_-15px_rgba(147,51,234,0.1)] overflow-hidden">
+        <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
