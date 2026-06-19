@@ -32,6 +32,8 @@ exports.doctorpermission=async(req,res)=>
         try {
             const result = await cloudinary.uploadBuffer(req.file.buffer, {
                 folder: "doctor-certificates",
+                resource_type: "raw",
+                format: "pdf",
             });
             certificate = result.secure_url;
         } catch (uploadErr) {

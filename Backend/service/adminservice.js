@@ -66,12 +66,34 @@ res.clearCookie("token");
 return res.status(200).json({success: true,msg:'admin logout successfully'})
 }
 
-exports.adminDashboard=async(req,res)=>
-{
-    const admin = req.admin;
-    return res.status(200).json({success: true,msg: "admin dashboard accessed successfully",dashboard:
-    {
-     email:admin.email,contact:admin.contact
-    },
+exports.adminDashboard = async (req, res) => {
+    const admin           = req.admin;
+    const doctorModel     = require("../model/doctor");
+    const userModel       = require("../model/user");
+    const permissionModel = require("../model/permission");
+    const appointRequest  = require("../model/Appointment/appointrequest");
+
+    const [totalDoctors, totalUsers, pendingRequests, pendingAppts, approvedAppts, rejectedAppts] = await Promise.all([
+        doctorModel.countDocuments(),
+        userModel.countDocuments(),
+        permissionModel.countDocuments({ permission: "pending" }),
+        appointRequest.countDocuments({ status: "pending" }),
+        appointRequest.countDocuments({ status: "approved" }),
+        appointRequest.countDocuments({ status: "rejected" }),
+    ]);
+
+    return res.status(200).json({
+        success: true,
+        dashboard: {
+            email: admin.email,
+            totalDoctors,
+            totalUsers,
+            pendingRequests,
+            appointmentChart: [
+                { label: "Pending",  value: pendingAppts  },
+                { label: "Approved", value: approvedAppts },
+                { label: "Rejected", value: rejectedAppts },
+            ],
+        },
     });
-}
+};
