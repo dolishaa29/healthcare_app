@@ -3,7 +3,7 @@ let auth=require("../middleware/user");
 let router=express.Router();
 const multer = require("multer");
 
-const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, userotpgenerate, userotpverify, userbyid, changepassword } = require("../controller/usercontroller");
+const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, userotpgenerate, userotpverify, userbyid, changepassword, userregisterverify } = require("../controller/usercontroller");
 const { blockuser, updateuser } = require("../service/userservice");
 
 let upload =multer({ 
@@ -24,6 +24,7 @@ router.get("/userlogout",auth,userlogout);
 router.get("/viewusers",userlist);
 router.get("/userdashboard",auth,userDashboard);
 router.get("/userviewapp",auth,userviewapp);
+router.post("/userregisterverify",userregisterverify);
 router.post("/userforgotpassword",userotpgenerate);
 router.post("/userverifyotp",userotpverify);
 router.post("/blockuser",blockuser);

@@ -1,6 +1,7 @@
 let rec=require("../model/user");
 let rec2=require("../model/Appointment/appointment");
 let otps=require("../model/OTP");
+let pendingUsers=require("../model/PendingUser");
 let bcrypt=require("bcrypt");
 let jwt=require("jsonwebtoken");
 let crypto=require("crypto");
@@ -16,31 +17,70 @@ const transporter = nodemailer.createTransport({
 
 });
 exports.userregister=async(req,res)=>
-{  
-    console.log("userregister called with body:", req.body);
+{
     try{
     let email=req.body.email;
     let password=req.body.password;
     let name=req.body.name;
     let contact=req.body.contact;
-    let address=req.body.address;    
+    let address=req.body.address;
     let user=await rec.findOne({email:email});
     if(user)
-    {        res.status(400).json({msg:"user already exists"});
+    {
+        return res.status(400).json({msg:"user already exists"});
     }
-    else{
-        let hash=await bcrypt.hash(password,10);
-        let newuser=new rec({ email:email,password:hash,name:name,contact:contact,address:address});
-        await newuser.save();
-        res.status(200).json({msg:"user registered successfully"});
-    }
+    let hash=await bcrypt.hash(password,10);
+    let otp=crypto.randomInt(100000,1000000).toString();
+
+    await pendingUsers.findOneAndUpdate(
+        {email:email},
+        {email,name,password:hash,contact,address,otp,createdAt:Date.now()},
+        {upsert:true,new:true}
+    );
+
+    const mail = {
+        from: process.env.EMAIL,
+        to: email,
+        subject: "Email Verification OTP",
+        text: `Your OTP to complete registration is: ${otp}. It is valid for 10 minutes.`
+    };
+    await transporter.sendMail(mail);
+
+    return res.status(200).json({success:true, msg:"OTP sent to your email. Please verify to complete registration."});
     }
     catch(err)
     {
         console.log(err);
         res.status(500).json({msg:"internal server error"});
     }
+}
 
+exports.registerotpverify=async(req,res)=>
+{
+    try{
+    let email=req.body.email;
+    let otp=req.body.otp;
+    let pending=await pendingUsers.findOne({email:email,otp:otp});
+    if(!pending)
+    {
+        return res.status(400).json({success:false, msg:"Invalid or expired OTP"});
+    }
+    let newuser=new rec({
+        email:pending.email,
+        password:pending.password,
+        name:pending.name,
+        contact:pending.contact,
+        address:pending.address
+    });
+    await newuser.save();
+    await pendingUsers.deleteOne({email:email});
+    return res.status(200).json({success:true, msg:"Registration successful. You can now login."});
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(500).json({msg:"internal server error"});
+    }
 }
 
 exports.userlogin=async(req,res)=>
