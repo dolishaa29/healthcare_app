@@ -17,8 +17,8 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -32,6 +32,7 @@ app.use("/", require("./router/ratingrouter"));
 app.use("/", require("./router/botrouter"));
 app.use("/", require("./router/chatrouter"));
 app.use("/", require("./router/reportanalysis"));
+app.use("/", require("./router/skinanalysis"));
 
 const PORT = process.env.PORT || 5000;
 

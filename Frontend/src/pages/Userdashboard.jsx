@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { LayoutList, Loader2, ChevronRight, Stethoscope } from 'lucide-react';
+import { LayoutList, Loader2, ChevronRight, Stethoscope, Video } from 'lucide-react';
 import HealthBot from '../components/bot';
 
 const Userdashboard = () => {
@@ -70,6 +70,12 @@ const Userdashboard = () => {
           description="View your upcoming and past sessions"
           icon={<LayoutList size={20} className="text-indigo-600" />}
           onClick={() => navigate('/userviewapp')}
+        />
+        <ActionButton
+          title="Live Capture"
+          description="Open your camera for real-time AI analysis"
+          icon={<Video size={20} className="text-indigo-600" />}
+          onClick={() => navigate('/LiveCapture')}
         />
       </div>
 

@@ -34,6 +34,7 @@ import Bot from './components/bot';
 import UserChat from './pages/UserChat';
 import DoctorChat from './pages/DoctorChat';
 import ReportAnalysis from './pages/ReportAnalysis';
+import LiveCapture from './pages/LiveCapture';
 
 function App() {
   return (
@@ -78,6 +79,7 @@ function App() {
           <Route path='/userprofile' element={<UserProfile/>}/>
           <Route path='/userchat' element={<UserChat/>}/>
           <Route path='/ReportAnalysis' element={<ReportAnalysis/>}/>
+          <Route path='/LiveCapture' element={<LiveCapture/>}/>
         </Route>
         
       </Routes>
