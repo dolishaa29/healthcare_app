@@ -42,6 +42,7 @@ function App() {
       <Routes>
         <Route path='/hehe' element={<Adminregister/>}/>
         <Route path='/' element={<Login/>}/>
+
         <Route element={<PrivateRoute><AdminLayout /></PrivateRoute>}>
           <Route path='/Admindashboard' element={<Admindashboard/>}/>
           <Route path='/Viewdoctor' element={<Viewdoctors/>}/>
@@ -49,19 +50,19 @@ function App() {
           <Route path='/Doctorrequest' element={<DoctorRequest/>}/>
           <Route path='/ViewAppointment' element={<ViewAppointment/>}/>
         </Route>
-        <Route path='/Doctorregister' element={<Doctorregister/>}/>
 
+        <Route path='/Doctorregister' element={<Doctorregister/>}/>
         <Route path='/Userregister' element={<Userregister/>}/>
         <Route path='/Approveddoctors' element={<Approved/>}/>
         <Route path='/Rejecteddoctors' element={<RejectedDoctors/>}/>
         <Route path='*' element={<h1>No Such Router Exist</h1>} />
-
         <Route path='/doctorprofileview/:id' element={<ProfileDocterForAll/>}/>
         <Route path='/forgotpassword/:role' element={<ForgotPassword/>}/>
         <Route path='/userbyid/:id' element={<Viewuserall/>}/>
         <Route path='/changepassworduser' element={<Changepassuser/>}/>
         <Route path='/rating/:doctorId' element={<Rating/>}/>
         <Route path='/Bot' element={<Bot/>}/>
+
         <Route element={<Doctorpri><DoctorLayout /></Doctorpri>}>
           <Route path='/Doctordashboard' element={<Docterdashboard/>}/>
           <Route path='/doctorviewapp' element={<Doctorviewapp/>}/>
@@ -78,6 +79,7 @@ function App() {
           <Route path='/userchat' element={<UserChat/>}/>
           <Route path='/ReportAnalysis' element={<ReportAnalysis/>}/>
         </Route>
+        
       </Routes>
       </BrowserRouter>
     </div>
