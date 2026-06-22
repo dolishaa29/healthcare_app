@@ -1,17 +1,13 @@
-// let mongo=require("mongoose");
-// exports.health=()=>
-// {
-// mongo.connect("mongodb://localhost:27017/health")
-// console.log('successfully connected')
-// }
-
-let mongoose=require("mongoose");
+let mongoose = require("mongoose");
 
 require('dotenv').config();
 
-const mongoUri = process.env.MONGO_URI ;
+const mongoUri = process.env.MONGO_URI;
 
-mongoose.connect(mongoUri);
+mongoose.connect(mongoUri).catch((err) => {
+  console.error("Failed to connect to MongoDB:", err.message);
+  process.exit(1);
+});
 
 const health = mongoose.connection;
 
@@ -20,7 +16,7 @@ health.on('connected', () => {
 });
 
 health.on('error', (error) => {
-  console.error("Error connecting to MongoDB:", error.message);
+  console.error("MongoDB connection error:", error.message);
 });
 
 health.on('disconnected', () => {

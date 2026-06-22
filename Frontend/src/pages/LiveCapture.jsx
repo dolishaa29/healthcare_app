@@ -3,34 +3,29 @@ import { Video, VideoOff, Camera, Scan, Loader2, Sparkles } from 'lucide-react';
 
 const LiveCapture = () => {
 
-  // --- REFS ---
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
   const analysisTimerRef = useRef(null);
 
-  // --- STATE ---
   const [isStreaming, setIsStreaming] = useState(false);
   const [frameCount, setFrameCount] = useState(0);
   const [error, setError] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  // capture current video frame as base64 JPEG
   const captureFrame = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas || video.readyState < 2) return null;
     const ctx = canvas.getContext('2d');
-    // send at 640x360 — enough for Gemini to analyse skin, keeps payload ~50kb
     canvas.width = 640;
     canvas.height = 360;
     ctx.drawImage(video, 0, 0, 640, 360);
     return canvas.toDataURL('image/jpeg', 0.7);
   };
 
-  // send frame to backend → Gemini
   const analyzeSkin = async () => {
     const frame = captureFrame();
     if (!frame) return;
@@ -51,7 +46,6 @@ const LiveCapture = () => {
     }
   };
 
-  // START CAMERA
   const startCamera = async () => {
     setError(null);
     setAnalysis(null);
@@ -69,10 +63,8 @@ const LiveCapture = () => {
         if (videoRef.current?.readyState >= 2) setFrameCount(p => p + 1);
       }, 100);
 
-      // auto-analyze every 5 seconds
       analysisTimerRef.current = setInterval(() => analyzeSkin(), 5000);
 
-      // first analysis after 1s warmup
       setTimeout(() => analyzeSkin(), 1000);
 
     } catch (err) {
@@ -82,7 +74,6 @@ const LiveCapture = () => {
     }
   };
 
-  // STOP CAMERA
   const stopCamera = () => {
     clearInterval(intervalRef.current);
     clearInterval(analysisTimerRef.current);
@@ -97,7 +88,6 @@ const LiveCapture = () => {
     setFrameCount(0);
   };
 
-  // cleanup on page leave
   useEffect(() => {
     return () => {
       clearInterval(intervalRef.current);
@@ -106,7 +96,7 @@ const LiveCapture = () => {
     };
   }, []);
 
-  // parse analysis text into sections for nicer display
+  
   const renderAnalysis = (text) => {
     return text.split('\n').map((line, i) => {
       if (line.startsWith('**') && line.endsWith('**')) {
@@ -120,10 +110,11 @@ const LiveCapture = () => {
     });
   };
 
+
+
   return (
     <div className="h-full overflow-hidden bg-[#f8fafc] p-6 flex flex-col gap-5">
 
-      {/* Header */}
       <div className="flex items-center gap-3 shrink-0">
         <div className="p-2.5 bg-indigo-600 rounded-xl">
           <Camera size={20} className="text-white" />
@@ -134,14 +125,11 @@ const LiveCapture = () => {
         </div>
       </div>
 
-      {/* Main layout: camera left, analysis right */}
       <div className="flex gap-5 flex-1 min-h-0">
 
-        {/* LEFT — Camera */}
         <div className="flex flex-col gap-3 flex-3 min-w-0">
           <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col flex-1">
 
-            {/* Video area */}
             <div className="relative bg-slate-950 flex-1 flex items-center justify-center">
               <video
                 ref={videoRef}
@@ -157,7 +145,6 @@ const LiveCapture = () => {
                 </div>
               )}
 
-              {/* LIVE badge */}
               {isStreaming && (
                 <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full">
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -165,7 +152,6 @@ const LiveCapture = () => {
                 </div>
               )}
 
-              {/* Analyzing badge */}
               {isAnalyzing && (
                 <div className="absolute top-4 right-4 flex items-center gap-2 bg-indigo-600/80 backdrop-blur-sm px-3 py-1.5 rounded-full">
                   <Loader2 size={12} className="text-white animate-spin" />
@@ -176,7 +162,6 @@ const LiveCapture = () => {
 
             <canvas ref={canvasRef} className="hidden" />
 
-            {/* Controls */}
             <div className="px-5 py-4 flex items-center justify-between border-t border-slate-50">
               <span className="text-xs text-slate-400 font-medium">
                 {isStreaming
@@ -212,7 +197,6 @@ const LiveCapture = () => {
             </div>
           </div>
 
-          {/* Error */}
           {error && (
             <div className="bg-red-50 border border-red-100 rounded-2xl px-4 py-3 text-red-600 text-xs font-medium shrink-0">
               {error}
@@ -220,10 +204,8 @@ const LiveCapture = () => {
           )}
         </div>
 
-        {/* RIGHT — Analysis Panel */}
         <div className="flex-2 min-w-0 bg-white rounded-3xl border border-slate-100 shadow-sm flex flex-col overflow-hidden">
 
-          {/* Panel header */}
           <div className="px-5 py-4 border-b border-slate-50 flex items-center gap-2 shrink-0">
             <Sparkles size={16} className="text-indigo-500" />
             <span className="text-sm font-black text-slate-800">AI Skin Analysis</span>
@@ -232,10 +214,8 @@ const LiveCapture = () => {
             )}
           </div>
 
-          {/* Panel body */}
           <div className="flex-1 overflow-y-auto p-5">
 
-            {/* placeholder — no analysis yet */}
             {!analysis && !isAnalyzing && (
               <div className="h-full flex flex-col items-center justify-center gap-3 text-center">
                 <div className="p-4 bg-slate-50 rounded-2xl">
@@ -250,7 +230,6 @@ const LiveCapture = () => {
               </div>
             )}
 
-            {/* loading state */}
             {isAnalyzing && !analysis && (
               <div className="h-full flex flex-col items-center justify-center gap-3">
                 <Loader2 size={28} className="text-indigo-400 animate-spin" />
@@ -258,7 +237,6 @@ const LiveCapture = () => {
               </div>
             )}
 
-            {/* result */}
             {analysis && (
               <div className="space-y-1">
                 {renderAnalysis(analysis)}
@@ -272,7 +250,6 @@ const LiveCapture = () => {
             )}
           </div>
 
-          {/* Panel footer */}
           {analysis && (
             <div className="px-5 py-3 border-t border-slate-50 shrink-0">
               <p className="text-xs text-slate-300 font-medium">Updates every 5s · Powered by Gemini</p>
