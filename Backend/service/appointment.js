@@ -71,12 +71,14 @@ exports.approveappointment=async(req,res)=>
 }
 
 function generateTimeSlots(bookedTimes) {
+  const allTimes = [
+    "09:00","09:30","10:00","10:30","11:00","11:30",
+    "12:00","12:30","13:00","13:30","14:00","14:30",
+    "15:00","15:30","16:00","16:30"
+  ];
   const slots = [];
-  for (let hour = 9; hour < 17; hour++) {
-    for (let min = 0; min < 60; min += 30) {
-      const timeStr = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
-      slots.push({ time: timeStr, available: !bookedTimes.includes(timeStr) });
-    }
+  for (let i = 0; i < allTimes.length; i++) {
+    slots.push({ time: allTimes[i], available: !bookedTimes.includes(allTimes[i]) });
   }
   return slots;
 }
