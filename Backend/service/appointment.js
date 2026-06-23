@@ -69,3 +69,82 @@ exports.approveappointment=async(req,res)=>
       return res.status(201).json({success: true,msg:'appointment approved successfully'});
 
 }
+
+function generateTimeSlots(bookedTimes) {
+  const slots = [];
+  for (let hour = 9; hour < 17; hour++) {
+    for (let min = 0; min < 60; min += 30) {
+      const timeStr = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+      slots.push({ time: timeStr, available: !bookedTimes.includes(timeStr) });
+    }
+  }
+  return slots;
+}
+
+exports.getAvailableSlots = async (req, res) => {
+  const user = req.user;
+  const { doctorid, date } = req.query;
+
+  if (!doctorid || !date) {
+    return res.status(400).json({ success: false, msg: 'doctorid and date are required' });
+  }
+
+  const doctor = await rec.findOne({ _id: doctorid });
+  if (!doctor) {
+    return res.status(404).json({ success: false, msg: 'Doctor not found' });
+  }
+
+  const userAppointmentOnDate = await rec5.findOne({ userid: user._id.toString(), date });
+  if (userAppointmentOnDate) {
+    return res.status(200).json({
+      success: true,
+      slots: [],
+      hasAppointmentToday: true,
+      msg: 'You already have an appointment on this date'
+    });
+  }
+
+  const booked = await rec5.find({ doctorid, date });
+  const bookedTimes = booked.map(a => a.time);
+  const slots = generateTimeSlots(bookedTimes);
+
+  return res.status(200).json({ success: true, slots, hasAppointmentToday: false });
+};
+
+exports.bookSlot = async (req, res) => {
+  const user = req.user;
+  const { doctorid, date, time, description } = req.body;
+
+  if (!doctorid || !date || !time || !description) {
+    return res.status(400).json({ success: false, msg: 'All fields are required' });
+  }
+
+  const doctor = await rec.findOne({ _id: doctorid });
+  if (!doctor) {
+    return res.status(404).json({ success: false, msg: 'Doctor not found' });
+  }
+
+  const existingUserApp = await rec5.findOne({ userid: user._id.toString(), date });
+  if (existingUserApp) {
+    return res.status(400).json({ success: false, msg: 'You already have an appointment on this date. Only one appointment per day is allowed.' });
+  }
+
+  const slotTaken = await rec5.findOne({ doctorid, date, time });
+  if (slotTaken) {
+    return res.status(400).json({ success: false, msg: 'This slot was just taken. Please choose another.' });
+  }
+
+  const appointment = new rec5({
+    userid: user._id,
+    name: user.name,
+    email: user.email,
+    doctorid,
+    doctormail: doctor.email,
+    description,
+    date,
+    time
+  });
+
+  await appointment.save();
+  return res.status(201).json({ success: true, msg: 'Appointment booked successfully!' });
+};

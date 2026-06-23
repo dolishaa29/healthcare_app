@@ -35,6 +35,7 @@ import UserChat from './pages/UserChat';
 import DoctorChat from './pages/DoctorChat';
 import ReportAnalysis from './pages/ReportAnalysis';
 import LiveCapture from './pages/LiveCapture';
+import SlotBooking from './pages/SlotBooking';
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
           <Route path='/userchat' element={<UserChat/>}/>
           <Route path='/ReportAnalysis' element={<ReportAnalysis/>}/>
           <Route path='/LiveCapture' element={<LiveCapture/>}/>
+          <Route path='/SlotBooking' element={<SlotBooking/>}/>
         </Route>
         
       </Routes>
