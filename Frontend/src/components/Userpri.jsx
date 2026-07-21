@@ -6,7 +6,7 @@ const Userpri = ({ children }) => {
   const token = Cookies.get("token");
 
   if (!token) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 
   return children;

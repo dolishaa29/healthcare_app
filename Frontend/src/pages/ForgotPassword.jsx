@@ -138,7 +138,7 @@ const ForgotPassword = () => {
 
                 <div className="mt-10 pt-6 border-t border-slate-100 text-center">
                     <button 
-                        onClick={() => navigate('/')} 
+                        onClick={() => navigate('/login')}
                         className="text-sm text-slate-500 hover:text-purple-600 font-semibold flex items-center justify-center gap-2 mx-auto transition-colors"
                     >
                         <span>←</span> Back to Login

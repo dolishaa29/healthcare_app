@@ -36,6 +36,7 @@ import DoctorChat from './pages/DoctorChat';
 import ReportAnalysis from './pages/ReportAnalysis';
 import LiveCapture from './pages/LiveCapture';
 import SlotBooking from './pages/SlotBooking';
+import Landing from './pages/Landing';
 
 function App() {
   return (
@@ -43,7 +44,8 @@ function App() {
       <BrowserRouter>
       <Routes>
         <Route path='/hehe' element={<Adminregister/>}/>
-        <Route path='/' element={<Login/>}/>
+        <Route path='/' element={<Landing/>}/>
+        <Route path='/login' element={<Login/>}/>
 
         <Route element={<PrivateRoute><AdminLayout /></PrivateRoute>}>
           <Route path='/Admindashboard' element={<Admindashboard/>}/>

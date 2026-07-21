@@ -39,7 +39,7 @@ const AdminLayout = () => {
 
         <div className="p-5 border-t border-slate-50">
           <button
-            onClick={() => { Cookies.remove("emtoken"); navigate("/"); }}
+            onClick={() => { Cookies.remove("emtoken"); navigate("/login"); }}
             className="w-full flex items-center gap-4 px-4 py-4 text-red-500 hover:bg-red-50/50 rounded-2xl transition-all duration-300 font-bold text-[13px]"
           >
             <LogOut size={18} />

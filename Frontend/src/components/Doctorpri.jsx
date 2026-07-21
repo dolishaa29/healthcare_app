@@ -6,7 +6,7 @@ const Doctorpri = ({ children }) => {
   const token = Cookies.get("emstoken");
 
   if (!token) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 
   return children;

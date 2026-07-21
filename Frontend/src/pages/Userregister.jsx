@@ -58,7 +58,7 @@ const Userregister = () => {
 
       if (response.data.success) {
         setMessage("Registration Successful! Redirecting to login...");
-        setTimeout(() => navigate("/"), 1500);
+        setTimeout(() => navigate("/login"), 1500);
       } else {
         setMessage(response.data.msg || "OTP verification failed");
       }
@@ -209,7 +209,7 @@ const Userregister = () => {
 
         <p className="text-center text-sm text-slate-500 mt-6">
           Already have an account?
-          <button onClick={() => navigate('/')} className="text-purple-600 hover:underline ml-1 font-semibold">Sign In</button>
+          <button onClick={() => navigate('/login')} className="text-purple-600 hover:underline ml-1 font-semibold">Sign In</button>
         </p>
       </div>
     </div>

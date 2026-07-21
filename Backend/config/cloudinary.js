@@ -7,8 +7,6 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-// Uploads an in-memory file buffer (from multer.memoryStorage) straight to
-// cloudinary without ever touching local disk.
 cloudinary.uploadBuffer = (buffer, options = {}) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
