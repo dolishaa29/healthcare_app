@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "WebFetch(domain:gyanama.com)",
-      "Bash(taskkill //F //IM msedge.exe)"
-    ]
-  }
-}
