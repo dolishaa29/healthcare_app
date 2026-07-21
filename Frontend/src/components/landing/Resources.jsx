@@ -30,12 +30,9 @@ const Resources = () => (
   <section className="bg-white border-y border-slate-100">
     <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
       <Reveal className="flex items-end justify-between gap-6 mb-14 flex-wrap">
-        <div>
-          <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">Resources</p>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter">
-            Health guides worth your time
-          </h2>
-        </div>
+        <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+          Health guides worth your time
+        </h2>
         <span className="text-sm font-bold text-slate-400">More articles coming soon</span>
       </Reveal>
 

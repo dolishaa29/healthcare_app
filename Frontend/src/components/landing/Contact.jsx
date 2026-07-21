@@ -38,14 +38,9 @@ const Contact = () => {
     <section id="contact" className="bg-white border-y border-slate-100">
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
         <Reveal className="text-center">
-          <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">Contact</p>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter">
+          <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
             We'd love to hear from you
           </h2>
-          <p className="text-slate-500 mt-4 max-w-xl mx-auto leading-relaxed">
-            Questions about a booking, a partnership idea, or feedback on the product —
-            send it over and a real person will get back to you.
-          </p>
         </Reveal>
 
         <div className="grid md:grid-cols-3 gap-6 mt-14 mb-10">

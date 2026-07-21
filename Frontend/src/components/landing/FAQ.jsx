@@ -139,8 +139,7 @@ const FAQ = () => {
   return (
     <section id="faq" className="max-w-3xl mx-auto px-6 md:px-10 py-20 md:py-28">
       <Reveal className="text-center mb-10">
-        <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">FAQ</p>
-        <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter">
+        <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
           Frequently asked questions
         </h2>
       </Reveal>

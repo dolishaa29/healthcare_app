@@ -38,13 +38,9 @@ const COMPARISON = [
 const ComparisonTable = () => (
   <section className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
     <Reveal className="text-center">
-      <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">The difference</p>
-      <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter">
+      <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
         Traditional clinic software vs. AuraHealth
       </h2>
-      <p className="text-slate-500 mt-3 max-w-xl mx-auto">
-        Every row below is a feature you can try right now — not a roadmap promise.
-      </p>
     </Reveal>
 
     <Reveal delay={80} className="mt-14 bg-white border border-slate-100 rounded-3xl shadow-xl shadow-indigo-500/5 overflow-x-auto">

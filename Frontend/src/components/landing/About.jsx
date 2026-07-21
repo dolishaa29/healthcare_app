@@ -23,15 +23,9 @@ const VALUES = [
 const About = () => (
   <section id="about" className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
     <Reveal className="text-center">
-      <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">About Us</p>
-      <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter">
+      <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
         Healthcare software that gets out of the way
       </h2>
-      <p className="text-slate-500 mt-4 max-w-2xl mx-auto leading-relaxed">
-        AuraHealth started with a simple frustration: booking a doctor and getting a straight
-        answer about a report shouldn't take a dozen phone calls. We're building the platform
-        we wished existed — for patients, doctors and the clinics that connect them.
-      </p>
     </Reveal>
 
     <div className="grid md:grid-cols-3 gap-6 mt-14">
