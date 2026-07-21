@@ -26,7 +26,6 @@ const Landing = () => (
     <Resources />
     <About />
     <FAQ />
-    <CTA />
     <Contact />
     <Privacy />
     <Footer />
