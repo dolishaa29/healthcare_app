@@ -37,12 +37,10 @@ const Bot = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
 
-      {/* Chat Window */}
       <div className={`mb-4 w-90 bg-white rounded-3xl shadow-2xl shadow-indigo-100 border border-slate-100 flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right
         ${isOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"}`}
         style={{ maxHeight: "520px" }}
       >
-        {/* Header */}
         <div className="bg-linear-to-r from-indigo-600 to-violet-600 px-5 py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-white/20 rounded-2xl flex items-center justify-center">

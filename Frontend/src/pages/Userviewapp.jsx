@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ExternalLink, CalendarCheck } from 'lucide-react';
 
 const Userviewapp = () => {
@@ -74,7 +75,10 @@ const Userviewapp = () => {
   );
 };
 
-const AppointmentCard = ({ app, active }) => (
+const AppointmentCard = ({ app, active }) => {
+  const navigate = useNavigate();
+
+  return (
   <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-lg hover:shadow-indigo-50/50 transition-all duration-300 flex flex-col">
     {/* Status badge */}
     <div className="flex items-center justify-between mb-5">
@@ -149,6 +153,7 @@ const AppointmentCard = ({ app, active }) => (
     {/* Action */}
     <button
       disabled={!active}
+      onClick={() => active && navigate(`/meeting/${app._id}`)}
       className={`mt-5 w-full py-3.5 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2
         ${
           active
@@ -166,6 +171,7 @@ const AppointmentCard = ({ app, active }) => (
       )}
     </button>
   </div>
-);
+  );
+};
 
 export default Userviewapp;

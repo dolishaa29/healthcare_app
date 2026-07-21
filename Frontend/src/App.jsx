@@ -37,6 +37,7 @@ import ReportAnalysis from './pages/ReportAnalysis';
 import LiveCapture from './pages/LiveCapture';
 import SlotBooking from './pages/SlotBooking';
 import Landing from './pages/Landing';
+import Meeting from './pages/Meeting';
 
 function App() {
   return (
@@ -73,6 +74,7 @@ function App() {
           <Route path='/doctorprofile' element={<DoctorProfile/>}/>
           <Route path='/changepassword' element={<Changepassworddoc/>}/>
           <Route path='/doctorchat' element={<DoctorChat/>}/>
+          <Route path='/meeting/:appointmentId' element={<Meeting/>}/>
         </Route>
 
         <Route element={<Userpri><UserLayout /></Userpri>}>
@@ -84,6 +86,7 @@ function App() {
           <Route path='/ReportAnalysis' element={<ReportAnalysis/>}/>
           <Route path='/LiveCapture' element={<LiveCapture/>}/>
           <Route path='/SlotBooking' element={<SlotBooking/>}/>
+          <Route path='/meeting/:appointmentId' element={<Meeting/>}/>
         </Route>
         
       </Routes>

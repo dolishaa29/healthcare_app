@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const usermodel = require("../model/user");
 const doctormodel = require("../model/doctor");
 const { saveMessage } = require("../service/chatservice");
+const { registerMeetingHandlers, handleMeetingDisconnect } = require("./meetingSocket");
 
 function roomId(userId, doctorId) {
     return `chat_${userId}_${doctorId}`;
@@ -49,6 +50,8 @@ function initChatSocket(server) {
     io.on("connection", (socket) => {
         console.log(`${socket.role} connected to chat: ${socket.profile._id}`);
 
+        registerMeetingHandlers(io, socket);
+
         socket.on("joinConversation", ({ userId, doctorId }) => {
             if (!userId || !doctorId) return;
             socket.join(roomId(userId, doctorId));
@@ -74,6 +77,7 @@ function initChatSocket(server) {
 
         socket.on("disconnect", () => {
             console.log(`${socket.role} disconnected from chat: ${socket.profile._id}`);
+            handleMeetingDisconnect(io, socket);
         });
     });
 
