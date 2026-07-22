@@ -31,7 +31,7 @@ const LiveCapture = () => {
     if (!frame) return;
     setIsAnalyzing(true);
     try {
-      const res = await fetch('http://localhost:5000/skin-analysis', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/skin-analysis`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ frame }),
