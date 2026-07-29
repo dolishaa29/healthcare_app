@@ -37,6 +37,392 @@ Live: [auraahealth.vercel.app](https://auraahealth.vercel.app)
 - Nodemailer (OTP emails)
 - Google Generative AI SDK (Gemini) — chatbot, skin analysis, report analysis
 
+## Architecture & Diagrams
+
+### System Architecture
+
+Two traffic patterns run side by side: REST for anything transactional (auth, profiles, bookings, uploads), and a single Socket.IO server for anything real-time. Video itself never touches the server — Socket.IO only exchanges the SDP/ICE handshake, after which media flows directly between the two browsers.
+
+```mermaid
+flowchart TB
+    subgraph Clients["React 19 + Vite — Browser"]
+        C1["Patient / Doctor / Admin UI"]
+        C2["Peer browser (call partner)"]
+    end
+
+    subgraph Server["Node.js + Express 5"]
+        REST["REST routers<br/>admin, doctor, user, appointment,<br/>rating, bot, chat, report, skin"]
+        CTRL["Controllers"]
+        SVC["Services (business logic)"]
+        SIO["Socket.IO server"]
+    end
+
+    DB[("MongoDB<br/>via Mongoose")]
+    CLOUD[("Cloudinary<br/>media + certificates")]
+    MAIL(["Nodemailer<br/>Gmail SMTP"])
+    GEMINI(["Google Gemini<br/>gemini-2.5-flash"])
+    STUN{{"STUN<br/>stun.l.google.com:19302"}}
+
+    C1 -->|"REST / axios"| REST
+    REST --> CTRL --> SVC --> DB
+    SVC --> CLOUD
+    SVC --> MAIL
+    SVC --> GEMINI
+
+    C1 -.->|"socket.io-client<br/>auth handshake"| SIO
+    C2 -.->|"socket.io-client"| SIO
+    SIO --> DB
+
+    C1 <==>|"WebRTC media<br/>P2P after signaling"| C2
+    C1 -.->|"ICE"| STUN
+    C2 -.->|"ICE"| STUN
+```
+
+### Module Layering (UML)
+
+Every feature module follows the same Router → Controller → Service → Model layering. The appointment module is the most interesting instance of it, because it carries two independent creation paths — a legacy admin-approved request, and a newer self-serve slot booking — that write to two different collections.
+
+```mermaid
+classDiagram
+    class Router {
+        <<layer>>
+        HTTP endpoints, auth middleware
+    }
+    class Controller {
+        <<layer>>
+        thin request or response glue
+    }
+    class Service {
+        <<layer>>
+        business logic
+    }
+    class Model {
+        <<layer>>
+        Mongoose schema
+    }
+    Router --> Controller
+    Controller --> Service
+    Service --> Model
+```
+
+```mermaid
+classDiagram
+    class AppointRouter {
+        +POST appointrequest()
+        +GET viewappointment()
+        +PUT appointmentstatus()
+        +POST approveappointment()
+        +GET available-slots()
+        +POST book-slot()
+    }
+    class AppointmentService {
+        +createRequest()
+        +updateStatus()
+        +approveAppointment()
+        +generateTimeSlots()
+        +bookSlot()
+    }
+    class AppointmentModel {
+        +String userid
+        +String doctorid
+        +String date
+        +String time
+    }
+    class AppointmentRequestModel {
+        +String userid
+        +String doctorid
+        +String status
+    }
+
+    AppointRouter --> AppointmentService : delegates
+    AppointmentService --> AppointmentModel : persists, appointmentnew
+    AppointmentService --> AppointmentRequestModel : persists, appointmentrequest
+```
+
+### Auth & Role Routing
+
+There is no shared session concept — three roles, three cookies, three JWT middlewares, each independently checking the same `JWT_SECRET` against its own collection.
+
+```mermaid
+flowchart LR
+    L["Login.jsx<br/>role selector"] -->|"admin"| LA["POST /adminlogin"]
+    L -->|"doctor"| LD["POST /doctorlogin"]
+    L -->|"user"| LU["POST /userlogin"]
+
+    LA --> JA["JWT signed<br/>Set-Cookie: emtoken"]
+    LD --> JD["JWT signed<br/>Set-Cookie: emstoken"]
+    LU --> JU["JWT signed<br/>Set-Cookie: token"]
+
+    JA --> MA["middleware/admin.js<br/>reads emtoken"]
+    JD --> MD["middleware/doctor.js<br/>reads emstoken"]
+    JU --> MU["middleware/user.js<br/>reads token"]
+
+    MA --> RA["Admindashboard, Viewdoctor,<br/>Viewusers, ViewAppointment"]
+    MD --> RD["Doctordashboard, doctorviewapp,<br/>doctorchat, meeting"]
+    MU --> RU["Userdashboard, userviewapp,<br/>SlotBooking, meeting"]
+```
+
+### Core Data Flows
+
+**A · Patient registration (OTP-gated)**
+
+```mermaid
+sequenceDiagram
+    actor U as Patient
+    participant API as userrouter
+    participant Svc as userservice
+    participant Pending as PendingUser
+    participant Mail as Nodemailer
+    participant DB as user
+
+    U->>API: POST /userregister
+    API->>Svc: registeruser()
+    Svc->>Svc: bcrypt hash + generate OTP
+    Svc->>Pending: upsert, TTL 10 min
+    Svc->>Mail: send OTP email
+    Mail-->>U: OTP delivered
+    API-->>U: 200 OTP sent
+
+    U->>API: POST /userregisterverify
+    API->>Svc: verifyOtp()
+    Svc->>Pending: find by email and otp
+    Svc->>DB: create user document
+    Svc->>Pending: delete pending doc
+    API-->>U: 200 account created
+
+    U->>API: POST /userlogin
+    API->>Svc: login()
+    Svc->>DB: find by email
+    Svc->>Svc: compare hash, check userstatus
+    Svc-->>API: sign JWT, 1 hour expiry
+    API-->>U: Set-Cookie token
+```
+
+**B · Doctor onboarding (admin-gated)**
+
+```mermaid
+sequenceDiagram
+    actor D as Doctor applicant
+    actor A as Admin
+    participant API as doctorrouter
+    participant Cloud as Cloudinary
+    participant Perm as permission
+    participant DocDB as doctor
+    participant Mail as Nodemailer
+
+    D->>API: POST /doctorpermission, multipart + certificate
+    API->>Cloud: upload certificate, raw
+    Cloud-->>API: secure_url
+    API->>Perm: create doc, permission pending
+    API-->>D: 200 request submitted
+
+    A->>API: GET /doctorrequest
+    API->>Perm: find pending applications
+    Perm-->>A: pending list
+
+    A->>API: PUT /doctorpermissionupdate
+    API->>Perm: set permission approved
+
+    A->>API: POST /doctorregister
+    API->>DocDB: create doctor, random password
+    API->>Mail: email credentials
+    Mail-->>D: login email + password
+```
+
+**C · Appointment booking — two parallel paths**
+
+```mermaid
+flowchart TD
+    Start(["Patient wants an appointment"])
+    Start --> Choice{"Which flow?"}
+
+    Choice -->|"Legacy request"| Req["POST /appointrequest<br/>creates appointmentrequest<br/>status pending"]
+    Req --> AdminReview["Admin<br/>PUT /appointmentstatus<br/>approve or reject"]
+    AdminReview --> Manual["Admin or frontend<br/>POST /approveappointment<br/>date and time supplied manually"]
+    Manual --> Real[("appointment collection<br/>appointmentnew")]
+
+    Choice -->|"Self-serve slots"| Avail["GET /available-slots<br/>generateTimeSlots minus booked times"]
+    Avail --> Pick["Patient picks a free slot"]
+    Pick --> Book["POST /book-slot<br/>revalidate + insert"]
+    Book --> Real
+
+    Real --> Chat["Enables chat<br/>user + doctor pair"]
+    Real --> Meeting["Enables /meeting/:appointmentId<br/>WebRTC authorization"]
+```
+
+**D · Video consultation (WebRTC signaling)**
+
+```mermaid
+sequenceDiagram
+    actor P as Patient
+    actor Dr as Doctor
+    participant IO as meetingSocket.js
+    participant DB as appointment
+
+    P->>IO: connect, auth token + role
+    IO->>IO: JWT verify, io.use middleware
+    P->>IO: join-meeting, appointmentId
+    IO->>DB: findById appointmentId
+    IO->>IO: check isAuthorized + hasMeetingStarted
+    IO-->>P: joined-meeting, selfId, peers empty
+
+    Dr->>IO: connect + join-meeting, appointmentId
+    IO->>DB: findById + verify
+    IO-->>Dr: joined-meeting, selfId, peers has P
+    IO-->>P: peer-joined, Dr
+
+    P->>P: new RTCPeerConnection, create offer
+    P->>IO: signal, type offer, sdp
+    IO->>Dr: relay signal, room-scoped
+    Dr->>Dr: setRemoteDescription, create answer
+    Dr->>IO: signal, type answer, sdp
+    IO->>P: relay signal
+
+    P->>IO: signal, type candidate
+    IO->>Dr: relay ICE candidate
+    Dr->>IO: signal, type candidate
+    IO->>P: relay ICE candidate
+
+    Note over P,Dr: STUN-assisted P2P media. No TURN configured.
+
+    Dr->>IO: leave-meeting or disconnect
+    IO-->>P: peer-left
+    P->>P: pc.close()
+```
+
+**E · Real-time chat**
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    actor D as Doctor
+    participant IO as chatSocket.js
+    participant DB as message
+
+    U->>IO: GET /chat/user/history/doctorId
+    IO-->>U: prior messages
+
+    U->>IO: joinConversation, userId, doctorId
+    IO->>IO: join room chat_userId_doctorId
+    D->>IO: joinConversation, userId, doctorId
+    IO->>IO: join same room
+
+    U->>IO: sendMessage, userId, doctorId, text
+    IO->>DB: saveMessage()
+    IO-->>U: receiveMessage, room broadcast
+    IO-->>D: receiveMessage, room broadcast
+```
+
+**F · AI features**
+
+```mermaid
+flowchart LR
+    subgraph Bot["Chatbot"]
+        B1["bot.jsx"] -->|"POST /chat"| B2["Gemini 2.5 Flash"]
+        B2 --> B1
+    end
+
+    subgraph Report["Medical report analysis"]
+        R1["ReportAnalysis.jsx<br/>upload PDF or image"] -->|"POST /report"| R2["Gemini: summarize"]
+        R2 --> R3[("Cloudinary: file")]
+        R2 --> R4[("report doc<br/>messages array")]
+        R5["Follow-up question"] -->|"POST /report<br/>text + reportId"| R2
+    end
+
+    subgraph Skin["Skin analysis"]
+        S1["LiveCapture.jsx<br/>webcam canvas, every 5s"] -->|"POST /skin-analysis"| S2["Gemini: analyze frame"]
+        S2 --> S1
+    end
+```
+
+### Data Model (ER Diagram)
+
+Mongoose enforces almost none of these relationships — `report → user` is the one real `ref`. Everything else is a logical foreign key: a plain string or ObjectId field joined by hand in application code, drawn here as if it were enforced because that's how the app actually uses it. `otps` and `pendingusers` are TTL-expiring staging collections, not core domain entities; `ADMIN` is a singleton — registration only succeeds while the collection is empty.
+
+```mermaid
+erDiagram
+    USER ||--o{ APPOINTMENT : books
+    DOCTOR ||--o{ APPOINTMENT : accepts
+    USER ||--o{ APPOINTMENT_REQUEST : submits
+    DOCTOR ||--o{ APPOINTMENT_REQUEST : receives
+    USER ||--o{ MESSAGE : sends
+    DOCTOR ||--o{ MESSAGE : sends
+    USER ||--o{ DOCTOR_RATING : writes
+    DOCTOR ||--o{ DOCTOR_RATING : receives
+    USER ||--o{ REPORT : owns
+    DOCTOR ||--o{ PERMISSION : "applies as, by email"
+
+    USER {
+        ObjectId _id
+        string email
+        string password
+        string name
+        string userstatus
+        string bloodGroup
+    }
+    DOCTOR {
+        ObjectId _id
+        string email
+        string password
+        string name
+        string specialization
+        string doctorstatus
+    }
+    ADMIN {
+        ObjectId _id
+        string email
+        string password
+    }
+    PERMISSION {
+        ObjectId _id
+        string email
+        string certificate
+        string permission
+    }
+    APPOINTMENT {
+        ObjectId _id
+        string userid
+        string doctorid
+        string date
+        string time
+    }
+    APPOINTMENT_REQUEST {
+        ObjectId _id
+        string userid
+        string doctorid
+        string status
+    }
+    MESSAGE {
+        ObjectId _id
+        string userId
+        string doctorId
+        string senderRole
+        string text
+    }
+    DOCTOR_RATING {
+        ObjectId _id
+        string userId
+        string doctorId
+        number rating
+    }
+    REPORT {
+        ObjectId _id
+        ObjectId user
+        string title
+        string fileUrl
+    }
+    OTP {
+        string email
+        string role
+        string otp
+    }
+    PENDING_USER {
+        string email
+        string password
+        string otp
+    }
+```
+
 ## Project Structure
 
 ```
