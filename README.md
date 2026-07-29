@@ -518,4 +518,5 @@ npm run build
 
 ## Documentation
 
-See [docs/live.md](docs/live.md) for a detailed walkthrough of the live-capture pipeline (webcam capture → Socket.IO → server-side processing → real-time UI feedback).
+- [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) — complete, file-by-file map of the repository (Backend and Frontend), plus the router → controller → service layering and a few structural notes on stub/legacy files.
+- [docs/live.md](docs/live.md) — walkthrough of the live-capture pipeline (webcam capture → Socket.IO → server-side processing → real-time UI feedback). Note: this describes an earlier design; the implemented `LiveCapture.jsx` instead POSTs a frame to `/skin-analysis` for Gemini every 5s — see the note in `docs/PROJECT_STRUCTURE.md`.
