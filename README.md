@@ -31,17 +31,39 @@ Live: [auraahealth.vercel.app](https://auraahealth.vercel.app)
 **Backend**
 - Node.js + Express 5
 - MongoDB + Mongoose
-- Socket.IO (chat + meeting/signaling namespaces)
+- Socket.IO, with `@socket.io/redis-adapter` — chat + meeting/signaling events broadcast correctly across multiple server instances, not just within one process
+- Redis (via `redis` client) — backs both the Socket.IO adapter and the rate limiter (`rate-limit-redis`)
 - JWT auth, bcrypt/bcryptjs
 - Multer + Cloudinary (file uploads)
 - Nodemailer (OTP emails)
 - Google Generative AI SDK (Gemini) — chatbot, skin analysis, report analysis
+- `compression`, `express-rate-limit` — response compression and per-route rate limiting
+
+**Infrastructure**
+- Docker (`Backend/Dockerfile`, Node 22 Alpine)
+- `docker-compose.yml` + Nginx (`nginx/nginx.conf`) — two backend instances load-balanced behind a reverse proxy with sticky sessions, for horizontal scaling
+
+## Scaling & Reliability
+
+Hardened specifically to run safely behind a load balancer with multiple backend instances:
+
+- **Stateless auth** — JWT in cookies, no server-side session store, so any instance can handle any request
+- **Redis-backed Socket.IO** (`@socket.io/redis-adapter`) — chat and meeting events reach the right client regardless of which instance it's connected to; verified end-to-end (two independent Socket.IO servers, one Redis, cross-instance delivery confirmed)
+- **Redis-backed rate limiting** — `/chat` and `/skin-analysis` (the two routes that call the paid Gemini API) are capped per-IP through a shared store, not per-instance memory, so the limit actually holds across instances
+- **Database indexes** — unique index on `email` (previously unindexed — every login and every authenticated request was a full collection scan), unique compound index on `{doctorid, date, time}` to close a double-booking race condition, indexes on chat/appointment lookup fields
+- **Health checks** — `GET /healthz` reports Mongo connectivity and the responding instance's hostname; used by both Docker's own healthcheck and Nginx's passive failure detection
+- **Graceful shutdown** — drains the HTTP server, Socket.IO, Mongo, and Redis connections on `SIGTERM`/`SIGINT` instead of hard-killing in-flight requests and open sockets mid-deploy
+- **`trust proxy`** — correct client IPs and secure cookies once traffic passes through Nginx
+- **Configurable CORS** (`CORS_ORIGINS` env var) — shared by REST and Socket.IO, instead of a hardcoded origin
+- **Compression** and opt-in pagination (`?page=&limit=`) on the admin list endpoints
+- **Reverse proxy** — Nginx + Docker Compose, two backend instances, sticky sessions, WebSocket upgrade support, live-verified (load distribution, failover, and the Socket.IO handshake all confirmed working through the proxy) — see [Horizontal Scaling & Reverse Proxy](#horizontal-scaling--reverse-proxy)
+- **Frontend code splitting** — routes are lazy-loaded (`React.lazy` + `Suspense`) instead of shipping one monolithic bundle
 
 ## Architecture & Diagrams
 
 ### System Architecture
 
-Two traffic patterns run side by side: REST for anything transactional (auth, profiles, bookings, uploads), and a single Socket.IO server for anything real-time. Video itself never touches the server — Socket.IO only exchanges the SDP/ICE handshake, after which media flows directly between the two browsers.
+Two traffic patterns run side by side: REST for anything transactional (auth, profiles, bookings, uploads), and a Socket.IO server for anything real-time. Video itself never touches the server — Socket.IO only exchanges the SDP/ICE handshake, after which media flows directly between the two browsers. Socket.IO is Redis-backed (`@socket.io/redis-adapter`): `io.to(room).emit(...)` publishes through Redis instead of just broadcasting in-process, which is what lets chat and meeting events reach a client no matter which backend instance it's actually connected to — see [Horizontal Scaling](#horizontal-scaling--reverse-proxy) below.
 
 ```mermaid
 flowchart TB
@@ -54,10 +76,11 @@ flowchart TB
         REST["REST routers<br/>admin, doctor, user, appointment,<br/>rating, bot, chat, report, skin"]
         CTRL["Controllers"]
         SVC["Services (business logic)"]
-        SIO["Socket.IO server"]
+        SIO["Socket.IO server<br/>+ Redis adapter"]
     end
 
     DB[("MongoDB<br/>via Mongoose")]
+    REDIS[("Redis<br/>Socket.IO pub/sub<br/>+ rate-limit store")]
     CLOUD[("Cloudinary<br/>media + certificates")]
     MAIL(["Nodemailer<br/>Gmail SMTP"])
     GEMINI(["Google Gemini<br/>gemini-2.5-flash"])
@@ -72,11 +95,36 @@ flowchart TB
     C1 -.->|"socket.io-client<br/>auth handshake"| SIO
     C2 -.->|"socket.io-client"| SIO
     SIO --> DB
+    SIO <-.->|"pub/sub"| REDIS
 
     C1 <==>|"WebRTC media<br/>P2P after signaling"| C2
     C1 -.->|"ICE"| STUN
     C2 -.->|"ICE"| STUN
 ```
+
+### Horizontal Scaling & Reverse Proxy
+
+The backend runs as two (or more) identical instances behind Nginx, load-balanced with sticky sessions. Neither instance holds any state that the other doesn't also have access to — auth is stateless JWTs, and the only real-time in-memory-feeling state (chat rooms, meeting participant lists) actually lives in Redis via the Socket.IO adapter, not in either process's memory. That's what makes it safe to route a given client to either instance.
+
+```mermaid
+flowchart TB
+    Client["Browser<br/>REST + Socket.IO client"]
+    LB["Nginx reverse proxy<br/>ip_hash sticky sessions<br/>WebSocket upgrade headers"]
+    B1["backend1<br/>Express + Socket.IO"]
+    B2["backend2<br/>Express + Socket.IO"]
+    Mongo[("MongoDB Atlas<br/>shared")]
+    Redis[("Redis<br/>shared pub/sub")]
+
+    Client -->|":80 HTTP / WS"| LB
+    LB -->|"sticky by client IP"| B1
+    LB -->|"sticky by client IP"| B2
+    B1 --> Mongo
+    B2 --> Mongo
+    B1 <-.->|"pub/sub"| Redis
+    B2 <-.->|"pub/sub"| Redis
+```
+
+Config lives in `docker-compose.yml` and `nginx/nginx.conf` at the repo root — see [Deployment](#deployment) for how to run it.
 
 ### Module Layering (UML)
 
@@ -427,19 +475,23 @@ erDiagram
 
 ```
 health/
+├── docker-compose.yml         # Two backend instances + Nginx, for horizontal scaling
+├── nginx/
+│   └── nginx.conf              # Reverse proxy: sticky sessions, WebSocket upgrade, passive health checks
 ├── Backend/
-│   ├── index.js              # Express app entry point
-│   ├── dbconnection.js       # MongoDB connection
-│   ├── config/                # Cloudinary config
-│   ├── router/                # Route definitions (admin, doctor, user, appointment, chat, rating, bot, report, skin analysis)
-│   ├── controller/            # Request handlers
-│   ├── service/                # Business logic (chat, appointments, ratings, AI services)
-│   ├── model/                  # Mongoose schemas (User, Doctor, Admin, Appointment, Message, OTP, ...)
-│   ├── middleware/             # JWT auth middleware per role + Multer upload config
-│   └── socket/                 # Socket.IO handlers (chatSocket, meetingSocket/WebRTC signaling)
+│   ├── index.js               # Express app entry point — health check, graceful shutdown, CORS, compression
+│   ├── dbconnection.js        # MongoDB connection
+│   ├── Dockerfile              # Node 22 Alpine
+│   ├── config/                 # Cloudinary, CORS origins (config/corsOrigins.js), Redis client (config/redisClient.js)
+│   ├── router/                 # Route definitions (admin, doctor, user, appointment, chat, rating, bot, report, skin analysis)
+│   ├── controller/             # Request handlers
+│   ├── service/                 # Business logic (chat, appointments, ratings, AI services)
+│   ├── model/                   # Mongoose schemas (User, Doctor, Admin, Appointment, Message, OTP, ...)
+│   ├── middleware/              # JWT auth per role, Multer upload config, Redis-backed rate limiting
+│   └── socket/                  # Socket.IO handlers (chatSocket, meetingSocket/WebRTC signaling) — Redis-adapter backed
 ├── Frontend/
 │   └── src/
-│       ├── pages/               # Route-level pages (dashboards, chat, appointments, meeting, etc.)
+│       ├── pages/               # Route-level pages (dashboards, chat, appointments, meeting, etc.) — lazy-loaded
 │       ├── components/          # Shared components & layouts (AdminLayout, DoctorLayout, UserLayout, private routes)
 │       └── socket.js            # Socket.IO client setup
 └── docs/
@@ -519,9 +571,9 @@ npm run build
 - **Frontend** is deployed to Vercel.
 - **Backend** ships with a `Dockerfile` (Node 22 Alpine) exposing port `5000`, and a `docker-compose.yml` + `nginx/nginx.conf` at the repo root that run two backend instances behind an Nginx reverse proxy — the setup this app needs for horizontal scaling.
 
-### Running the backend behind Nginx (horizontal scaling)
+### Running the backend behind Nginx
 
-This runs two instances of the backend container behind Nginx, load-balanced with sticky sessions. Both instances share the same MongoDB and Redis (via `Backend/.env`), so chat/meeting state stays consistent across them (see `socket/chatSocket.js`'s Redis adapter) — this is what actually makes running more than one instance safe.
+See [Horizontal Scaling & Reverse Proxy](#horizontal-scaling--reverse-proxy) above for the architecture — this is the actual command sequence to run it.
 
 **On the VM (EC2/VPS) that will run the backend:**
 
