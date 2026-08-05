@@ -1,9 +1,12 @@
 const Appointment = require("../model/Appointment/appointment");
 
-// roomId -> Map<socketId, { role, profileId, name }>
-const rooms = new Map();
-// socketId -> roomId (a socket is only ever in one meeting at a time)
-const socketRoom = new Map();
+// Room membership itself is NOT tracked in a local Map here — that would
+// only ever see participants connected to this same process. Instead it
+// relies on Socket.IO's own room state via socket.join()/fetchSockets(),
+// which the Redis adapter (see chatSocket.js) keeps in sync across every
+// instance. The one piece of state that's still safe to keep on the socket
+// itself is which meeting room THIS socket is currently in — that's always
+// local anyway, since a given socket only ever lives on one instance.
 
 function meetingRoomId(appointmentId) {
     return `meeting_${appointmentId}`;
@@ -24,20 +27,12 @@ function hasMeetingStarted(appointment) {
     return Date.now() >= scheduledAt.getTime();
 }
 
-function leaveCurrentRoom(io, socket) {
-    const roomId = socketRoom.get(socket.id);
+async function leaveCurrentRoom(io, socket) {
+    const roomId = socket.data.meetingRoomId;
     if (!roomId) return;
 
     socket.leave(roomId);
-    socketRoom.delete(socket.id);
-
-    const participants = rooms.get(roomId);
-    if (participants) {
-        participants.delete(socket.id);
-        if (participants.size === 0) {
-            rooms.delete(roomId);
-        }
-    }
+    socket.data.meetingRoomId = null;
 
     socket.to(roomId).emit("peer-left", { socketId: socket.id });
 }
@@ -63,30 +58,24 @@ function registerMeetingHandlers(io, socket) {
             }
 
             const roomId = meetingRoomId(appointmentId);
-            let participants = rooms.get(roomId);
-            if (!participants) {
-                participants = new Map();
-                rooms.set(roomId, participants);
-            }
 
-            if (participants.size >= 2 && !participants.has(socket.id)) {
+            // Cross-instance: sees every socket in this room regardless of
+            // which server instance it's connected to.
+            const existing = await io.in(roomId).fetchSockets();
+
+            if (existing.length >= 2 && !existing.some((s) => s.id === socket.id)) {
                 return socket.emit("meetingError", { msg: "This meeting already has two participants" });
             }
 
             // Leave any stale room this socket thinks it's in first
-            leaveCurrentRoom(io, socket);
+            await leaveCurrentRoom(io, socket);
 
             socket.join(roomId);
-            socketRoom.set(socket.id, roomId);
-            participants.set(socket.id, {
-                role: socket.role,
-                profileId: String(socket.profile._id),
-                name: socket.profile.name,
-            });
+            socket.data.meetingRoomId = roomId;
 
-            const peers = [...participants.entries()]
-                .filter(([id]) => id !== socket.id)
-                .map(([socketId, info]) => ({ socketId, ...info }));
+            const peers = existing
+                .filter((s) => s.id !== socket.id)
+                .map((s) => ({ socketId: s.id, role: s.data.role, profileId: s.data.profileId, name: s.data.name }));
 
             socket.emit("joined-meeting", { selfId: socket.id, peers });
             socket.to(roomId).emit("peer-joined", {
@@ -102,17 +91,17 @@ function registerMeetingHandlers(io, socket) {
     socket.on("signal", ({ appointmentId, data }) => {
         if (!appointmentId || !data) return;
         const roomId = meetingRoomId(appointmentId);
-        if (socketRoom.get(socket.id) !== roomId) return;
+        if (socket.data.meetingRoomId !== roomId) return;
         socket.to(roomId).emit("signal", { from: socket.id, data });
     });
 
-    socket.on("leave-meeting", () => {
-        leaveCurrentRoom(io, socket);
+    socket.on("leave-meeting", async () => {
+        await leaveCurrentRoom(io, socket);
     });
 }
 
-function handleMeetingDisconnect(io, socket) {
-    leaveCurrentRoom(io, socket);
+async function handleMeetingDisconnect(io, socket) {
+    await leaveCurrentRoom(io, socket);
 }
 
 module.exports = { registerMeetingHandlers, handleMeetingDisconnect };

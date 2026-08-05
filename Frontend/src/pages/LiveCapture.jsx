@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Video, VideoOff, Camera, Scan, Loader2, Sparkles } from 'lucide-react';
+import Cookies from 'js-cookie';
 
 const LiveCapture = () => {
 
@@ -33,7 +34,11 @@ const LiveCapture = () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/skin-analysis`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+        credentials: 'include',
         body: JSON.stringify({ frame }),
       });
       const data = await res.json();

@@ -1,48 +1,50 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import react from 'react'
-import Admindashboard from './pages/Admindashboard';
-import Doctorregister from './pages/Doctorregister';
-import Docterdashboard from './pages/Docterdashboard';
-import Userregister from './pages/Userregister';
-import Userdashboard from './pages/Userdashboard';
-import Viewusers from './pages/Viewusers';
-import Viewdoctors from './pages/Viewdoctors';
-import DoctorRequest from './pages/Doctorrequest';
-import Approved from './pages/Approved';
-import RejectedDoctors from './pages/RejectedDoctors';
-import ViewAppointment from './pages/ViewAppointment';
-import Login from './pages/Login';
+import { Suspense, lazy } from 'react'
 import PrivateRoute from './components/priroutes';
 import Userpri from './components/Userpri';
 import Doctorpri from './components/Doctorpri';
 import UserLayout from './components/UserLayout';
 import DoctorLayout from './components/DoctorLayout';
 import AdminLayout from './components/AdminLayout';
-import Userviewapp from './pages/Userviewapp';
-import Doctorviewapp from './pages/Doctorviewapp';
-import Adminregister from './pages/Adminregister';
-import DoctorProfile from './pages/DoctorProfile';
-import Changepassworddoc from './pages/changepassworddoc';
-import ViewDoctorss from './pages/ViewDoctor';
-import ProfileDocterForAll from './pages/ProfileDocterForAll';
-import ForgotPassword from './pages/ForgotPassword';
-import Viewuserall from './pages/Viewuserall';
-import UserProfile from './pages/UserProfile';
-import Changepassuser from './pages/Changepassuser';
-import Rating from './pages/Rating';
-import Bot from './components/bot';
-import UserChat from './pages/UserChat';
-import DoctorChat from './pages/DoctorChat';
-import ReportAnalysis from './pages/ReportAnalysis';
-import LiveCapture from './pages/LiveCapture';
-import SlotBooking from './pages/SlotBooking';
-import Landing from './pages/Landing';
-import Meeting from './pages/Meeting';
+
+const Admindashboard = lazy(() => import('./pages/Admindashboard'));
+const Doctorregister = lazy(() => import('./pages/Doctorregister'));
+const Docterdashboard = lazy(() => import('./pages/Docterdashboard'));
+const Userregister = lazy(() => import('./pages/Userregister'));
+const Userdashboard = lazy(() => import('./pages/Userdashboard'));
+const Viewusers = lazy(() => import('./pages/Viewusers'));
+const Viewdoctors = lazy(() => import('./pages/Viewdoctors'));
+const DoctorRequest = lazy(() => import('./pages/Doctorrequest'));
+const Approved = lazy(() => import('./pages/Approved'));
+const RejectedDoctors = lazy(() => import('./pages/RejectedDoctors'));
+const ViewAppointment = lazy(() => import('./pages/ViewAppointment'));
+const Login = lazy(() => import('./pages/Login'));
+const Userviewapp = lazy(() => import('./pages/Userviewapp'));
+const Doctorviewapp = lazy(() => import('./pages/Doctorviewapp'));
+const Adminregister = lazy(() => import('./pages/Adminregister'));
+const DoctorProfile = lazy(() => import('./pages/DoctorProfile'));
+const Changepassworddoc = lazy(() => import('./pages/changepassworddoc'));
+const ViewDoctorss = lazy(() => import('./pages/ViewDoctor'));
+const ProfileDocterForAll = lazy(() => import('./pages/ProfileDocterForAll'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const Viewuserall = lazy(() => import('./pages/Viewuserall'));
+const UserProfile = lazy(() => import('./pages/UserProfile'));
+const Changepassuser = lazy(() => import('./pages/Changepassuser'));
+const Rating = lazy(() => import('./pages/Rating'));
+const Bot = lazy(() => import('./components/bot'));
+const UserChat = lazy(() => import('./pages/UserChat'));
+const DoctorChat = lazy(() => import('./pages/DoctorChat'));
+const ReportAnalysis = lazy(() => import('./pages/ReportAnalysis'));
+const LiveCapture = lazy(() => import('./pages/LiveCapture'));
+const SlotBooking = lazy(() => import('./pages/SlotBooking'));
+const Landing = lazy(() => import('./pages/Landing'));
+const Meeting = lazy(() => import('./pages/Meeting'));
 
 function App() {
   return (
     <div>
       <BrowserRouter>
+      <Suspense fallback={null}>
       <Routes>
         <Route path='/hehe' element={<Adminregister/>}/>
         <Route path='/' element={<Landing/>}/>
@@ -88,8 +90,9 @@ function App() {
           <Route path='/SlotBooking' element={<SlotBooking/>}/>
           <Route path='/meeting/:appointmentId' element={<Meeting/>}/>
         </Route>
-        
+
       </Routes>
+      </Suspense>
       </BrowserRouter>
     </div>
   );

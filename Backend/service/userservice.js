@@ -129,8 +129,21 @@ exports.userprofile=async(req,res)=>
 exports.userlist=async(req,res)=>
 {
     try{
-    let users=await rec.find();
-    res.status(200).json({users:users});
+    const page = parseInt(req.query.page, 10);
+    const limit = parseInt(req.query.limit, 10);
+
+    // page/limit are opt-in — omit them to get the old unpaginated behavior.
+    if (!page || !limit) {
+        let users=await rec.find();
+        return res.status(200).json({users:users});
+    }
+
+    const skip = (page - 1) * limit;
+    const [users, total] = await Promise.all([
+        rec.find().skip(skip).limit(limit),
+        rec.countDocuments(),
+    ]);
+    res.status(200).json({ users, total, page, totalPages: Math.ceil(total / limit) });
     }
     catch(err)
     {

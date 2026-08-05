@@ -6,10 +6,8 @@ async function auth(req, res, next) {
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
     if (token != undefined && token != "") {
-      console.log("token in auth middleware:", token);
       const data = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("data in auth middleware:", data);
-      
+
       let user = await usermodel.findOne({ email: data.token });
       
       if (!user) return res.status(403).json({ msg: "user not found" });

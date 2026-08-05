@@ -1,22 +1,31 @@
 const { Server } = require("socket.io");
+const { createAdapter } = require("@socket.io/redis-adapter");
 const jwt = require("jsonwebtoken");
 const usermodel = require("../model/user");
 const doctormodel = require("../model/doctor");
 const { saveMessage } = require("../service/chatservice");
 const { registerMeetingHandlers, handleMeetingDisconnect } = require("./meetingSocket");
+const allowedOrigins = require("../config/corsOrigins");
+const { getRedisClients } = require("../config/redisClient");
 
 function roomId(userId, doctorId) {
     return `chat_${userId}_${doctorId}`;
 }
 
-function initChatSocket(server) {
+async function initChatSocket(server) {
+    const { pubClient, subClient } = await getRedisClients();
+
     const io = new Server(server, {
         cors: {
-            origin:"https://auraahealth.vercel.app",
-            //: "http://localhost:5173",
+            origin: allowedOrigins,
             credentials: true,
         },
     });
+
+    // Without this, io.to(room).emit(...) only reaches sockets connected to
+    // THIS process — fine with one instance, silently drops messages/signals
+    // to peers connected to a different instance once there's more than one.
+    io.adapter(createAdapter(pubClient, subClient));
 
     io.use(async (socket, next) => {
         try {
@@ -41,6 +50,14 @@ function initChatSocket(server) {
             } else {
                 return next(new Error("Invalid role"));
             }
+
+            // socket.role/socket.profile only exist in this process's memory.
+            // socket.data is what the Redis adapter serializes and hands back
+            // via fetchSockets() for sockets connected to OTHER instances —
+            // meetingSocket.js relies on that to build cross-instance peer lists.
+            socket.data.role = socket.role;
+            socket.data.profileId = String(socket.profile._id);
+            socket.data.name = socket.profile.name;
 
             next();
         } catch (err) {

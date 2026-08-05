@@ -60,7 +60,17 @@ if (already && (already.permission === "pending" || already.permission === "appr
             certificate:certificate,
 
         });
-        await newdoctor.save();
+        try {
+            await newdoctor.save();
+        } catch (err) {
+            if (err.code === 11000) {
+                return res.status(400).json({
+                    success: false,
+                    msg: "Doctor already exists with pending or approved permission"
+                });
+            }
+            throw err;
+        }
         return res.status(201).json({success: true,msg:'doctor registered , approval pending'})
     }
 }
@@ -174,10 +184,22 @@ exports.doctorlist=async(req,res)=>
 }
 
 exports.doctorrequest=async(req,res)=>
-{  
+{
     console.log("Fetching doctor requests");
-    let doctors=await rec2.find();
-    return res.status(200).json({success: true,doctors});
+    const page = parseInt(req.query.page, 10);
+    const limit = parseInt(req.query.limit, 10);
+
+    if (!page || !limit) {
+        let doctors=await rec2.find();
+        return res.status(200).json({success: true,doctors});
+    }
+
+    const skip = (page - 1) * limit;
+    const [doctors, total] = await Promise.all([
+        rec2.find().skip(skip).limit(limit),
+        rec2.countDocuments(),
+    ]);
+    return res.status(200).json({ success: true, doctors, total, page, totalPages: Math.ceil(total / limit) });
 }
 
 exports.doctorpermissionupdate=async(req,res)=>

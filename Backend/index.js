@@ -1,8 +1,10 @@
 let express = require("express");
+let os = require("os");
 let path = require("path");
 let dotenv = require("dotenv");
 let cors = require("cors");
 let cookieParser = require("cookie-parser");
+let compression = require("compression");
 let http = require("http");
 let initChatSocket = require("./socket/chatSocket");
 
@@ -10,20 +12,43 @@ dotenv.config();
 
 let app = express();
 
+// Behind a reverse proxy/load balancer, this makes req.ip, secure cookies,
+// and req.protocol reflect the original client via X-Forwarded-* headers
+// instead of the proxy's own connection.
+app.set("trust proxy", 1);
+
+let allowedOrigins = require("./config/corsOrigins");
+
 app.use(cors({
-  origin:"https://auraahealth.vercel.app",
-  //origin: "http://localhost:5173",
+  origin: allowedOrigins,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 let health = require("./dbconnection");
+let { closeRedisClients } = require("./config/redisClient");
+
+// Load-balancer/orchestrator health check — only reports healthy once Mongo
+// is actually connected, so traffic isn't routed to an instance that can't
+// serve requests yet (or has lost its DB connection). Includes the
+// container/host name so you can curl this through the reverse proxy
+// repeatedly and confirm requests are actually landing on different
+// instances instead of always hitting the same one.
+app.get("/healthz", (req, res) => {
+  const dbConnected = health.readyState === 1;
+  res.status(dbConnected ? 200 : 503).json({
+    status: dbConnected ? "ok" : "degraded",
+    db: dbConnected ? "connected" : "disconnected",
+    instance: os.hostname(),
+  });
+});
 
 app.use("/", require("./router/adminrouter"));
 app.use("/", require("./router/doctorrouter"));
@@ -38,8 +63,60 @@ app.use("/", require("./router/skinanalysis"));
 const PORT = process.env.PORT || 5000;
 
 let server = http.createServer(app);
-initChatSocket(server);
+let io;
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Rolling deploys behind a load balancer send SIGTERM to the old instance
+// before routing traffic away from it — without this, in-flight requests
+// and open sockets (chat/meeting) get hard-killed mid-request instead of
+// draining cleanly.
+let isShuttingDown = false;
+
+async function shutdown(signal) {
+  if (isShuttingDown) return;
+  isShuttingDown = true;
+  console.log(`${signal} received, shutting down gracefully...`);
+
+  const forceExit = setTimeout(() => {
+    console.error("Graceful shutdown timed out, forcing exit");
+    process.exit(1);
+  }, 10000);
+  forceExit.unref();
+
+  io?.close();
+  server.close(async () => {
+    console.log("HTTP server closed");
+    try {
+      await health.close();
+      console.log("MongoDB connection closed");
+    } catch (err) {
+      console.error("Error closing MongoDB connection:", err.message);
+    }
+    try {
+      await closeRedisClients();
+      console.log("Redis connections closed");
+    } catch (err) {
+      console.error("Error closing Redis connections:", err.message);
+    }
+    clearTimeout(forceExit);
+    process.exit(0);
+  });
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
+
+// initChatSocket connects to Redis (for the Socket.IO adapter) before it can
+// hand back an io instance, so this needs to be awaited before the server
+// starts accepting traffic.
+(async () => {
+  try {
+    io = await initChatSocket(server);
+  } catch (err) {
+    console.error("Failed to initialize Socket.IO:", err.message);
+    process.exit(1);
+  }
+
+  server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+})();

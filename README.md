@@ -449,7 +449,7 @@ health/
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 20.19+ (required by mongoose/mongodb-driver's use of the global Web Crypto API — Node 18 will fail to connect to MongoDB with `crypto is not defined`)
 - A MongoDB instance (local or Atlas)
 - A Cloudinary account (media uploads)
 - A Google Gemini API key
@@ -474,7 +474,11 @@ CLOUD_NAME=your_cloudinary_cloud_name
 API_KEY=your_cloudinary_api_key
 API_SECRET=your_cloudinary_api_secret
 GEMINI_API_KEY=your_gemini_api_key
+CORS_ORIGINS=http://localhost:5173,https://auraahealth.vercel.app
+REDIS_URL=rediss://default:password@your-cloud-redis-host:port
 ```
+
+`REDIS_URL` backs the Socket.IO Redis adapter (chat + meeting signaling) — required so real-time events reach the right client no matter which server instance it's connected to. Any cloud Redis works (Upstash, Redis Cloud, ElastiCache, ...); use `rediss://` if the provider requires TLS, `redis://` otherwise. The server won't start without it.
 
 Run the server:
 
@@ -494,7 +498,6 @@ Create a `.env` file in `Frontend/`:
 
 ```env
 VITE_API_URL=http://localhost:5000
-VITE_GEMINI_API_KEY=your_gemini_api_key
 ```
 
 Run the dev server:
@@ -509,12 +512,44 @@ Build for production:
 npm run build
 ```
 
-> Note: `Backend/index.js` currently has the CORS origin hardcoded to the deployed frontend URL. Uncomment/adjust the `origin` value in `app.use(cors(...))` and in `socket/chatSocket.js` when running against a local frontend.
+> Note: CORS origins are read from `CORS_ORIGINS` (comma-separated) in `Backend/.env`, shared by both the REST API (`index.js`) and the Socket.IO server (`socket/chatSocket.js`) via `config/corsOrigins.js`. Defaults to the deployed frontend URL if unset — add your local dev origin (e.g. `http://localhost:5173`) to run against a local frontend.
 
 ## Deployment
 
-- **Backend** ships with a `Dockerfile` (Node 18 Alpine) exposing port `5000`.
 - **Frontend** is deployed to Vercel.
+- **Backend** ships with a `Dockerfile` (Node 22 Alpine) exposing port `5000`, and a `docker-compose.yml` + `nginx/nginx.conf` at the repo root that run two backend instances behind an Nginx reverse proxy — the setup this app needs for horizontal scaling.
+
+### Running the backend behind Nginx (horizontal scaling)
+
+This runs two instances of the backend container behind Nginx, load-balanced with sticky sessions. Both instances share the same MongoDB and Redis (via `Backend/.env`), so chat/meeting state stays consistent across them (see `socket/chatSocket.js`'s Redis adapter) — this is what actually makes running more than one instance safe.
+
+**On the VM (EC2/VPS) that will run the backend:**
+
+```bash
+git clone <this repo> && cd health
+# Backend/.env must exist here with production values (MONGO_URI, JWT_SECRET,
+# REDIS_URL, CORS_ORIGINS pointed at your real frontend origin, etc.)
+docker compose up -d --build
+```
+
+That builds `backend1` and `backend2` from `Backend/Dockerfile`, and starts Nginx listening on port 80, proxying to whichever instance is healthy (`ip_hash` sticky sessions, passive health checks via `max_fails`/`fail_timeout`). Open port 80 (and 443, once TLS is set up) in the VM's security group / firewall.
+
+**Verify traffic is actually being distributed** — the `/healthz` route reports its own container hostname, so hitting it repeatedly through Nginx should alternate between instances:
+
+```bash
+for i in $(seq 1 10); do curl -s http://<your-vm-ip>/healthz; echo; done
+# {"status":"ok","db":"connected","instance":"<backend1 container id>"}
+# {"status":"ok","db":"connected","instance":"<backend2 container id>"}
+# ...
+```
+
+Scale further by adding a `backend3`, etc. to `docker-compose.yml` (same shape as `backend1`) and adding it to the `upstream backend_pool` block in `nginx/nginx.conf`.
+
+**TLS**: the Nginx config here only handles plain HTTP (port 80). For production HTTPS, point a real domain's DNS at the VM's IP and run [certbot](https://certbot.eff.org/)'s Nginx plugin on the host — it edits `nginx.conf` in place to add a `443` server block and handles certificate renewal. That step needs an actual domain name, so it's left for you to run once one is pointed here.
+
+**Update the frontend** once this is live: set `VITE_API_URL` (in `Frontend/.env`, and in Vercel's env vars for the deployed site) to the VM's domain/IP instead of `localhost:5000`, and make sure `CORS_ORIGINS` in `Backend/.env` includes the deployed frontend's actual origin.
+
+> Verified locally: `docker compose up --build` brings up both instances and Nginx cleanly, `/healthz` confirms requests land on different container instances, a real API route (`/viewdoctors`) round-trips through the proxy to MongoDB, and the Engine.IO handshake (`/socket.io/?EIO=4&transport=polling`) responds correctly — the path chat and video signaling depend on. Nginx failover was also confirmed by stopping one instance mid-test and watching sticky sessions/round-robin route around it.
 
 ## Documentation
 

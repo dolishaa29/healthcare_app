@@ -27,13 +27,33 @@ exports.appointrequest=async(req,res)=>
 }
 
 exports.viewappointment=async(req,res)=>
-{   
+{
     const admin = req.admin;
     if (!admin) {
         return res.status(403).json({success: false,msg:'Access denied. Admin privileges required.'});
     }
-    let appointments=await rec4.find();
-    return res.status(200).json({success: true,msg:'appointment requests fetched successfully',appointments});
+
+    const page = parseInt(req.query.page, 10);
+    const limit = parseInt(req.query.limit, 10);
+
+    if (!page || !limit) {
+        let appointments=await rec4.find();
+        return res.status(200).json({success: true,msg:'appointment requests fetched successfully',appointments});
+    }
+
+    const skip = (page - 1) * limit;
+    const [appointments, total] = await Promise.all([
+        rec4.find().skip(skip).limit(limit),
+        rec4.countDocuments(),
+    ]);
+    return res.status(200).json({
+        success: true,
+        msg: 'appointment requests fetched successfully',
+        appointments,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+    });
 }
 
 exports.appointmentstatus=async(req,res)=>
@@ -147,6 +167,18 @@ exports.bookSlot = async (req, res) => {
     time
   });
 
-  await appointment.save();
+  try {
+    await appointment.save();
+  } catch (err) {
+    // Unique index on {doctorid, date, time} is the real guard against a
+    // double-booking race — the findOne check above can't prevent two
+    // concurrent requests (e.g. hitting different server instances) from
+    // both passing it before either writes.
+    if (err.code === 11000) {
+      return res.status(400).json({ success: false, msg: 'This slot was just taken. Please choose another.' });
+    }
+    throw err;
+  }
+
   return res.status(201).json({ success: true, msg: 'Appointment booked successfully!' });
 };

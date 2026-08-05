@@ -1,7 +1,7 @@
 let mongo = require("mongoose");
 
 let usermodel = mongo.Schema({
-   email: { type: String },
+   email: { type: String, unique: true, index: true },
    password: { type: String },
    name: { type: String },
    contact: { type: Number },

@@ -1,6 +1,6 @@
 let mongo=require("mongoose");
 let doctormodel=mongo.Schema({
-   email:{type:String},
+   email:{type:String, unique:true, index:true},
    password:{type:String},
    name:{type:String},
    specialization:{type:String},

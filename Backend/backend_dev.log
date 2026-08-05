@@ -1,0 +1,8 @@
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+DEBUG allowedOrigins: [ 'https://auraahealth.vercel.app' ]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+Connected to MongoDB successfully
+Server is running on port 5000
