@@ -1,12 +1,5 @@
 const { createClient } = require("redis");
 
-// Backs the Socket.IO Redis adapter (see socket/chatSocket.js) so chat and
-// meeting events broadcast across every server instance, not just the one
-// a given socket happens to be connected to. REDIS_URL points at whichever
-// cloud Redis you're using (Upstash, Redis Cloud, ElastiCache, ...) — use
-// a "rediss://" URL if the provider requires TLS, "redis://" otherwise;
-// the client picks the right transport from the scheme automatically.
-
 let pubClient = null;
 let subClient = null;
 let connecting = null;

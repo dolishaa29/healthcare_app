@@ -1,13 +1,5 @@
 const Appointment = require("../model/Appointment/appointment");
 
-// Room membership itself is NOT tracked in a local Map here — that would
-// only ever see participants connected to this same process. Instead it
-// relies on Socket.IO's own room state via socket.join()/fetchSockets(),
-// which the Redis adapter (see chatSocket.js) keeps in sync across every
-// instance. The one piece of state that's still safe to keep on the socket
-// itself is which meeting room THIS socket is currently in — that's always
-// local anyway, since a given socket only ever lives on one instance.
-
 function meetingRoomId(appointmentId) {
     return `meeting_${appointmentId}`;
 }
@@ -59,15 +51,12 @@ function registerMeetingHandlers(io, socket) {
 
             const roomId = meetingRoomId(appointmentId);
 
-            // Cross-instance: sees every socket in this room regardless of
-            // which server instance it's connected to.
             const existing = await io.in(roomId).fetchSockets();
 
             if (existing.length >= 2 && !existing.some((s) => s.id === socket.id)) {
                 return socket.emit("meetingError", { msg: "This meeting already has two participants" });
             }
 
-            // Leave any stale room this socket thinks it's in first
             await leaveCurrentRoom(io, socket);
 
             socket.join(roomId);

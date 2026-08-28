@@ -22,9 +22,6 @@ async function initChatSocket(server) {
         },
     });
 
-    // Without this, io.to(room).emit(...) only reaches sockets connected to
-    // THIS process — fine with one instance, silently drops messages/signals
-    // to peers connected to a different instance once there's more than one.
     io.adapter(createAdapter(pubClient, subClient));
 
     io.use(async (socket, next) => {
@@ -50,11 +47,6 @@ async function initChatSocket(server) {
             } else {
                 return next(new Error("Invalid role"));
             }
-
-            // socket.role/socket.profile only exist in this process's memory.
-            // socket.data is what the Redis adapter serializes and hands back
-            // via fetchSockets() for sockets connected to OTHER instances —
-            // meetingSocket.js relies on that to build cross-instance peer lists.
             socket.data.role = socket.role;
             socket.data.profileId = String(socket.profile._id);
             socket.data.name = socket.profile.name;

@@ -1,4 +1,4 @@
-const { userregister,userlogin,userlogout,userprofile,userlist, userDashboard, userviewapp, otpgenerate, otpverify, blockuser, userbyid, changepassword, updateuser, registerotpverify} = require("../service/userservice");
+const { userregister,userlogin,userlogout,userprofile,userlist, userDashboard, userviewapp, otpgenerate, otpverify, userbyid, changepassword, registerotpverify} = require("../service/userservice");
 
 exports.userregister=async(req,res)=>
 {
@@ -40,11 +40,6 @@ exports.userotpverify=async(req,res)=>
   await otpverify(req,res);
 }
 
-exports.blockuser=async(req,res)=>
-{
-  await blockuser(req,res);
-}
-
 exports.userbyid=async(req,res)=>
 {
   await userbyid(req,res);
@@ -53,11 +48,6 @@ exports.userbyid=async(req,res)=>
 exports.changepassword=async(req,res)=>
 {
   await changepassword(req,res);
-}
-
-exports.updateuser=async(req,res)=>
-{
-  await updateuser(req,res);
 }
 
 exports.userregisterverify=async(req,res)=>
