@@ -21,6 +21,8 @@ Eight UML views of the platform described in the root [README](../README.md) and
 
 Three human actors — Patient, Doctor, Admin — plus three external systems (Gemini, Cloudinary, SMTP) that participate directly in certain use cases. `Book Appointment` includes both booking paths (`appointrouter.js` exposes both the legacy request flow and the newer slot-based flow, per the ER/module-layering diagrams in the README); registration and password reset both include OTP verification, backed by the TTL-expiring `otps` and `pendingusers` collections.
 
+![Use Case Diagram](uml-images/01-usecase.png)
+
 ```mermaid
 flowchart LR
     Patient(Patient)
@@ -83,6 +85,8 @@ flowchart LR
 
 The patient-facing journey from authentication through appointment booking to consultation — the workflow that touches the most decision points and both booking paths at once (legacy admin-approved vs. self-serve slots), converging on the fork where a confirmed appointment simultaneously unlocks chat and video.
 
+![Activity Diagram](uml-images/02-activity.png)
+
 ```mermaid
 flowchart TD
     Start([Start]) --> Login{Logged in?}
@@ -120,6 +124,8 @@ flowchart TD
 ## 3. Sequence Diagram
 
 Self-serve slot booking traced through the actual layers (`appointrouter.js` → `appointmentcontroller.js` → `service/appointment.js` → `appointmentnew` collection), including the double-booking race that the compound unique index (`{doctorid, date, time}`) is specifically there to catch — noted in the README's reliability section and confirmed in [appointment.js](../Backend/model/Appointment/appointment.js).
+
+![Sequence Diagram](uml-images/03-sequence.png)
 
 ```mermaid
 sequenceDiagram
@@ -169,6 +175,8 @@ sequenceDiagram
 ## 4. Class Diagram
 
 The domain model as it's actually defined across `Backend/model/` — every attribute below is copied from the real Mongoose schemas, not inferred. `Doctor` and `DoctorPermission` are deliberately separate collections (`doctor` vs. `doctorpermissions`): a doctor only gets a `doctor` document once an admin approves their application, which is why the relationship between them is a dependency, not an association. `Report` is the one model with an actual Mongoose `ref` (`ReportMessage` is embedded, not referenced).
+
+![Class Diagram](uml-images/04-class.png)
 
 ```mermaid
 classDiagram
@@ -339,6 +347,8 @@ classDiagram
 
 Every feature module follows the same `Router → Controller → Service → Model` layering (as already noted in the README), except the bot/report/skin-analysis routers, which call their service directly. This diagram shows that layering plus every external component it talks to.
 
+![Component Diagram](uml-images/05-component.png)
+
 ```mermaid
 flowchart TB
     subgraph FE["Frontend — React 19 + Vite SPA"]
@@ -388,6 +398,8 @@ flowchart TB
 ## 6. Deployment Diagram
 
 The production topology from the README's [Horizontal Scaling](../README.md#horizontal-scaling--reverse-proxy) section, formalized as UML deployment nodes: two Dockerized backend instances behind Nginx on one VM, shared managed MongoDB/Redis, and the browser-to-browser WebRTC path that never touches the server.
+
+![Deployment Diagram](uml-images/06-deployment.png)
 
 ```mermaid
 flowchart TB
@@ -446,6 +458,8 @@ flowchart TB
 
 Real-time chat, drawn as a communication diagram: objects linked by association, with the interaction sequence numbered on each link rather than laid out on a timeline. This is the same feature as the chat sequence diagram in the README, viewed the other way — object topology first, message order second.
 
+![Communication Diagram](uml-images/07-communication.png)
+
 ```mermaid
 flowchart LR
     P(["patientClient : Browser"])
@@ -471,6 +485,8 @@ flowchart LR
 ## 8. Object Diagram
 
 A concrete runtime snapshot — one patient, one doctor, a confirmed appointment, two chat messages, and a rating — showing the same associations as the class diagram in [Section 4](#4-class-diagram), but instantiated with sample data instead of types.
+
+![Object Diagram](uml-images/08-object.png)
 
 ```mermaid
 flowchart TB
