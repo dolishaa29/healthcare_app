@@ -46,14 +46,14 @@ const DoctorCard = ({ doctor, image }) => {
           />
         ) : (
           <div className="w-full h-full bg-slate-50 rounded-[2rem] flex items-center justify-center">
-            <span className="text-slate-300 text-[10px] font-black tracking-widest uppercase">No Profile</span>
+            <span className="text-slate-300 text-[10px] font-bold tracking-widest uppercase">No Profile</span>
           </div>
         )}
 
 
         <div className="absolute top-7 right-7">
           <div className="bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-sm border border-white/40">
-            <p className="text-[10px] font-black text-slate-800 tracking-tighter">
+            <p className="text-[10px] font-bold text-slate-800 tracking-tight">
               {doctor.experienceYears}Y+ EXP
             </p>
           </div>
@@ -108,19 +108,19 @@ const DoctorCard = ({ doctor, image }) => {
               >
                 Back
               </button>
-              <button 
+              <button
                 onClick={handleFinalizeBooking}
                 disabled={loading}
-                className="flex-grow py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-[0.15em] active:scale-95"
+                className="flex-grow py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] uppercase tracking-[0.15em] active:scale-95 transition-colors"
               >
                 {loading ? "..." : "Confirm"}
               </button>
             </div>
           </div>
         ) : (
-          <button 
-            onClick={handleAction} 
-            className="w-full py-4 rounded-[1.5rem] bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95"
+          <button
+            onClick={handleAction}
+            className="w-full py-4 rounded-[1.5rem] bg-indigo-600 text-white font-bold text-[11px] uppercase tracking-[0.2em] shadow-sm hover:bg-indigo-700 transition-all active:scale-95"
           >
             Make Appointment
           </button>

@@ -15,7 +15,7 @@ import Privacy from '../components/landing/Privacy';
 import Footer from '../components/landing/Footer';
 
 const Landing = () => (
-  <div className="w-full bg-[#FDFBFF] font-sans text-slate-900">
+  <div className="w-full bg-white font-sans text-slate-900">
     <Navbar />
     <Hero />
     <HowItWorks />

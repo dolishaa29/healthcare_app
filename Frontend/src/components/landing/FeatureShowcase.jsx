@@ -41,7 +41,7 @@ const BookingMock = () => (
       <div
         key={slot}
         className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold ${
-          i === 2 ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-200' : 'bg-white text-slate-400 border border-slate-100'
+          i === 2 ? 'bg-indigo-600 text-white' : 'bg-white text-slate-400 border border-slate-100'
         }`}
       >
         {slot}
@@ -55,17 +55,17 @@ const ReportsMock = () => (
   <div className="flex items-center gap-6">
     <div
       className="w-24 h-24 rounded-full flex items-center justify-center shrink-0"
-      style={{ background: 'conic-gradient(#7c3aed 0% 92%, #e9d5ff 92% 100%)' }}
+      style={{ background: 'conic-gradient(#4f46e5 0% 92%, #e0e7ff 92% 100%)' }}
     >
       <div className="w-[72px] h-[72px] rounded-full bg-white flex flex-col items-center justify-center">
-        <span className="text-xl font-black text-slate-900">92</span>
+        <span className="text-xl font-bold text-slate-900">92</span>
         <span className="text-[9px] font-bold text-slate-400 uppercase">Score</span>
       </div>
     </div>
     <div className="space-y-2">
       <span className="inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold">Normal range</span>
       <div className="w-32 h-2 rounded-full bg-white" />
-      <div className="w-24 h-2 rounded-full bg-white/70" />
+      <div className="w-24 h-2 rounded-full bg-white" />
     </div>
   </div>
 );
@@ -79,9 +79,9 @@ const VideoMock = () => (
       <Video size={16} className="text-slate-300" />
     </div>
     <div className="flex items-center justify-center gap-4">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-black">Dr</div>
+      <div className="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">Dr</div>
       <div className="flex-1 h-px border-t-2 border-dashed border-indigo-200" />
-      <div className="w-16 h-16 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 font-black">Pt</div>
+      <div className="w-16 h-16 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 font-bold">Pt</div>
     </div>
   </div>
 );
@@ -91,7 +91,7 @@ const MessagingMock = () => (
     <div className="max-w-[75%] bg-white border border-slate-100 rounded-2xl rounded-bl-sm px-4 py-2.5 text-xs font-bold text-slate-500">
       How are you feeling after the last dose?
     </div>
-    <div className="max-w-[75%] ml-auto bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl rounded-br-sm px-4 py-2.5 text-xs font-bold text-white">
+    <div className="max-w-[75%] ml-auto bg-indigo-600 rounded-2xl rounded-br-sm px-4 py-2.5 text-xs font-bold text-white">
       Much better, thank you!
     </div>
   </div>
@@ -102,17 +102,14 @@ const MOCKS = { booking: BookingMock, reports: ReportsMock, video: VideoMock, me
 const MockCard = ({ variant }) => {
   const Content = MOCKS[variant];
   return (
-    <div className="relative rounded-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-100 via-purple-100 to-blue-100" />
-      <div className="relative m-3 rounded-xl bg-white/60 backdrop-blur-xl border border-white/60 shadow-xl overflow-hidden">
-        <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/60">
-          <span className="w-2.5 h-2.5 rounded-full bg-slate-300/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-slate-300/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-slate-300/70" />
-        </div>
-        <div className="p-8 flex items-center justify-center min-h-[220px]">
-          <Content />
-        </div>
+    <div className="rounded-2xl bg-slate-50 border border-slate-100 overflow-hidden">
+      <div className="flex items-center gap-1.5 px-4 py-3 border-b border-slate-100">
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+        <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
+      </div>
+      <div className="p-8 flex items-center justify-center min-h-[220px]">
+        <Content />
       </div>
     </div>
   );
@@ -124,7 +121,7 @@ const FeatureShowcase = () => (
       <Reveal key={f.title} className={`grid md:grid-cols-2 gap-10 md:gap-16 items-center ${i % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}>
         <div>
           <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">{f.eyebrow}</p>
-          <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter">{f.title}</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">{f.title}</h3>
           <p className="text-slate-500 mt-4 leading-relaxed">{f.description}</p>
           <ul className="mt-6 space-y-3">
             {f.bullets.map((b) => (

@@ -20,13 +20,18 @@ const DoctorSearchStep = ({ search, onSearchChange, loadingDoctors, filtered, ge
       </div>
     ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filtered.map((doc) => (
-          <DoctorCard
+        {filtered.map((doc, i) => (
+          <div
             key={doc._id}
-            doctor={doc}
-            imageUrl={getImageUrl(doc.image)}
-            onSelect={() => onSelectDoctor(doc)}
-          />
+            className="motion-safe:animate-[fadeInUp_0.35s_ease-out_both]"
+            style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}
+          >
+            <DoctorCard
+              doctor={doc}
+              imageUrl={getImageUrl(doc.image)}
+              onSelect={() => onSelectDoctor(doc)}
+            />
+          </div>
         ))}
       </div>
     )}
@@ -52,11 +57,11 @@ const DoctorCard = ({ doctor, imageUrl, onSelect }) => (
     <div className="relative h-44 overflow-hidden shrink-0">
       {imageUrl
         ? <img src={imageUrl} alt={doctor.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-        : <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center"><span className="text-6xl font-black text-indigo-200">{doctor.name?.[0]}</span></div>}
+        : <div className="w-full h-full bg-indigo-50 flex items-center justify-center"><span className="text-6xl font-bold text-indigo-200">{doctor.name?.[0]}</span></div>}
       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
       {doctor.experienceYears && (
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2.5 py-1.5 rounded-xl shadow-sm">
-          <p className="text-[10px] font-black text-slate-800 leading-none">{doctor.experienceYears}Y+</p>
+          <p className="text-[10px] font-bold text-slate-800 leading-none">{doctor.experienceYears}Y+</p>
           <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Exp</p>
         </div>
       )}
@@ -67,14 +72,14 @@ const DoctorCard = ({ doctor, imageUrl, onSelect }) => (
       </div>
     </div>
     <div className="p-5 flex flex-col flex-1">
-      <h3 className="font-extrabold text-slate-900 tracking-tight text-base">Dr. {doctor.name}</h3>
+      <h3 className="font-bold text-slate-900 tracking-tight text-base">Dr. {doctor.name}</h3>
       {doctor.hospitalName && (
         <div className="flex items-center gap-1.5 mt-1.5 text-slate-400">
           <Building2 size={11} /><span className="text-[11px] truncate">{doctor.hospitalName}</span>
         </div>
       )}
       <div className="mt-auto pt-4">
-        <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-widest group-hover:shadow-lg group-hover:shadow-indigo-100 transition-all duration-300">
+        <button className="w-full py-3 rounded-2xl bg-indigo-600 text-white font-bold text-[11px] uppercase tracking-widest group-hover:bg-indigo-700 transition-all duration-300">
           Select Doctor
         </button>
       </div>

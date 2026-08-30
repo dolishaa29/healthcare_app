@@ -32,20 +32,20 @@ const ViewDoctorss = () => {
     }, [doctors, searchTerm]);
 
     return (
-        <div className="h-full overflow-y-auto bg-[#FDFBFF] w-full px-4 md:px-10 py-10">
+        <div className="h-full overflow-y-auto bg-slate-50 w-full px-4 md:px-10 py-10">
 
             {/* Header */}
-            <div className="w-full flex flex-col md:flex-row justify-between items-end mb-8 pb-6 border-b border-purple-50">
-                <h2 className="text-5xl font-black text-gray-900 leading-tight">
+            <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] w-full flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-6 border-b border-slate-100 gap-4">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
                     Find &amp; Book <br/>
-                    <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-indigo-500">
+                    <span className="text-indigo-600">
                         Specialists
                     </span>
                 </h2>
 
                 {!loading && (
-                    <div className="mt-4 md:mt-0 px-5 py-3 bg-indigo-50 rounded-2xl text-right shrink-0">
-                        <p className="text-2xl font-black text-indigo-600">{filtered.length}</p>
+                    <div className="px-5 py-3 bg-indigo-50 rounded-2xl text-right shrink-0">
+                        <p className="text-2xl font-bold text-indigo-600">{filtered.length}</p>
                         <p className="text-[11px] font-bold text-indigo-400 uppercase tracking-widest">
                             {filtered.length === 1 ? 'Doctor' : 'Doctors'}
                         </p>
@@ -55,7 +55,7 @@ const ViewDoctorss = () => {
 
             {/* Search */}
             {!loading && doctors.length > 0 && (
-                <div className="relative max-w-md mb-8">
+                <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] relative max-w-md mb-8" style={{ animationDelay: '80ms' }}>
                     <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                     <input
                         type="text"
@@ -103,18 +103,20 @@ const ViewDoctorss = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-                    {filtered.map((doc) => {
+                    {filtered.map((doc, i) => {
                         let fullImageUrl = null;
                         if (doc.image) {
                             const filename = doc.image.split(/[\\/]/).pop();
                             fullImageUrl = `${import.meta.env.VITE_API_URL}/images/${filename}`;
                         }
                         return (
-                            <DoctorCard
+                            <div
                                 key={doc._id}
-                                doctor={doc}
-                                image={fullImageUrl}
-                            />
+                                className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both]"
+                                style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}
+                            >
+                                <DoctorCard doctor={doc} image={fullImageUrl} />
+                            </div>
                         );
                     })}
                 </div>

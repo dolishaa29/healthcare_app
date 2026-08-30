@@ -30,7 +30,7 @@ const Resources = () => (
   <section className="bg-white border-y border-slate-100">
     <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
       <Reveal className="flex items-end justify-between gap-6 mb-14 flex-wrap">
-        <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
           Health guides worth your time
         </h2>
         <span className="text-sm font-bold text-slate-400">More articles coming soon</span>
@@ -39,7 +39,7 @@ const Resources = () => (
       <div className="grid md:grid-cols-3 gap-6">
         {ARTICLES.map((a, i) => (
           <Reveal key={a.title} delay={i * 80}>
-            <div className="group bg-white border border-slate-100 rounded-2xl p-6 h-full hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div className="group bg-white border border-slate-100 rounded-2xl p-6 h-full hover:border-indigo-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
               <div className="flex items-center justify-between mb-5">
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-slate-600 ${a.tagBg}`}>
                   {a.icon} {a.tag}

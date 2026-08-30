@@ -33,14 +33,11 @@ const Doctorviewapp = () => {
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-[#FDFBFF] px-6 py-10 md:px-10">
-      <div className="mb-10">
+    <div className="h-full overflow-y-auto bg-slate-50 px-6 py-10 md:px-10">
+      <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] mb-10">
         <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Doctor Portal</p>
-        <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
-          My{" "}
-          <span className="bg-linear-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
-            Appointments
-          </span>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+          My <span className="text-indigo-600">Appointments</span>
         </h1>
       </div>
 
@@ -57,8 +54,8 @@ const Doctorviewapp = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {appointments.map((app) => (
-            <AppointmentCard key={app._id} app={app} active={isTimeReached(app.date, app.time)} />
+          {appointments.map((app, i) => (
+            <AppointmentCard key={app._id} app={app} active={isTimeReached(app.date, app.time)} index={i} />
           ))}
         </div>
       )}
@@ -66,14 +63,17 @@ const Doctorviewapp = () => {
   );
 };
 
-const AppointmentCard = ({ app, active }) => {
+const AppointmentCard = ({ app, active, index = 0 }) => {
   const navigate = useNavigate();
 
   return (
-  <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-lg hover:shadow-indigo-50/50 transition-all duration-300 flex flex-col">
+  <div
+    style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
+    className="motion-safe:animate-[fadeInUp_0.45s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-lg hover:shadow-indigo-50/50 transition-all duration-300 flex flex-col"
+  >
     <div className="flex items-center justify-between mb-5">
       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Appointment</span>
-      <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+      <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
         active ? "bg-green-50 text-green-600" : "bg-slate-100 text-slate-500"
       }`}>
         <span className={`w-1.5 h-1.5 rounded-full ${active ? "bg-green-500 animate-pulse" : "bg-slate-400"}`} />
@@ -83,7 +83,7 @@ const AppointmentCard = ({ app, active }) => {
 
     <div className="mb-5">
       <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest mb-1">Patient</p>
-      <h3 className="font-extrabold text-slate-800 text-base leading-tight">{app.name}</h3>
+      <h3 className="font-bold text-slate-800 text-base leading-tight">{app.name}</h3>
     </div>
 
     <div className="space-y-2.5 flex-1">
@@ -98,7 +98,7 @@ const AppointmentCard = ({ app, active }) => {
       </div>
 
       <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl">
-        <div className="p-1.5 bg-purple-50 text-purple-600 rounded-lg"><Clock size={15} /></div>
+        <div className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg"><Clock size={15} /></div>
         <div>
           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-0.5">Time</p>
           <p className="text-sm font-bold text-slate-700">{app.time}</p>
@@ -133,7 +133,7 @@ const AppointmentCard = ({ app, active }) => {
       onClick={() => active && navigate(`/meeting/${app._id}`)}
       className={`mt-5 w-full py-3.5 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2
         ${active
-          ? "bg-linear-to-r from-purple-600 to-indigo-500 text-white shadow-lg shadow-indigo-100 hover:opacity-90 active:scale-[0.98]"
+          ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 active:scale-[0.98]"
           : "bg-slate-100 text-slate-400 cursor-not-allowed"
         }`}
     >

@@ -1,14 +1,14 @@
+let dotenv = require("dotenv");
+dotenv.config();
+
 let express = require("express");
 let os = require("os");
 let path = require("path");
-let dotenv = require("dotenv");
 let cors = require("cors");
 let cookieParser = require("cookie-parser");
 let compression = require("compression");
 let http = require("http");
 let initChatSocket = require("./socket/chatSocket");
-
-dotenv.config();
 
 let app = express();
 

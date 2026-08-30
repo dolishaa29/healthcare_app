@@ -38,15 +38,15 @@ const COMPARISON = [
 const ComparisonTable = () => (
   <section className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
     <Reveal className="text-center">
-      <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
         Traditional clinic software vs. AuraHealth
       </h2>
     </Reveal>
 
-    <Reveal delay={80} className="mt-14 bg-white border border-slate-100 rounded-3xl shadow-xl shadow-indigo-500/5 overflow-x-auto">
+    <Reveal delay={80} className="mt-14 bg-white border border-slate-100 rounded-3xl shadow-sm overflow-x-auto">
       <div className="min-w-[620px]">
-        <div className="grid grid-cols-[1.1fr_1fr_1.2fr] bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white text-sm font-bold">
-          <div className="px-6 py-4 text-indigo-200">Feature</div>
+        <div className="grid grid-cols-[1.1fr_1fr_1.2fr] bg-slate-900 text-white text-sm font-bold">
+          <div className="px-6 py-4 text-slate-400">Feature</div>
           <div className="px-6 py-4">Traditional</div>
           <div className="px-6 py-4">AuraHealth</div>
         </div>
@@ -67,7 +67,7 @@ const ComparisonTable = () => (
               <Minus size={16} className="shrink-0 mt-0.5" /> {row.traditional}
             </div>
             <div className="px-6 py-5">
-              <span className="inline-flex items-start gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 text-slate-700 font-semibold px-3 py-1.5 rounded-lg">
+              <span className="inline-flex items-start gap-2 bg-indigo-50 text-slate-700 font-semibold px-3 py-1.5 rounded-lg">
                 <Check size={16} className="shrink-0 mt-0.5 text-indigo-600" /> {row.aura}
               </span>
             </div>

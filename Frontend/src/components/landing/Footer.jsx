@@ -30,9 +30,6 @@ const Footer = () => {
 
   return (
     <footer className="bg-slate-900 text-slate-300 relative overflow-hidden">
-      {/* Decorative Subtle Radial Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-indigo-600/10 blur-[120px] pointer-events-none rounded-full" />
-
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 pt-16 pb-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
@@ -42,11 +39,8 @@ const Footer = () => {
             <div>
               {/* Brand Logo */}
               <a href="#" className="inline-block mb-4">
-                <span className="font-black text-2xl tracking-tight text-white">
-                  Aura
-                  <span className="bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent">
-                    Health
-                  </span>
+                <span className="font-bold text-2xl tracking-tight text-white">
+                  Aura<span className="text-indigo-400">Health</span>
                 </span>
               </a>
 

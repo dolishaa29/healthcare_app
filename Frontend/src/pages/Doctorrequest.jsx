@@ -30,7 +30,7 @@ const RejectModal = ({ doctor, onConfirm, onCancel, loading }) => (
       <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center mx-auto mb-4">
         <AlertTriangle size={22} className="text-rose-500" />
       </div>
-      <h3 className="text-lg font-black text-slate-900 text-center mb-1">Reject Request?</h3>
+      <h3 className="text-lg font-bold text-slate-900 text-center mb-1">Reject Request?</h3>
       <p className="text-slate-400 text-xs text-center mb-1">
         <span className="font-bold text-slate-600">{doctor.name}</span>'s application will be declined.
       </p>
@@ -61,7 +61,7 @@ const Avatar = ({ name }) => {
     ? name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()
     : "?";
   return (
-    <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-100 to-purple-100 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-xs shrink-0">
+    <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs shrink-0">
       {initials}
     </div>
   );
@@ -175,24 +175,24 @@ const DoctorRequest = () => {
   const end        = Math.min(page * PAGE_SIZE, filtered.length);
 
   return (
-    <div className="h-full overflow-y-auto bg-[#FDFBFF] font-sans px-6 py-8 md:px-10">
+    <div className="h-full overflow-y-auto bg-slate-50 font-sans px-6 py-8 md:px-10">
       {toast        && <Toast {...toast} onClose={() => setToast(null)} />}
       {rejectTarget && <RejectModal doctor={rejectTarget} onConfirm={handleReject} onCancel={() => setReject(null)} loading={rejecting} />}
 
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+        <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
           <div className="flex bg-white/60 backdrop-blur-md p-1 rounded-2xl border border-slate-100 shadow-sm">
             {["pending", "approved", "rejected"].map((t) => (
               <button
                 key={t}
                 onClick={() => setType(t)}
-                className={`relative px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-2 ${
-                  type === t ? "bg-white text-purple-600 shadow-sm border border-purple-100" : "text-slate-400 hover:text-slate-600"
+                className={`relative px-5 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                  type === t ? "bg-white text-indigo-600 shadow-sm border border-indigo-100" : "text-slate-400 hover:text-slate-600"
                 }`}
               >
                 {t}
                 {counts[t] > 0 && (
-                  <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full border ${
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${
                     type === t ? TAB_COLORS[t] : "bg-slate-100 text-slate-400 border-slate-200"
                   }`}>
                     {counts[t]}
@@ -219,7 +219,7 @@ const DoctorRequest = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
+        <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden" style={{ animationDelay: '60ms' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
@@ -288,7 +288,7 @@ const DoctorRequest = () => {
 
                     <td className="px-6 py-4">
                       {doc.certificate ? (
-                        <a href={doc.certificate} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[10px] font-black text-indigo-500 hover:text-indigo-700 transition-colors">
+                        <a href={doc.certificate} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[10px] font-bold text-indigo-500 hover:text-indigo-700 transition-colors">
                           <FileText size={12} />
                           View PDF
                         </a>
@@ -304,20 +304,20 @@ const DoctorRequest = () => {
                             <button
                               onClick={() => handleApprove(doc)}
                               disabled={approving === doc._id}
-                              className="px-3 py-1.5 bg-green-50 text-green-600 text-[10px] font-black rounded-lg hover:bg-green-600 hover:text-white transition-all border border-green-100 disabled:opacity-50 flex items-center gap-1"
+                              className="px-3 py-1.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg hover:bg-green-600 hover:text-white transition-all border border-green-100 disabled:opacity-50 flex items-center gap-1"
                             >
                               {approving === doc._id ? <Loader2 size={11} className="animate-spin" /> : null}
                               APPROVE
                             </button>
                             <button
                               onClick={() => setReject(doc)}
-                              className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-black rounded-lg hover:bg-rose-600 hover:text-white transition-all border border-rose-100"
+                              className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-bold rounded-lg hover:bg-rose-600 hover:text-white transition-all border border-rose-100"
                             >
                               REJECT
                             </button>
                           </>
                         ) : (
-                          <span className={`text-[10px] font-black px-3 py-1 rounded-full border ${TAB_COLORS[type]}`}>
+                          <span className={`text-[10px] font-bold px-3 py-1 rounded-full border ${TAB_COLORS[type]}`}>
                             {type.toUpperCase()}
                           </span>
                         )}

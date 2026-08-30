@@ -28,7 +28,7 @@ const Toast = ({ message, type, onClose }) => {
 const Initials = ({ name }) => {
   const letters = name ? name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() : "?";
   return (
-    <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-100 to-purple-100 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-xs shrink-0">
+    <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs shrink-0">
       {letters}
     </div>
   );
@@ -150,29 +150,29 @@ const ViewAppointment = () => {
   const end        = Math.min(page * PAGE_SIZE, filtered.length);
 
   if (loading) return (
-    <div className="h-full w-full flex items-center justify-center bg-[#FDFBFF]">
+    <div className="h-full w-full flex items-center justify-center bg-slate-50">
       <Loader2 className="animate-spin text-indigo-600" size={32} />
     </div>
   );
 
   return (
-    <div className="h-full overflow-y-auto bg-[#FDFBFF] font-sans px-6 py-8 md:px-10">
+    <div className="h-full overflow-y-auto bg-slate-50 font-sans px-6 py-8 md:px-10">
       {toast && <Toast {...toast} onClose={() => setToast(null)} />}
 
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+        <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
           <div className="flex bg-white/60 backdrop-blur-md p-1 rounded-2xl border border-slate-100 shadow-sm">
             {["pending", "approved", "rejected"].map((t) => (
               <button
                 key={t}
                 onClick={() => setType(t)}
-                className={`relative px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-2 ${
-                  type === t ? "bg-white text-purple-600 shadow-sm border border-purple-100" : "text-slate-400 hover:text-slate-600"
+                className={`relative px-5 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                  type === t ? "bg-white text-indigo-600 shadow-sm border border-indigo-100" : "text-slate-400 hover:text-slate-600"
                 }`}
               >
                 {t}
                 {counts[t] > 0 && (
-                  <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full border ${
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${
                     type === t ? TAB_COLORS[t] : "bg-slate-100 text-slate-400 border-slate-200"
                   }`}>
                     {counts[t]}
@@ -199,7 +199,7 @@ const ViewAppointment = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
+        <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden" style={{ animationDelay: '60ms' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
@@ -281,15 +281,15 @@ const ViewAppointment = () => {
                       <div className="flex items-center justify-center gap-2">
                         {type === "pending" ? (
                           <>
-                            <button onClick={() => openApproveModal(app)} className="px-3 py-1.5 bg-green-50 text-green-600 text-[10px] font-black rounded-lg hover:bg-green-600 hover:text-white transition-all border border-green-100">
+                            <button onClick={() => openApproveModal(app)} className="px-3 py-1.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg hover:bg-green-600 hover:text-white transition-all border border-green-100">
                               APPROVE
                             </button>
-                            <button onClick={() => openRejectModal(app)} className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-black rounded-lg hover:bg-rose-600 hover:text-white transition-all border border-rose-100">
+                            <button onClick={() => openRejectModal(app)} className="px-3 py-1.5 bg-rose-50 text-rose-600 text-[10px] font-bold rounded-lg hover:bg-rose-600 hover:text-white transition-all border border-rose-100">
                               REJECT
                             </button>
                           </>
                         ) : (
-                          <span className={`text-[10px] font-black px-3 py-1 rounded-full border ${TAB_COLORS[type]}`}>
+                          <span className={`text-[10px] font-bold px-3 py-1 rounded-full border ${TAB_COLORS[type]}`}>
                             {type.toUpperCase()}
                           </span>
                         )}
@@ -316,7 +316,7 @@ const ViewAppointment = () => {
       {showModal && selectedAppointment && (
         <div className="fixed inset-0 z-100 flex items-center justify-center px-4 bg-slate-900/40 backdrop-blur-sm">
           <div className="bg-white p-8 w-full max-w-md rounded-[2.5rem] shadow-2xl">
-            <h3 className="text-xl font-black text-slate-900 mb-1">Schedule Appointment</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-1">Schedule Appointment</h3>
             <p className="text-slate-400 text-xs mb-6 uppercase tracking-widest font-bold">Assign Date & Time</p>
             <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-6">
               <Initials name={selectedAppointment.name} />
@@ -327,7 +327,7 @@ const ViewAppointment = () => {
             </div>
             <div className="space-y-4">
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-1.5">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-1.5">
                   <Calendar size={10} /> Appointment Date
                 </label>
                 <input
@@ -335,25 +335,25 @@ const ViewAppointment = () => {
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full mt-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all"
+                  className="w-full mt-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 transition-all"
                 />
               </div>
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-1.5">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-1.5">
                   <Clock size={10} /> Slot Time
                 </label>
                 <input
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="w-full mt-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all"
+                  className="w-full mt-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 transition-all"
                 />
               </div>
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={confirmAppointment}
                   disabled={submitting}
-                  className="flex-1 py-3 bg-linear-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-purple-100 hover:opacity-90 active:scale-95 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm active:scale-95 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
                 >
                   {submitting && <Loader2 size={15} className="animate-spin" />}
                   Confirm Slot
@@ -373,7 +373,7 @@ const ViewAppointment = () => {
             <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 mx-auto mb-4">
               <AlertCircle size={22} className="text-rose-500" />
             </div>
-            <h3 className="text-lg font-black text-slate-900 text-center mb-1">Reject Appointment?</h3>
+            <h3 className="text-lg font-bold text-slate-900 text-center mb-1">Reject Appointment?</h3>
             <p className="text-slate-400 text-xs text-center mb-2">
               This will notify <span className="font-bold text-slate-600">{selectedAppointment.name}</span> that their request was declined.
             </p>

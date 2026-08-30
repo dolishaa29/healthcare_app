@@ -16,8 +16,11 @@ const Field = ({ label, children }) => (
   </div>
 );
 
-const SectionCard = ({ icon, title, children }) => (
-  <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
+const SectionCard = ({ icon, title, children, delay = 0 }) => (
+  <div
+    style={{ animationDelay: `${delay}ms` }}
+    className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-6 shadow-sm"
+  >
     <div className="flex items-center gap-2.5 mb-5">
       <div className="p-1.5 rounded-xl bg-indigo-50 text-indigo-600">{icon}</div>
       <h3 className="text-sm font-bold text-slate-800">{title}</h3>
@@ -101,21 +104,18 @@ const DoctorProfile = () => {
   };
 
   if (loading) return (
-    <div className="h-full bg-[#FDFBFF] flex items-center justify-center">
+    <div className="h-full bg-slate-50 flex items-center justify-center">
       <div className="w-10 h-10 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="h-full overflow-y-auto bg-[#FDFBFF] px-6 py-10 md:px-10">
-      <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
+    <div className="h-full overflow-y-auto bg-slate-50 px-6 py-10 md:px-10">
+      <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex items-start justify-between flex-wrap gap-4 mb-8">
         <div>
           <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Doctor Portal</p>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
-            Your{" "}
-            <span className="bg-linear-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
-              Profile
-            </span>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+            Your <span className="text-indigo-600">Profile</span>
           </h1>
         </div>
         <button
@@ -130,14 +130,17 @@ const DoctorProfile = () => {
 
       <form onSubmit={handleSubmit} className="space-y-5 max-w-3xl">
         {/* Photo + Name card */}
-        <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        <div
+          className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-6"
+          style={{ animationDelay: '60ms' }}
+        >
           <div className="relative shrink-0">
             <div className="w-24 h-24 rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-100">
               {imagePreview ? (
                 <img src={imagePreview} className="w-full h-full object-cover" alt="Profile" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-indigo-100 to-purple-100">
-                  <span className="text-3xl font-black text-indigo-300">{doctor.name?.[0] || "D"}</span>
+                <div className="w-full h-full flex items-center justify-center bg-indigo-50">
+                  <span className="text-3xl font-bold text-indigo-300">{doctor.name?.[0] || "D"}</span>
                 </div>
               )}
             </div>
@@ -147,21 +150,21 @@ const DoctorProfile = () => {
             </label>
           </div>
           <div className="flex-1 text-center sm:text-left">
-            <h2 className="text-xl font-black text-slate-900 tracking-tight">Dr. {doctor.name}</h2>
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight">Dr. {doctor.name}</h2>
             <p className="text-sm text-slate-400 mt-0.5">{doctor.email}</p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
               {doctor.specialization && (
-                <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-wider">
+                <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-bold uppercase tracking-wider">
                   {doctor.specialization}
                 </span>
               )}
               {doctor.experienceYears && (
-                <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-xl text-[10px] font-black uppercase tracking-wider">
+                <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-bold uppercase tracking-wider">
                   {doctor.experienceYears}Y exp
                 </span>
               )}
               {doctor.gender && (
-                <span className="px-3 py-1 bg-slate-50 text-slate-500 rounded-xl text-[10px] font-black uppercase tracking-wider">
+                <span className="px-3 py-1 bg-slate-50 text-slate-500 rounded-xl text-[10px] font-bold uppercase tracking-wider">
                   {doctor.gender}
                 </span>
               )}
@@ -169,7 +172,7 @@ const DoctorProfile = () => {
           </div>
         </div>
 
-        <SectionCard icon={<Stethoscope size={15} />} title="Basic Information">
+        <SectionCard icon={<Stethoscope size={15} />} title="Basic Information" delay={120}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Full Name">
               <input name="name" value={doctor.name || ""} onChange={handleChange} className={inputClass} placeholder="Dr. Full Name" />
@@ -197,7 +200,7 @@ const DoctorProfile = () => {
           </div>
         </SectionCard>
 
-        <SectionCard icon={<Building2 size={15} />} title="Hospital / Clinic">
+        <SectionCard icon={<Building2 size={15} />} title="Hospital / Clinic" delay={180}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Hospital Name">
               <input name="hospitalName" value={doctor.hospitalName || ""} onChange={handleChange} className={inputClass} placeholder="Hospital name" />
@@ -210,7 +213,7 @@ const DoctorProfile = () => {
           </div>
         </SectionCard>
 
-        <SectionCard icon={<GraduationCap size={15} />} title="Academic Degree">
+        <SectionCard icon={<GraduationCap size={15} />} title="Academic Degree" delay={240}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Field label="Degree (e.g. MBBS)">
               <input name="title" value={doctor.title || ""} onChange={handleChange} className={inputClass} placeholder="Degree title" />
@@ -224,7 +227,7 @@ const DoctorProfile = () => {
           </div>
         </SectionCard>
 
-        <SectionCard icon={<FileText size={15} />} title="Professional Bio">
+        <SectionCard icon={<FileText size={15} />} title="Professional Bio" delay={300}>
           <textarea
             name="bio"
             value={doctor.bio || ""}
@@ -248,7 +251,7 @@ const DoctorProfile = () => {
         <button
           type="submit"
           disabled={saving}
-          className="px-10 py-4 bg-linear-to-r from-purple-600 to-indigo-500 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 hover:opacity-90 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-sm transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {saving ? "Saving..." : "Save Changes"}
         </button>

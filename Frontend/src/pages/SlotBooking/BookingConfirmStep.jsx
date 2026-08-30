@@ -28,7 +28,7 @@ const BookingConfirmStep = ({
       <ChevronLeft size={14} strokeWidth={2.5} /> Back to Slots
     </button>
 
-    <div className="bg-white border border-slate-100 rounded-3xl p-5 mb-4 shadow-sm">
+    <div className="motion-safe:animate-[fadeInUp_0.35s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-5 mb-4 shadow-sm">
       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Booking Summary</p>
       <div className="space-y-2.5">
         <SummaryRow label="Doctor" value={`Dr. ${selectedDoctor?.name}`} />
@@ -38,7 +38,7 @@ const BookingConfirmStep = ({
       </div>
     </div>
 
-    <div className="bg-white border border-slate-100 rounded-3xl p-5 mb-4 shadow-sm">
+    <div className="motion-safe:animate-[fadeInUp_0.35s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-5 mb-4 shadow-sm" style={{ animationDelay: '60ms' }}>
       <div className="flex items-center gap-2 mb-3">
         <FileText size={14} className="text-indigo-500" />
         <label className="text-xs font-bold text-slate-700 uppercase tracking-widest">Reason for Visit</label>
@@ -61,7 +61,7 @@ const BookingConfirmStep = ({
     <button
       onClick={onSubmit}
       disabled={submitting || !description.trim()}
-      className="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-bold rounded-2xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+      className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-sm transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
     >
       {submitting
         ? <><Loader2 size={17} className="animate-spin" /> Booking...</>

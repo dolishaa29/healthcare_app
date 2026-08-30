@@ -24,14 +24,14 @@ const DateSlotStep = ({
       <ChevronLeft size={14} strokeWidth={2.5} /> Back to Doctors
     </button>
 
-    <div className="bg-white border border-slate-100 rounded-3xl p-5 mb-5 shadow-sm flex items-center gap-4">
-      <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0 text-xl font-black text-indigo-300 overflow-hidden">
+    <div className="motion-safe:animate-[fadeInUp_0.35s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-5 mb-5 shadow-sm flex items-center gap-4">
+      <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0 text-xl font-bold text-indigo-300 overflow-hidden">
         {getImageUrl(selectedDoctor?.image)
           ? <img src={getImageUrl(selectedDoctor.image)} className="w-full h-full object-cover" alt={selectedDoctor.name} />
           : selectedDoctor?.name?.[0]}
       </div>
       <div>
-        <p className="font-extrabold text-slate-900 text-sm">Dr. {selectedDoctor?.name}</p>
+        <p className="font-bold text-slate-900 text-sm">Dr. {selectedDoctor?.name}</p>
         <p className="text-xs text-indigo-500 font-semibold">{selectedDoctor?.specialization}</p>
         {selectedDoctor?.hospitalName && (
           <div className="flex items-center gap-1 mt-0.5 text-slate-400">
@@ -41,7 +41,7 @@ const DateSlotStep = ({
       </div>
     </div>
 
-    <div className="bg-white border border-slate-100 rounded-3xl p-5 mb-5 shadow-sm">
+    <div className="motion-safe:animate-[fadeInUp_0.35s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-5 mb-5 shadow-sm" style={{ animationDelay: '60ms' }}>
       <div className="flex items-center gap-2 mb-3">
         <CalendarDays size={16} className="text-indigo-500" />
         <label className="text-xs font-bold text-slate-700 uppercase tracking-widest">Select Date</label>
@@ -56,7 +56,7 @@ const DateSlotStep = ({
     </div>
 
     {selectedDate && (
-      <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm">
+      <div className="motion-safe:animate-[fadeInUp_0.35s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <Clock size={16} className="text-indigo-500" />
           <span className="text-xs font-bold text-slate-700 uppercase tracking-widest">Available Slots</span>
@@ -85,7 +85,7 @@ const DateSlotStep = ({
               <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-slate-200 inline-block" />Booked</span>
               <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-green-500 inline-block" />Selected</span>
             </div>
-            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
               {slots.map((slot) => (
                 <button
                   key={slot.time}
@@ -104,14 +104,14 @@ const DateSlotStep = ({
             </div>
 
             {selectedSlot && (
-              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="motion-safe:animate-[fadeInUp_0.3s_ease-out_both] mt-5 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
                   <CheckCircle2 size={16} className="text-green-500" />
                   {formatTime(selectedSlot)}
                 </div>
                 <button
                   onClick={onContinue}
-                  className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-500 text-white text-xs font-bold rounded-xl shadow-md hover:opacity-90 transition-all"
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors"
                 >
                   Continue →
                 </button>

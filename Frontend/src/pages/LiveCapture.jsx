@@ -118,24 +118,27 @@ const LiveCapture = () => {
 
 
   return (
-    <div className="h-full overflow-hidden bg-[#f8fafc] p-6 flex flex-col gap-5">
+    <div className="h-full overflow-y-auto md:overflow-hidden bg-[#f8fafc] p-4 md:p-6 flex flex-col gap-5">
 
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex items-center gap-3 shrink-0">
         <div className="p-2.5 bg-indigo-600 rounded-xl">
           <Camera size={20} className="text-white" />
         </div>
         <div>
-          <h1 className="text-xl font-black tracking-tight text-slate-900">Live Skin Analysis</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">Live Skin Analysis</h1>
           <p className="text-xs text-slate-400 font-medium">Real-time camera · Gemini AI · auto-analyzes every 5s</p>
         </div>
       </div>
 
-      <div className="flex gap-5 flex-1 min-h-0">
+      <div className="flex flex-col md:flex-row gap-5 flex-1 md:min-h-0">
 
-        <div className="flex flex-col gap-3 flex-3 min-w-0">
+        <div
+          className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex flex-col gap-3 md:flex-3 min-w-0"
+          style={{ animationDelay: '80ms' }}
+        >
           <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col flex-1">
 
-            <div className="relative bg-slate-950 flex-1 flex items-center justify-center">
+            <div className="relative bg-slate-950 min-h-[280px] md:min-h-0 flex-1 flex items-center justify-center">
               <video
                 ref={videoRef}
                 className={`w-full h-full object-cover ${isStreaming ? 'block' : 'hidden'}`}
@@ -209,11 +212,13 @@ const LiveCapture = () => {
           )}
         </div>
 
-        <div className="flex-2 min-w-0 bg-white rounded-3xl border border-slate-100 shadow-sm flex flex-col overflow-hidden">
-
+        <div
+          className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] min-h-[240px] md:min-h-0 md:flex-2 min-w-0 bg-white rounded-3xl border border-slate-100 shadow-sm flex flex-col overflow-hidden"
+          style={{ animationDelay: '150ms' }}
+        >
           <div className="px-5 py-4 border-b border-slate-50 flex items-center gap-2 shrink-0">
             <Sparkles size={16} className="text-indigo-500" />
-            <span className="text-sm font-black text-slate-800">AI Skin Analysis</span>
+            <span className="text-sm font-bold text-slate-800">AI Skin Analysis</span>
             {isAnalyzing && (
               <Loader2 size={13} className="ml-auto text-indigo-400 animate-spin" />
             )}

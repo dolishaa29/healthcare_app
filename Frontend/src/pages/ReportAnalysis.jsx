@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { FileText, Upload, Send, Loader2, Bot, Sparkles } from "lucide-react";
+import { FileText, Upload, Send, Loader2, Bot, Sparkles, ArrowLeft } from "lucide-react";
 
 const ReportAnalysis = () => {
   const [reports, setReports] = useState([]);
@@ -108,13 +108,17 @@ const ReportAnalysis = () => {
   return (
     <div className="flex h-full overflow-hidden bg-white">
       {/* Sidebar */}
-      <aside className="w-72 shrink-0 flex flex-col border-r border-slate-100 bg-white">
+      <aside
+        className={`w-full md:w-72 shrink-0 flex-col border-r border-slate-100 bg-white ${
+          activeReport ? "hidden md:flex" : "flex"
+        }`}
+      >
         {/* Header */}
         <div className="px-4 pt-5 pb-3 border-b border-slate-100">
           <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-0.5">
             AI-Powered
           </p>
-          <h1 className="text-lg font-black text-slate-900 tracking-tight mb-3">
+          <h1 className="text-lg font-bold text-slate-900 tracking-tight mb-3">
             Report Analysis
           </h1>
 
@@ -167,13 +171,14 @@ const ReportAnalysis = () => {
               </p>
             </div>
           ) : (
-            reports.map((r) => {
+            reports.map((r, i) => {
               const isActive = activeReport?._id === r._id;
               return (
                 <button
                   key={r._id}
                   onClick={() => openReport(r._id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all mb-0.5 ${
+                  style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
+                  className={`motion-safe:animate-[fadeInUp_0.35s_ease-out_both] w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all mb-0.5 ${
                     isActive
                       ? "bg-indigo-600 shadow-sm shadow-indigo-200"
                       : "hover:bg-slate-50"
@@ -213,11 +218,17 @@ const ReportAnalysis = () => {
       </aside>
 
       {/* Main chat area */}
-      <main className="flex-1 min-w-0 overflow-hidden flex flex-col bg-white">
+      <main className={`flex-1 min-w-0 overflow-hidden ${activeReport ? "flex" : "hidden md:flex"} flex-col bg-white`}>
         {activeReport ? (
           <>
             {/* Chat header */}
             <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-100 shrink-0">
+              <button
+                onClick={() => setActiveReport(null)}
+                className="md:hidden p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500 shrink-0"
+              >
+                <ArrowLeft size={18} />
+              </button>
               <div className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center bg-linear-to-br from-violet-500 to-indigo-600 shadow-sm">
                 <Sparkles size={16} className="text-white" />
               </div>

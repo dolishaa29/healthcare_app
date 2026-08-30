@@ -32,12 +32,12 @@ const Login = () => {
         setMessage("Login Successful");
         navigate("/Userdashboard");
       } else {
-        setMessage(response.data.message || "Invalid Credentials");
+        setMessage(response.data.msg || "Invalid Credentials");
       }
 
     } catch (err) {
       console.error("Login Error:", err.response ? err.response.data : err.message);
-      setMessage(err.response?.data?.message || "Login Failed! Please try again.");
+      setMessage(err.response?.data?.msg || "Login Failed! Please try again.");
     } finally {
       setLoading(false);
     }
@@ -58,16 +58,16 @@ const Login = () => {
         setMessage("Login Successful");
         navigate("/Doctordashboard");
       } else {
-        setMessage(response.data.message || "Invalid Credentials");
+        setMessage(response.data.msg || "Invalid Credentials");
       }
 
     } catch (err) {
       console.error("Login Error:", err.response ? err.response.data : err.message);
-      setMessage(err.response?.data?.message || "Login Failed! Please try again.");
+      setMessage(err.response?.data?.msg || "Login Failed! Please try again.");
     } finally {
       setLoading(false);
     }
-    
+
 
   }
 
@@ -86,12 +86,12 @@ const Login = () => {
         setMessage("Login Successful");
         navigate("/Admindashboard");
       } else {
-        setMessage(response.data.message || "Invalid login credentials");
+        setMessage(response.data.msg || "Invalid login credentials");
       }
 
     } catch (err) {
       console.error("Login Error:", err.response ? err.response.data : err.message);
-      setMessage(err.response?.data?.message || "Login failed! Please try again.");
+      setMessage(err.response?.data?.msg || "Login failed! Please try again.");
     } finally {
       setLoading(false);
     }

@@ -45,7 +45,7 @@ const Pricing = () => {
     <section id="pricing" className="bg-white border-y border-slate-100">
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
         <Reveal className="text-center">
-          <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
             Simple plans for patients &amp; clinics
           </h2>
 
@@ -76,12 +76,12 @@ const Pricing = () => {
               <div
                 className={`relative rounded-3xl p-8 transition-all duration-300 ${
                   plan.highlighted
-                    ? 'bg-gradient-to-b from-purple-600 via-indigo-600 to-blue-600 text-white shadow-2xl shadow-purple-300/50 md:-translate-y-4'
-                    : 'bg-white border border-slate-100 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5'
+                    ? 'bg-indigo-600 text-white shadow-lg md:-translate-y-4'
+                    : 'bg-white border border-slate-100 hover:border-indigo-200 hover:shadow-md'
                 }`}
               >
                 {plan.badge && (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white text-indigo-600 text-[11px] font-bold shadow-lg whitespace-nowrap">
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white text-indigo-600 text-[11px] font-bold shadow-sm whitespace-nowrap">
                     <Sparkles size={12} /> {plan.badge}
                   </span>
                 )}
@@ -90,7 +90,7 @@ const Pricing = () => {
                 <p className={`text-sm mt-2 ${plan.highlighted ? 'text-indigo-100' : 'text-slate-500'}`}>{plan.description}</p>
 
                 <div className="flex items-baseline gap-1 mt-6 mb-1">
-                  <span className="text-4xl font-black tracking-tighter">{plan.price[yearly ? 'yearly' : 'monthly']}</span>
+                  <span className="text-4xl font-bold tracking-tight">{plan.price[yearly ? 'yearly' : 'monthly']}</span>
                   {plan.period && <span className={`text-sm font-bold ${plan.highlighted ? 'text-indigo-100' : 'text-slate-400'}`}>{plan.period}</span>}
                 </div>
                 <p className={`text-xs font-semibold mb-8 ${plan.highlighted ? 'text-indigo-100' : 'text-slate-400'}`}>

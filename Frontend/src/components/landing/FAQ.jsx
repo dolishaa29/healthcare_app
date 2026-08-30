@@ -1,41 +1,6 @@
-import React, { useEffect, useRef, useState, forwardRef } from 'react';
+import React, { useRef, useState, forwardRef } from 'react';
 import { ChevronDown } from 'lucide-react';
-
-/* ─────────────────────────────────────────────────────────────
-   TEMP: inline stand-in so this file previews on its own.
-   In your project, DELETE this block and restore:
-       import Reveal from './Reveal';
-   ───────────────────────────────────────────────────────────── */
-const Reveal = ({ children, className = '', delay = 0 }) => {
-  const [shown, setShown] = useState(false);
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setTimeout(() => setShown(true), delay);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [delay]);
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ease-out motion-reduce:transition-none ${
-        shown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-      } ${className}`}
-    >
-      {children}
-    </div>
-  );
-};
-/* ───────────────────────── end temp block ───────────────────── */
+import Reveal from './Reveal';
 
 const FAQS = [
   {
@@ -139,7 +104,7 @@ const FAQ = () => {
   return (
     <section id="faq" className="max-w-3xl mx-auto px-6 md:px-10 py-20 md:py-28">
       <Reveal className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
           Frequently asked questions
         </h2>
       </Reveal>

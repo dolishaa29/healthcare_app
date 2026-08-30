@@ -118,7 +118,7 @@ const ChatWindow = ({ role, token, userId, doctorId, otherName, otherColor, othe
 
       <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-white shrink-0">
         {onBack && (
-          <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500">
+          <button onClick={onBack} className="md:hidden p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500 shrink-0">
             <ArrowLeft size={18} />
           </button>
         )}

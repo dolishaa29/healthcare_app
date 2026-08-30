@@ -33,21 +33,21 @@ const SECTIONS = [
 const Privacy = () => (
   <section id="privacy" className="max-w-3xl mx-auto px-6 md:px-10 py-20 md:py-28">
     <Reveal className="text-center mb-12">
-      <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
         Your data, handled with care
       </h2>
     </Reveal>
 
     <Reveal>
-      <div className="bg-white border border-slate-100 rounded-3xl shadow-sm shadow-slate-200/40 overflow-hidden">
+      <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
         {/* Header strip */}
-        <div className="flex items-center justify-between gap-4 px-6 sm:px-8 py-6 bg-gradient-to-r from-indigo-50 via-purple-50 to-blue-50 border-b border-slate-100">
+        <div className="flex items-center justify-between gap-4 px-6 sm:px-8 py-6 bg-slate-50 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm shrink-0">
               <ShieldCheck size={18} className="text-indigo-600" />
             </div>
             <div>
-              <p className="font-black text-slate-900 tracking-tight text-sm">Privacy Policy</p>
+              <p className="font-bold text-slate-900 tracking-tight text-sm">Privacy Policy</p>
               <p className="text-xs text-slate-400">AuraHealth Inc.</p>
             </div>
           </div>
@@ -65,7 +65,7 @@ const Privacy = () => (
                 {s.icon}
               </div>
               <div>
-                <h3 className="font-black text-slate-900 tracking-tight text-sm mb-1.5">
+                <h3 className="font-bold text-slate-900 tracking-tight text-sm mb-1.5">
                   <span className="text-slate-300 mr-1.5">{String(i + 1).padStart(2, '0')}</span>
                   {s.title}
                 </h3>

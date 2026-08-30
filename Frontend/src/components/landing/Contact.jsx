@@ -38,7 +38,7 @@ const Contact = () => {
     <section id="contact" className="bg-white border-y border-slate-100">
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
         <Reveal className="text-center">
-          <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
             We'd love to hear from you
           </h2>
         </Reveal>
@@ -46,11 +46,11 @@ const Contact = () => {
         <div className="grid md:grid-cols-3 gap-6 mt-14 mb-10">
           {CHANNELS.map((c, i) => (
             <Reveal key={c.title} delay={i * 80}>
-              <div className="bg-white border border-slate-100 rounded-2xl p-6 h-full hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300">
+              <div className="bg-white border border-slate-100 rounded-2xl p-6 h-full hover:border-indigo-200 hover:shadow-md transition-all duration-300">
                 <div className="w-11 h-11 bg-indigo-50 rounded-xl flex items-center justify-center mb-4">
                   {c.icon}
                 </div>
-                <h3 className="font-black text-slate-900 tracking-tight">{c.title}</h3>
+                <h3 className="font-bold text-slate-900 tracking-tight">{c.title}</h3>
                 <p className="text-sm font-bold text-indigo-600 mt-1">{c.detail}</p>
                 <p className="text-sm text-slate-500 mt-2 leading-relaxed">{c.description}</p>
               </div>
@@ -65,7 +65,7 @@ const Contact = () => {
                 <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
                   <CheckCircle2 size={26} className="text-emerald-600" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 tracking-tight">Message sent</h3>
+                <h3 className="text-xl font-bold text-slate-900 tracking-tight">Message sent</h3>
                 <p className="text-slate-500 mt-2">Thanks for reaching out — we'll get back to you shortly.</p>
               </div>
             ) : (
@@ -110,7 +110,7 @@ const Contact = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] inline-flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-2xl shadow-sm transition-colors duration-200 active:scale-[0.98] inline-flex items-center justify-center gap-2"
                 >
                   Send Message <Send size={16} />
                 </button>

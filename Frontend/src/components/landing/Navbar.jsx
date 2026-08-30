@@ -35,11 +35,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Brand Logo */}
         <a href="#" className="flex items-center gap-2 group">
-          <span className="font-black text-2xl tracking-tight text-slate-900 transition-opacity group-hover:opacity-90">
-            Aura
-            <span className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
-              Health
-            </span>
+          <span className="font-bold text-2xl tracking-tight text-slate-900 transition-opacity group-hover:opacity-90">
+            Aura<span className="text-indigo-600">Health</span>
           </span>
         </a>
 
@@ -66,7 +63,7 @@ const Navbar = () => {
           </button>
           <button
             onClick={() => navigate('/Userregister')}
-            className="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white text-sm font-semibold rounded-full shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
+            className="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-full shadow-sm transition-colors duration-200"
           >
             <span>Get Started</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -86,10 +83,10 @@ const Navbar = () => {
       {/* Mobile Drawer */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          menuOpen ? 'max-h-[calc(100vh-4rem)] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="px-6 pt-4 pb-6 mt-3 bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-xl flex flex-col gap-2">
+        <div className="px-6 pt-4 pb-6 mt-3 bg-white/95 backdrop-blur-xl border-t border-slate-200/60 shadow-xl flex flex-col gap-2 max-h-[calc(100vh-4rem)] overflow-y-auto">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
@@ -116,7 +113,7 @@ const Navbar = () => {
                 setMenuOpen(false);
                 navigate('/Userregister');
               }}
-              className="w-full py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white text-sm font-semibold rounded-xl shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all"
+              className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm active:scale-[0.98] transition-all"
             >
               Get Started
             </button>

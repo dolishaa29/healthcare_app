@@ -23,7 +23,7 @@ const VALUES = [
 const About = () => (
   <section id="about" className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
     <Reveal className="text-center">
-      <h2 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
         Healthcare software that gets out of the way
       </h2>
     </Reveal>
@@ -31,11 +31,11 @@ const About = () => (
     <div className="grid md:grid-cols-3 gap-6 mt-14">
       {VALUES.map((v, i) => (
         <Reveal key={v.title} delay={i * 80}>
-          <div className="bg-white border border-slate-100 rounded-2xl p-8 h-full hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1 transition-all duration-300">
+          <div className="bg-white border border-slate-100 rounded-2xl p-8 h-full hover:border-indigo-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div className="w-11 h-11 bg-indigo-50 rounded-xl flex items-center justify-center mb-4">
               {v.icon}
             </div>
-            <h3 className="font-black text-slate-900 tracking-tight text-lg">{v.title}</h3>
+            <h3 className="font-bold text-slate-900 tracking-tight text-lg">{v.title}</h3>
             <p className="text-sm text-slate-500 mt-2 leading-relaxed">{v.description}</p>
           </div>
         </Reveal>

@@ -12,10 +12,7 @@ const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="motion-safe:animate-[floatSlow_9s_ease-in-out_infinite] absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
-      <div className="motion-safe:animate-[floatSlower_11s_ease-in-out_infinite] absolute top-[10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
-
+    <section className="relative overflow-hidden bg-slate-50/60">
       <div className="relative max-w-6xl mx-auto px-6 md:px-10 pt-20 pb-20 md:pt-28 md:pb-28 grid md:grid-cols-2 gap-14 items-center">
         <div className="text-center md:text-left">
           <div className="motion-safe:animate-[fadeInUp_0.6s_ease-out_both] inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-md border border-white/60 rounded-full shadow-sm mb-8">
@@ -24,13 +21,13 @@ const Hero = () => {
           </div>
 
           <h1
-            className="motion-safe:animate-[fadeInUp_0.6s_ease-out_both] text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-slate-900 leading-[1.1]"
+            className="motion-safe:animate-[fadeInUp_0.6s_ease-out_both] text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]"
             style={{ animationDelay: '70ms' }}
           >
             AuraHealth is the AI operating system for healthcare.
           </h1>
           <p
-            className="motion-safe:animate-[fadeInUp_0.6s_ease-out_both] text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent mt-4"
+            className="motion-safe:animate-[fadeInUp_0.6s_ease-out_both] text-2xl md:text-3xl font-semibold tracking-tight text-indigo-600 mt-4"
             style={{ animationDelay: '140ms' }}
           >
             Give your clinic a pulse.
@@ -50,13 +47,13 @@ const Hero = () => {
           >
             <button
               onClick={() => navigate('/Userregister')}
-              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl active:scale-[0.98] inline-flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-2xl shadow-sm transition-colors duration-200 active:scale-[0.98] inline-flex items-center justify-center gap-2"
             >
               Get Started Free <ArrowRight size={18} />
             </button>
             <button
               onClick={() => navigate('/Doctorregister')}
-              className="w-full sm:w-auto px-8 py-4 bg-white border border-slate-200 hover:border-indigo-300 text-slate-700 font-bold rounded-2xl shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"
+              className="w-full sm:w-auto px-8 py-4 bg-white border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 text-slate-700 font-semibold rounded-2xl shadow-sm transition-colors duration-200 active:scale-[0.98]"
             >
               Join as a Doctor
             </button>
@@ -79,14 +76,14 @@ const Hero = () => {
           className="motion-safe:animate-[fadeInUp_0.7s_ease-out_both] hidden md:block relative h-96"
           style={{ animationDelay: '200ms' }}
         >
-          <div className="absolute top-6 right-4 w-56 rotate-6 bg-white/50 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl p-4">
+          <div className="absolute top-6 right-4 w-56 bg-white border border-slate-100 rounded-2xl shadow-lg shadow-slate-200/60 p-4">
             <div className="flex items-center gap-3">
               <div
                 className="w-14 h-14 rounded-full flex items-center justify-center shrink-0"
-                style={{ background: 'conic-gradient(#7c3aed 0% 92%, #e9d5ff 92% 100%)' }}
+                style={{ background: 'conic-gradient(#4f46e5 0% 92%, #e0e7ff 92% 100%)' }}
               >
-                <div className="w-10 h-10 rounded-full bg-white/90 backdrop-blur flex flex-col items-center justify-center">
-                  <span className="text-sm font-black text-slate-900">92</span>
+                <div className="w-10 h-10 rounded-full bg-white flex flex-col items-center justify-center">
+                  <span className="text-sm font-bold text-slate-900">92</span>
                 </div>
               </div>
               <div>
@@ -96,9 +93,9 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="absolute bottom-6 left-2 w-64 -rotate-3 bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl p-5">
+          <div className="absolute bottom-6 left-2 w-64 bg-white border border-slate-100 rounded-2xl shadow-lg shadow-slate-200/60 p-5">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white text-xs font-black shrink-0">
+              <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
                 MA
               </div>
               <div>
@@ -106,13 +103,13 @@ const Hero = () => {
                 <p className="text-xs text-slate-400">Cardiologist</p>
               </div>
             </div>
-            <div className="flex items-center justify-between px-3 py-2 bg-white/70 rounded-xl mb-3">
+            <div className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-xl mb-3">
               <span className="flex items-center gap-2 text-xs font-bold text-slate-600">
                 <CalendarClock size={14} className="text-indigo-500" /> Today, 10:00 AM
               </span>
               <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Confirmed</span>
             </div>
-            <button className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2">
+            <button className="w-full py-2.5 bg-indigo-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2">
               <Video size={14} /> Join Video Call
             </button>
           </div>

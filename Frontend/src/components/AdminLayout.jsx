@@ -8,33 +8,74 @@ import {
 
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  return (
-    <div className="flex h-screen bg-[#FDFBFF] font-sans text-slate-900 overflow-hidden">
+  const closeMobile = () => setMobileOpen(false);
+  const go = (path) => {
+    navigate(path);
+    closeMobile();
+  };
 
-      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-white border-r border-slate-100 transition-all duration-500 ease-in-out flex flex-col z-50 shrink-0`}>
+  return (
+    <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">
+
+      {/* Mobile top bar */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4 z-30">
+        <span className="font-bold text-lg tracking-tight text-slate-900">
+          Aura<span className="text-indigo-600">Admin</span>
+        </span>
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="p-2 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors"
+          aria-label="Open menu"
+        >
+          <Menu size={22} />
+        </button>
+      </div>
+
+      {/* Mobile backdrop */}
+      {mobileOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-slate-900/40 z-40"
+          onClick={closeMobile}
+        />
+      )}
+
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64
+        ${isSidebarOpen ? 'lg:w-64' : 'lg:w-20'}
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
+        bg-white border-r border-slate-100 transition-all duration-300 lg:duration-500 ease-in-out flex flex-col shrink-0`}
+      >
         <div className="h-24 flex items-center justify-between px-7">
-          {isSidebarOpen && (
-            <span className="font-black text-xl tracking-tighter bg-linear-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-              AuraAdmin
+          {(isSidebarOpen || mobileOpen) && (
+            <span className="font-bold text-xl tracking-tight text-slate-900">
+              Aura<span className="text-indigo-600">Admin</span>
             </span>
           )}
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="p-2.5 hover:bg-slate-50 rounded-xl text-slate-400 transition-all active:scale-90"
+            className="hidden lg:flex p-2.5 hover:bg-slate-50 rounded-xl text-slate-400 transition-all active:scale-90"
           >
             {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+          <button
+            onClick={closeMobile}
+            className="lg:hidden p-2.5 hover:bg-slate-50 rounded-xl text-slate-400 transition-all active:scale-90"
+            aria-label="Close menu"
+          >
+            <X size={18} />
           </button>
         </div>
 
         <nav className="flex-1 px-3 space-y-1.5 overflow-y-auto">
-          <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard"        active={location.pathname === '/Admindashboard'}   onClick={() => navigate('/Admindashboard')}   isExpanded={isSidebarOpen} />
-          <SidebarLink icon={<Stethoscope size={20} />}    label="View Doctors"      active={location.pathname === '/Viewdoctor'}        onClick={() => navigate('/Viewdoctor')}        isExpanded={isSidebarOpen} />
-          <SidebarLink icon={<Users size={20} />}          label="View Users"         active={location.pathname === '/Viewusers'}         onClick={() => navigate('/Viewusers')}         isExpanded={isSidebarOpen} />
-          <SidebarLink icon={<UserPlus size={20} />}       label="Doctor Requests"    active={location.pathname === '/Doctorrequest'}     onClick={() => navigate('/Doctorrequest')}     isExpanded={isSidebarOpen} />
-          <SidebarLink icon={<Calendar size={20} />}       label="Appointments"       active={location.pathname === '/ViewAppointment'}   onClick={() => navigate('/ViewAppointment')}   isExpanded={isSidebarOpen} />
+          <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard"        active={location.pathname === '/Admindashboard'}   onClick={() => go('/Admindashboard')}   isExpanded={isSidebarOpen || mobileOpen} />
+          <SidebarLink icon={<Stethoscope size={20} />}    label="View Doctors"      active={location.pathname === '/Viewdoctor'}        onClick={() => go('/Viewdoctor')}        isExpanded={isSidebarOpen || mobileOpen} />
+          <SidebarLink icon={<Users size={20} />}          label="View Users"         active={location.pathname === '/Viewusers'}         onClick={() => go('/Viewusers')}         isExpanded={isSidebarOpen || mobileOpen} />
+          <SidebarLink icon={<UserPlus size={20} />}       label="Doctor Requests"    active={location.pathname === '/Doctorrequest'}     onClick={() => go('/Doctorrequest')}     isExpanded={isSidebarOpen || mobileOpen} />
+          <SidebarLink icon={<Calendar size={20} />}       label="Appointments"       active={location.pathname === '/ViewAppointment'}   onClick={() => go('/ViewAppointment')}   isExpanded={isSidebarOpen || mobileOpen} />
         </nav>
 
         <div className="p-5 border-t border-slate-50">
@@ -43,12 +84,12 @@ const AdminLayout = () => {
             className="w-full flex items-center gap-4 px-4 py-4 text-red-500 hover:bg-red-50/50 rounded-2xl transition-all duration-300 font-bold text-[13px]"
           >
             <LogOut size={18} />
-            {isSidebarOpen && <span>Sign Out</span>}
+            {(isSidebarOpen || mobileOpen) && <span>Sign Out</span>}
           </button>
         </div>
       </aside>
 
-      <main className="flex-1 min-w-0 overflow-hidden">
+      <main className="flex-1 min-w-0 overflow-hidden pt-16 lg:pt-0">
         <Outlet />
       </main>
     </div>

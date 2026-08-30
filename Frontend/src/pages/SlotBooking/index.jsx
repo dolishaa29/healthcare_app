@@ -113,57 +113,58 @@ const SlotBooking = () => {
   }
 
   return (
-    <div className="h-full overflow-y-auto bg-[#FDFBFF] px-6 py-10 md:px-10">
-      <div className="mb-8">
+    <div className="h-full overflow-y-auto bg-slate-50 px-6 py-10 md:px-10">
+      <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] mb-8">
         <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Direct Scheduling</p>
-        <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
-          Book a
-          <span className="bg-gradient-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent"> Slot</span>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+          Book a <span className="text-indigo-600">Slot</span>
         </h1>
         <p className="text-slate-400 text-sm mt-1">{stepLabel}</p>
       </div>
 
-      {step === 1 && (
-        <DoctorSearchStep
-          search={search}
-          onSearchChange={setSearch}
-          loadingDoctors={loadingDoctors}
-          filtered={filtered}
-          getImageUrl={getImageUrl}
-          onSelectDoctor={(doc) => { setSelectedDoctor(doc); setStep(2); setError(""); }}
-        />
-      )}
+      <div key={step} className="motion-safe:animate-[fadeInUp_0.35s_ease-out_both]">
+        {step === 1 && (
+          <DoctorSearchStep
+            search={search}
+            onSearchChange={setSearch}
+            loadingDoctors={loadingDoctors}
+            filtered={filtered}
+            getImageUrl={getImageUrl}
+            onSelectDoctor={(doc) => { setSelectedDoctor(doc); setStep(2); setError(""); }}
+          />
+        )}
 
-      {step === 2 && (
-        <DateSlotStep
-          selectedDoctor={selectedDoctor}
-          getImageUrl={getImageUrl}
-          today={today}
-          selectedDate={selectedDate}
-          onDateChange={handleDateChange}
-          loadingSlots={loadingSlots}
-          hasAppointmentToday={hasAppointmentToday}
-          slots={slots}
-          selectedSlot={selectedSlot}
-          onSelectSlot={(time) => { setSelectedSlot(time); setError(""); }}
-          onBack={() => { setStep(1); setSelectedDate(""); setSlots([]); setSelectedSlot(null); }}
-          onContinue={() => setStep(3)}
-        />
-      )}
+        {step === 2 && (
+          <DateSlotStep
+            selectedDoctor={selectedDoctor}
+            getImageUrl={getImageUrl}
+            today={today}
+            selectedDate={selectedDate}
+            onDateChange={handleDateChange}
+            loadingSlots={loadingSlots}
+            hasAppointmentToday={hasAppointmentToday}
+            slots={slots}
+            selectedSlot={selectedSlot}
+            onSelectSlot={(time) => { setSelectedSlot(time); setError(""); }}
+            onBack={() => { setStep(1); setSelectedDate(""); setSlots([]); setSelectedSlot(null); }}
+            onContinue={() => setStep(3)}
+          />
+        )}
 
-      {step === 3 && (
-        <BookingConfirmStep
-          selectedDoctor={selectedDoctor}
-          selectedDate={selectedDate}
-          selectedSlot={selectedSlot}
-          description={description}
-          onDescriptionChange={(val) => { setDescription(val); if (error) setError(""); }}
-          error={error}
-          submitting={submitting}
-          onBack={() => setStep(2)}
-          onSubmit={handleBookSlot}
-        />
-      )}
+        {step === 3 && (
+          <BookingConfirmStep
+            selectedDoctor={selectedDoctor}
+            selectedDate={selectedDate}
+            selectedSlot={selectedSlot}
+            description={description}
+            onDescriptionChange={(val) => { setDescription(val); if (error) setError(""); }}
+            error={error}
+            submitting={submitting}
+            onBack={() => setStep(2)}
+            onSubmit={handleBookSlot}
+          />
+        )}
+      </div>
     </div>
   );
 };

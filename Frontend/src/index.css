@@ -19,13 +19,3 @@ html {
   50% { transform: translate(-16px, 18px); }
 }
 
-@keyframes gradientX {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes pulseRing {
-  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.35); }
-  70% { box-shadow: 0 0 0 16px rgba(99, 102, 241, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
-}

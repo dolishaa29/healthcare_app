@@ -52,10 +52,14 @@ const DoctorChat = () => {
   return (
     <div className="flex h-full overflow-hidden bg-white">
       {/* Sidebar */}
-      <aside className="w-72 shrink-0 flex flex-col border-r border-slate-100 bg-white">
+      <aside
+        className={`w-full md:w-72 shrink-0 flex-col border-r border-slate-100 bg-white ${
+          active ? "hidden md:flex" : "flex"
+        }`}
+      >
         <div className="px-4 pt-5 pb-3 border-b border-slate-100">
           <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-0.5">Inbox</p>
-          <h1 className="text-lg font-black text-slate-900 tracking-tight mb-3">Messages</h1>
+          <h1 className="text-lg font-bold text-slate-900 tracking-tight mb-3">Messages</h1>
           <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 border border-slate-100">
             <Search size={13} className="text-slate-400 shrink-0" />
             <input
@@ -85,14 +89,15 @@ const DoctorChat = () => {
               </p>
             </div>
           ) : (
-            filtered.map((c) => {
+            filtered.map((c, i) => {
               const isActive = active?.userId === c.userId;
               const color = getAvatarColor(c.userId);
               return (
                 <button
                   key={c.userId}
                   onClick={() => setActive(c)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all mb-0.5 ${
+                  style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
+                  className={`motion-safe:animate-[fadeInUp_0.35s_ease-out_both] w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all mb-0.5 ${
                     isActive ? "bg-indigo-600 shadow-sm shadow-indigo-200" : "hover:bg-slate-50"
                   }`}
                 >
@@ -116,7 +121,7 @@ const DoctorChat = () => {
       </aside>
 
       {/* Chat area */}
-      <main className="flex-1 min-w-0 overflow-hidden">
+      <main className={`flex-1 min-w-0 overflow-hidden ${active ? "flex" : "hidden md:flex"} flex-col`}>
         {active ? (
           <ChatWindow
             role="doctor"
@@ -127,6 +132,7 @@ const DoctorChat = () => {
             otherColor={getAvatarColor(active.userId)}
             otherRole="Patient"
             historyUrl={`${API_BASE_URL}/chat/doctor/history/${active.userId}`}
+            onBack={() => setActive(null)}
           />
         ) : (
           <div className="h-full flex flex-col items-center justify-center bg-slate-50">

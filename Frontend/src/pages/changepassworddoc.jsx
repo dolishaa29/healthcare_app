@@ -49,12 +49,12 @@ const Changepassworddoc = () => {
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-[#FDFBFF] font-sans flex items-center justify-center py-10 px-4">
-      <div className="w-full max-w-md p-10 bg-white border border-slate-100 rounded-3xl shadow-sm">
-        
+    <div className="h-full overflow-y-auto bg-slate-50 font-sans flex items-center justify-center py-10 px-4">
+      <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] w-full max-w-md p-10 bg-white border border-slate-100 rounded-3xl shadow-sm">
+
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
-            Aura<span className="bg-linear-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Health</span>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Aura<span className="text-indigo-600">Health</span>
           </h1>
           <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-2">Security Settings</p>
           <h2 className="text-xl font-semibold text-slate-700 mt-4">Update Password</h2>
@@ -69,7 +69,7 @@ const Changepassworddoc = () => {
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 transition-all shadow-sm"
             />
           </div>
 
@@ -81,7 +81,7 @@ const Changepassworddoc = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Enter new password"
               required
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 transition-all shadow-sm"
             />
           </div>
 
@@ -96,7 +96,7 @@ const Changepassworddoc = () => {
               className={`w-full px-4 py-3 bg-white border rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 transition-all shadow-sm ${
                 newPassword && confirmNewPassword && newPassword !== confirmNewPassword 
                 ? 'border-red-300 focus:ring-red-500/10 focus:border-red-400' 
-                : 'border-slate-200 focus:ring-purple-500/10 focus:border-purple-400'
+                : 'border-slate-200 focus:ring-indigo-500/10 focus:border-indigo-400'
               }`}
             />
           </div>
@@ -104,7 +104,7 @@ const Changepassworddoc = () => {
           <button
             type="submit"
             disabled={loading || !newPassword || newPassword !== confirmNewPassword}
-            className="w-full py-4 mt-4 bg-linear-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-4 mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-sm transform transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Update Password"}
           </button>
@@ -125,7 +125,7 @@ const Changepassworddoc = () => {
         <div className="mt-8 text-center">
           <button 
             onClick={() => navigate(-1)} 
-            className="text-slate-400 hover:text-purple-600 text-sm font-medium transition-colors"
+            className="text-slate-400 hover:text-indigo-600 text-sm font-medium transition-colors"
           >
             ← Back to Profile
           </button>
