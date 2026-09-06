@@ -1,5 +1,5 @@
 let express = require("express");
-const { getrating, viewrating } = require("../controller/ratingcontroller");
+const { getrating, viewrating } = require("../service/ratings");
 let router=express.Router();
 let auth=require('../middleware/user')
 

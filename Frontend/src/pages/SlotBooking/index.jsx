@@ -23,6 +23,9 @@ const SlotBooking = () => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [symptoms, setSymptoms] = useState("");
+  const [triageLoading, setTriageLoading] = useState(false);
+  const [triageResult, setTriageResult] = useState(null);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -66,6 +69,23 @@ const SlotBooking = () => {
       setError("Failed to fetch available slots.");
     } finally {
       setLoadingSlots(false);
+    }
+  };
+
+  const handleTriage = async () => {
+    if (!symptoms.trim() || triageLoading) return;
+    setTriageLoading(true);
+    setTriageResult(null);
+    try {
+      const res = await axios.post(API + "/triage", { symptoms: symptoms.trim() });
+      if (res.data.success) {
+        setTriageResult(res.data);
+        if (res.data.specialization) setSearch(res.data.specialization);
+      }
+    } catch {
+      setTriageResult({ specialization: null, urgency: "low", reasoning: "Couldn't analyze symptoms right now — try searching manually below." });
+    } finally {
+      setTriageLoading(false);
     }
   };
 
@@ -131,6 +151,11 @@ const SlotBooking = () => {
             filtered={filtered}
             getImageUrl={getImageUrl}
             onSelectDoctor={(doc) => { setSelectedDoctor(doc); setStep(2); setError(""); }}
+            symptoms={symptoms}
+            onSymptomsChange={setSymptoms}
+            onTriage={handleTriage}
+            triageLoading={triageLoading}
+            triageResult={triageResult}
           />
         )}
 

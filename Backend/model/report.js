@@ -16,6 +16,7 @@ let reportSchema = new mongo.Schema(
     title: { type: String, required: true },
     summary: { type: String },
     fileUrl: { type: String },
+    publicId: { type: String },
     messages: [messageSchema],
   },
   { timestamps: true }

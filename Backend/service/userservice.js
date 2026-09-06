@@ -120,6 +120,12 @@ catch(err)
 }
 }
 
+exports.userlogout=async(req,res)=>
+{
+    res.clearCookie("token");
+    return res.status(200).json({success: true,msg:'user logout successfully'})
+}
+
 exports.userprofile=async(req,res)=>
 {
     const user = req.user;

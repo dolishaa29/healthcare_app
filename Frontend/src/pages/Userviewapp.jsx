@@ -1,8 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, ExternalLink, CalendarCheck } from 'lucide-react';
+
+const groupByDate = (appointments) => {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const startOfTomorrow = new Date(startOfToday);
+  startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+
+  const today = [];
+  const upcoming = [];
+  const past = [];
+
+  [...appointments]
+    .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`))
+    .forEach((app) => {
+      const dt = new Date(`${app.date}T${app.time}`);
+      if (dt >= startOfToday && dt < startOfTomorrow) today.push(app);
+      else if (dt >= startOfTomorrow) upcoming.push(app);
+      else past.push(app);
+    });
+
+  return { today, upcoming, past: past.reverse() };
+};
 
 const Userviewapp = () => {
   const [appointments, setappointments] = useState([]);
@@ -35,6 +57,8 @@ const Userviewapp = () => {
     return now >= appointmentDateTime;
   };
 
+  const groups = useMemo(() => groupByDate(appointments), [appointments]);
+
   return (
     <div className="h-full overflow-y-auto bg-slate-50 px-6 py-10 md:px-10">
       {/* Header */}
@@ -59,18 +83,35 @@ const Userviewapp = () => {
           <p className="text-slate-400 text-sm mt-1">Book a session with a specialist to get started.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {appointments.map((app, i) => {
-            const active = isTimeReached(app.date, app.time);
-            return (
-              <AppointmentCard key={app._id} app={app} active={active} index={i} />
-            );
-          })}
+        <div className="space-y-10">
+          {groups.today.length > 0 && (
+            <AppointmentSection title="Today" badgeClass="bg-emerald-50 text-emerald-600" appointments={groups.today} isTimeReached={isTimeReached} />
+          )}
+          {groups.upcoming.length > 0 && (
+            <AppointmentSection title="Upcoming" badgeClass="bg-indigo-50 text-indigo-600" appointments={groups.upcoming} isTimeReached={isTimeReached} />
+          )}
+          {groups.past.length > 0 && (
+            <AppointmentSection title="Past" badgeClass="bg-slate-100 text-slate-500" appointments={groups.past} isTimeReached={isTimeReached} />
+          )}
         </div>
       )}
     </div>
   );
 };
+
+const AppointmentSection = ({ title, badgeClass, appointments, isTimeReached }) => (
+  <div>
+    <div className="flex items-center gap-2.5 mb-4">
+      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">{title}</p>
+      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass}`}>{appointments.length}</span>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {appointments.map((app, i) => (
+        <AppointmentCard key={app._id} app={app} active={isTimeReached(app.date, app.time)} index={i} />
+      ))}
+    </div>
+  </div>
+);
 
 const AppointmentCard = ({ app, active, index = 0 }) => {
   const navigate = useNavigate();

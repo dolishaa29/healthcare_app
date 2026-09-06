@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { X, Send, Stethoscope, Sparkles } from "lucide-react";
 
 const Bot = () => {
@@ -25,7 +26,11 @@ const Bot = () => {
     setPrompt("");
     setLoading(true);
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/chat`, { prompt: text });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/chat`,
+        { prompt: text },
+        { headers: { Authorization: `Bearer ${Cookies.get("token")}` }, withCredentials: true }
+      );
       setMessages((prev) => [...prev, { text: res.data.text, sender: "bot" }]);
     } catch {
       setMessages((prev) => [...prev, { text: "Sorry, I couldn't process that. Please try again.", sender: "bot" }]);

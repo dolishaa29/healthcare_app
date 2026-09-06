@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import {
   CalendarPlus, LayoutList, LogOut, Menu, X,
-  LayoutDashboard, User, MessageCircle, FileText, Video, CalendarClock
+  LayoutDashboard, User, MessageCircle, FileText, Video, CalendarClock, MapPin
 } from 'lucide-react';
 
 const UserLayout = () => {
@@ -79,6 +79,7 @@ const UserLayout = () => {
           <SidebarLink icon={<FileText size={20} />} label="Report Analysis" active={location.pathname === '/ReportAnalysis'} onClick={() => go('/ReportAnalysis')} isExpanded={isSidebarOpen || mobileOpen} />
           <SidebarLink icon={<Video size={20} />} label="Live Capture" active={location.pathname === '/LiveCapture'} onClick={() => go('/LiveCapture')} isExpanded={isSidebarOpen || mobileOpen} />
           <SidebarLink icon={<CalendarClock size={20} />} label="Book by Slot" active={location.pathname === '/SlotBooking'} onClick={() => go('/SlotBooking')} isExpanded={isSidebarOpen || mobileOpen} />
+          <SidebarLink icon={<MapPin size={20} />} label="Nearby Hospitals" active={location.pathname === '/NearbyHospitals'} onClick={() => go('/NearbyHospitals')} isExpanded={isSidebarOpen || mobileOpen} />
         </nav>
 
         <div className="p-5 border-t border-slate-50">

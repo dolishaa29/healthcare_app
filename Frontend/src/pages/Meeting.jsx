@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Mic, MicOff, Video, VideoOff, PhoneOff, Loader2, User } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, PhoneOff, Loader2, User, ClipboardList } from 'lucide-react';
 import { getSocket } from '../socket';
 
 const ICE_SERVERS = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
@@ -9,6 +10,7 @@ const ICE_SERVERS = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 const Meeting = () => {
   const { appointmentId } = useParams();
   const navigate = useNavigate();
+  const role = Cookies.get('token') ? 'user' : Cookies.get('emstoken') ? 'doctor' : null;
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
@@ -19,6 +21,31 @@ const Meeting = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
+  const [briefing, setBriefing] = useState(null);
+  const [briefingLoading, setBriefingLoading] = useState(role === 'doctor');
+  const [showBriefing, setShowBriefing] = useState(true);
+
+  useEffect(() => {
+    if (role !== 'doctor') return undefined;
+    let cancelled = false;
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/appointment/${appointmentId}/briefing`, {
+        headers: { Authorization: `Bearer ${Cookies.get('emstoken')}` },
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (!cancelled) setBriefing(res.data.text);
+      })
+      .catch(() => {
+        if (!cancelled) setBriefing('Could not load patient briefing.');
+      })
+      .finally(() => {
+        if (!cancelled) setBriefingLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [appointmentId, role]);
 
   const cleanup = useCallback(() => {
     if (pcRef.current) {
@@ -192,7 +219,32 @@ const Meeting = () => {
             {status === 'connecting' && 'Connecting…'}
           </span>
         </div>
+
+        {role === 'doctor' && (
+          <button
+            onClick={() => setShowBriefing((v) => !v)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all"
+          >
+            <ClipboardList size={13} /> Patient Briefing
+          </button>
+        )}
       </div>
+
+      {role === 'doctor' && showBriefing && (
+        <div className="absolute top-20 left-4 z-20 w-72 sm:w-80 max-h-[60%] overflow-y-auto bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <ClipboardList size={14} className="text-indigo-600" />
+            <p className="text-xs font-bold text-slate-800">AI Patient Briefing</p>
+          </div>
+          {briefingLoading ? (
+            <div className="flex items-center gap-2 text-slate-400 text-xs">
+              <Loader2 size={13} className="animate-spin" /> Loading…
+            </div>
+          ) : (
+            <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">{briefing}</p>
+          )}
+        </div>
+      )}
 
       <div className="flex-1 relative flex items-center justify-center">
         {status === 'error' ? (

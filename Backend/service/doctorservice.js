@@ -7,6 +7,22 @@ let bct=require("bcryptjs");
 let crypto=require("crypto");
 const nodemailer = require("nodemailer");
 const cloudinary=require("../config/cloudinary")
+const axios = require("axios");
+
+async function geocodeAddress(address) {
+    try {
+        const res = await axios.get("https://nominatim.openstreetmap.org/search", {
+            params: { format: "json", q: address, limit: 1 },
+            headers: { "User-Agent": "AuraHealth/1.0 (telemedicine platform)" },
+        });
+        const hit = res.data?.[0];
+        if (!hit) return null;
+        return { type: "Point", coordinates: [parseFloat(hit.lon), parseFloat(hit.lat)] };
+    } catch (err) {
+        console.log("Geocoding error:", err.message);
+        return null;
+    }
+}
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -262,6 +278,12 @@ exports.doctorupdate = async (req, res) => {
             year: req.body.year,
             image: image,
         };
+
+        if (req.body.HospitalAddress && req.body.HospitalAddress !== doctor.HospitalAddress) {
+            const location = await geocodeAddress(req.body.HospitalAddress);
+            if (location) updateData.location = location;
+        }
+
         let updatedDoctor = await rec.findOneAndUpdate({ _id: doctor._id }, updateData, { new: true });
 
         if (!updatedDoctor) {

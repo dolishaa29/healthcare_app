@@ -45,7 +45,12 @@ let doctormodel=mongo.Schema({
     },
 
     doctorstatus:{type:String , default:"unblock" , enum:["block","unblock"]},
-  
+
+    location: {
+      type: { type: String, enum: ["Point"], default: "Point" },
+      coordinates: { type: [Number], default: undefined }, // [lng, lat]
+    },
 
 });
+doctormodel.index({ location: "2dsphere" });
 module.exports=mongo.model('doctor',doctormodel);

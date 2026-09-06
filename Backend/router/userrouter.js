@@ -3,7 +3,7 @@ let auth=require("../middleware/user");
 let router=express.Router();
 const multer = require("multer");
 
-const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, userotpgenerate, userotpverify, userbyid, changepassword, userregisterverify } = require("../controller/usercontroller");
+const { userregister, userlogin ,userprofile,userlogout, userlist, userDashboard, userviewapp, otpgenerate: userotpgenerate, otpverify: userotpverify, userbyid, changepassword, registerotpverify: userregisterverify } = require("../service/userservice");
 const { blockuser, updateuser } = require("../service/userservice");
 
 let upload =multer({ 

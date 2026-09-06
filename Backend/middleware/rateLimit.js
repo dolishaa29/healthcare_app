@@ -25,4 +25,22 @@ const skinAnalysisLimiter = rateLimit({
   message: { success: false, message: "Too many requests, please slow down." },
 });
 
-module.exports = { chatLimiter, skinAnalysisLimiter };
+const triageLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: new RedisStore({ sendCommand, prefix: "rl:triage:" }),
+  message: { success: false, message: "Too many requests, please slow down." },
+});
+
+const hospitalLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: new RedisStore({ sendCommand, prefix: "rl:hospital:" }),
+  message: { success: false, message: "Too many requests, please slow down." },
+});
+
+module.exports = { chatLimiter, skinAnalysisLimiter, triageLimiter, hospitalLimiter };

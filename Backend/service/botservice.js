@@ -1,14 +1,5 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-require("dotenv").config();
-
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-if (!GEMINI_API_KEY) {
-  console.warn("GEMINI_API_KEY is not set in .env file");
-}
-
-
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const { getModel, GEMINI_API_KEY } = require("../config/gemini");
+const Report = require("../model/report");
 
 exports.chat = async (req, res) => {
   try {
@@ -28,11 +19,25 @@ exports.chat = async (req, res) => {
       });
     }
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-    });
+    let fullPrompt = prompt;
 
-    const result = await model.generateContent(prompt);
+    if (req.user) {
+      const reports = await Report.find({ user: req.user._id })
+        .select("title summary createdAt")
+        .sort({ createdAt: -1 })
+        .limit(5);
+
+      if (reports.length) {
+        const context = reports
+          .map((r) => `- [${r.createdAt.toDateString()}] ${r.title}: ${r.summary}`)
+          .join("\n");
+        fullPrompt = `The patient asking this question has the following recent medical report summaries on file. Use them only if relevant to the question below; otherwise ignore them and answer normally.\n\n${context}\n\nPatient question: ${prompt}`;
+      }
+    }
+
+    const model = getModel();
+
+    const result = await model.generateContent(fullPrompt);
 
     res.status(200).json({
       success: true,

@@ -1,7 +1,7 @@
 let express=require("express");
 let auths=require("../middleware/doctor");
 let router=express.Router();
-const { doctorregister , doctorlogin,doctorlogout,doctorprofile, doctorlist, doctorpermission, doctorrequest, doctorpermissionupdate, doctorDashboard, doctorviewapp, doctorupdate, changePassword, doctorprofileview, doctorforgotpassword, doctorverifyotp, deletedoctor} = require("../controller/doctorcontroller");
+const { doctorregister , doctorlogin,doctorlogout,doctorprofile, doctorlist, doctorpermission, doctorrequest, doctorpermissionupdate, doctorDashboard, doctorviewapp, doctorupdate, changePassword, doctorprofileview, otpgenerate: doctorforgotpassword, otpverify: doctorverifyotp, deletedoctor} = require("../service/doctorservice");
 const { blockdoctor } = require("../service/doctorservice");
 const upload = require("../middleware/multer"); 
 const cloudinary = require("../config/cloudinary");

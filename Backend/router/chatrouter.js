@@ -1,7 +1,7 @@
 let express = require("express");
 let userAuth = require("../middleware/user");
 let doctorAuth = require("../middleware/doctor");
-const { getUserConversations, getDoctorConversations, getHistoryForUser, getHistoryForDoctor } = require("../controller/chatcontroller");
+const { getUserConversations, getDoctorConversations, getHistoryForUser, getHistoryForDoctor } = require("../service/chatservice");
 
 let router = express.Router();
 

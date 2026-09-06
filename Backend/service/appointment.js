@@ -1,6 +1,8 @@
 let rec4=require("../model/Appointment/appointrequest");
 let rec5=require("../model/Appointment/appointment");
 let rec=require("../model/doctor");
+const Report = require("../model/report");
+const { getModel } = require("../config/gemini");
 exports.appointrequest=async(req,res)=>
 {
  console.log("Appointment request received");   
@@ -181,4 +183,47 @@ exports.bookSlot = async (req, res) => {
   }
 
   return res.status(201).json({ success: true, msg: 'Appointment booked successfully!' });
+};
+
+exports.getBriefing = async (req, res) => {
+  const doctor = req.doctor;
+  const { appointmentId } = req.params;
+
+  const appointment = await rec5.findById(appointmentId);
+  if (!appointment) {
+    return res.status(404).json({ success: false, msg: 'Appointment not found' });
+  }
+  if (String(appointment.doctorid) !== String(doctor._id)) {
+    return res.status(403).json({ success: false, msg: 'You are not part of this appointment' });
+  }
+
+  const reports = await Report.find({ user: appointment.userid })
+    .select('title summary createdAt')
+    .sort({ createdAt: -1 })
+    .limit(5);
+
+  const pastAppointments = await rec5.find({ userid: appointment.userid, _id: { $ne: appointment._id } })
+    .select('description date')
+    .sort({ date: -1 })
+    .limit(5);
+
+  if (!reports.length && !pastAppointments.length) {
+    return res.status(200).json({ success: true, text: 'No prior records on file for this patient yet.' });
+  }
+
+  const context = [
+    reports.length
+      ? 'Recent report summaries:\n' + reports.map((r) => `- [${r.createdAt.toDateString()}] ${r.title}: ${r.summary}`).join('\n')
+      : '',
+    pastAppointments.length
+      ? 'Past appointment notes:\n' + pastAppointments.map((a) => `- [${a.date}] ${a.description}`).join('\n')
+      : '',
+  ].filter(Boolean).join('\n\n');
+
+  const model = getModel();
+  const result = await model.generateContent(
+    `You are briefing a doctor right before a consultation. Summarize the following patient history into 3-4 short bullet points, highlighting anything clinically relevant.\n\n${context}`
+  );
+
+  return res.status(200).json({ success: true, text: result.response.text() });
 };

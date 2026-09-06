@@ -50,6 +50,8 @@ app.use("/", require("./router/botrouter"));
 app.use("/", require("./router/chatrouter"));
 app.use("/", require("./router/reportanalysis"));
 app.use("/", require("./router/skinanalysis"));
+app.use("/", require("./router/triagerouter"));
+app.use("/", require("./router/hospitalrouter"));
 
 const PORT = process.env.PORT || 5000;
 

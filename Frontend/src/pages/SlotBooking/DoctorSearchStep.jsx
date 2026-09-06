@@ -1,8 +1,53 @@
 import React from "react";
-import { Search, Building2 } from "lucide-react";
+import { Search, Building2, Sparkles, AlertTriangle } from "lucide-react";
 
-const DoctorSearchStep = ({ search, onSearchChange, loadingDoctors, filtered, getImageUrl, onSelectDoctor }) => (
+const URGENCY_STYLES = {
+  high: "bg-red-50 text-red-600 border-red-100",
+  medium: "bg-amber-50 text-amber-600 border-amber-100",
+  low: "bg-emerald-50 text-emerald-600 border-emerald-100",
+};
+
+const DoctorSearchStep = ({
+  search, onSearchChange, loadingDoctors, filtered, getImageUrl, onSelectDoctor,
+  symptoms, onSymptomsChange, onTriage, triageLoading, triageResult,
+}) => (
   <>
+    <div className="mb-6 max-w-md bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+      <div className="flex items-center gap-2 mb-2">
+        <Sparkles size={14} className="text-indigo-500" />
+        <p className="text-xs font-bold text-slate-700">Not sure who to see? Describe your symptoms</p>
+      </div>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          placeholder="e.g. persistent cough and mild fever for 3 days"
+          value={symptoms}
+          onChange={(e) => onSymptomsChange(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && onTriage()}
+          className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all"
+        />
+        <button
+          onClick={onTriage}
+          disabled={!symptoms.trim() || triageLoading}
+          className="px-4 py-2 rounded-xl bg-indigo-600 text-white font-bold text-[11px] uppercase tracking-wider disabled:opacity-30 hover:bg-indigo-700 transition-all shrink-0"
+        >
+          {triageLoading ? "..." : "Check"}
+        </button>
+      </div>
+      {triageResult && (
+        <div className={`mt-3 border rounded-xl px-3 py-2 text-[11px] leading-relaxed ${URGENCY_STYLES[triageResult.urgency] || URGENCY_STYLES.low}`}>
+          {triageResult.urgency === "high" && (
+            <p className="flex items-center gap-1 font-bold mb-1"><AlertTriangle size={12} /> This may need urgent attention</p>
+          )}
+          {triageResult.specialization && (
+            <p className="font-bold">Suggested: {triageResult.specialization}</p>
+          )}
+          {triageResult.reasoning && <p className="mt-0.5">{triageResult.reasoning}</p>}
+        </div>
+      )}
+      <p className="text-[9px] text-slate-300 mt-2">AI suggestion only · Not a diagnosis</p>
+    </div>
+
     <div className="relative mb-6 max-w-md">
       <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
       <input

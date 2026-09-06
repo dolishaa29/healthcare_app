@@ -1,7 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-require("dotenv").config();
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const { getModel } = require("../config/gemini");
 
 const SKIN_PROMPT = `You are a professional skincare analysis expert. Analyze the skin visible in this image and respond in this exact format:
 
@@ -25,7 +22,7 @@ exports.analyzeSkin = async (req, res) => {
       return res.status(400).json({ success: false, message: "No frame provided" });
     }
     const base64Data = frame.replace(/^data:image\/\w+;base64,/, "");
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = getModel();
     const result = await model.generateContent([
       {
         inlineData: {
