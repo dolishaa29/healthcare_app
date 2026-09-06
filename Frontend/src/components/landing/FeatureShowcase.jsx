@@ -41,7 +41,7 @@ const BookingMock = () => (
       <div
         key={slot}
         className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold ${
-          i === 2 ? 'bg-indigo-600 text-white' : 'bg-white text-slate-400 border border-slate-100'
+          i === 2 ? 'bg-indigo-600 text-white' : 'bg-slate-50 text-slate-400 border border-slate-100'
         }`}
       >
         {slot}
@@ -64,8 +64,8 @@ const ReportsMock = () => (
     </div>
     <div className="space-y-2">
       <span className="inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold">Normal range</span>
-      <div className="w-32 h-2 rounded-full bg-white" />
-      <div className="w-24 h-2 rounded-full bg-white" />
+      <div className="w-32 h-2 rounded-full bg-slate-100" />
+      <div className="w-24 h-2 rounded-full bg-slate-100" />
     </div>
   </div>
 );
@@ -81,14 +81,14 @@ const VideoMock = () => (
     <div className="flex items-center justify-center gap-4">
       <div className="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">Dr</div>
       <div className="flex-1 h-px border-t-2 border-dashed border-indigo-200" />
-      <div className="w-16 h-16 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 font-bold">Pt</div>
+      <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 font-bold">Pt</div>
     </div>
   </div>
 );
 
 const MessagingMock = () => (
   <div className="w-full space-y-2.5">
-    <div className="max-w-[75%] bg-white border border-slate-100 rounded-2xl rounded-bl-sm px-4 py-2.5 text-xs font-bold text-slate-500">
+    <div className="max-w-[75%] bg-slate-50 border border-slate-100 rounded-2xl rounded-bl-sm px-4 py-2.5 text-xs font-bold text-slate-500">
       How are you feeling after the last dose?
     </div>
     <div className="max-w-[75%] ml-auto bg-indigo-600 rounded-2xl rounded-br-sm px-4 py-2.5 text-xs font-bold text-white">
@@ -102,7 +102,7 @@ const MOCKS = { booking: BookingMock, reports: ReportsMock, video: VideoMock, me
 const MockCard = ({ variant }) => {
   const Content = MOCKS[variant];
   return (
-    <div className="rounded-2xl bg-slate-50 border border-slate-100 overflow-hidden">
+    <div className="rounded-2xl bg-white border border-slate-100 shadow-sm overflow-hidden">
       <div className="flex items-center gap-1.5 px-4 py-3 border-b border-slate-100">
         <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
         <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />

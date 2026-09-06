@@ -38,6 +38,7 @@ const COMPARISON = [
 const ComparisonTable = () => (
   <section className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
     <Reveal className="text-center">
+      <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">The Difference</p>
       <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
         Traditional clinic software vs. AuraHealth
       </h2>

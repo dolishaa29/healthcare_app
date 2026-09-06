@@ -27,12 +27,15 @@ const ARTICLES = [
 ];
 
 const Resources = () => (
-  <section className="bg-white border-y border-slate-100">
+  <section>
     <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
       <Reveal className="flex items-end justify-between gap-6 mb-14 flex-wrap">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
-          Health guides worth your time
-        </h2>
+        <div>
+          <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">Resources</p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+            Health guides worth your time
+          </h2>
+        </div>
         <span className="text-sm font-bold text-slate-400">More articles coming soon</span>
       </Reveal>
 

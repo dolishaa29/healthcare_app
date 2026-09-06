@@ -31,7 +31,6 @@ const Viewuserall = lazy(() => import('./pages/Viewuserall'));
 const UserProfile = lazy(() => import('./pages/UserProfile'));
 const Changepassuser = lazy(() => import('./pages/Changepassuser'));
 const Rating = lazy(() => import('./pages/Rating'));
-const Bot = lazy(() => import('./components/bot'));
 const UserChat = lazy(() => import('./pages/UserChat'));
 const DoctorChat = lazy(() => import('./pages/DoctorChat'));
 const ReportAnalysis = lazy(() => import('./pages/ReportAnalysis'));
@@ -69,7 +68,6 @@ function App() {
         <Route path='/userbyid/:id' element={<Viewuserall/>}/>
         <Route path='/changepassworduser' element={<Changepassuser/>}/>
         <Route path='/rating/:doctorId' element={<Rating/>}/>
-        <Route path='/Bot' element={<Bot/>}/>
 
         <Route element={<Doctorpri><DoctorLayout /></Doctorpri>}>
           <Route path='/Doctordashboard' element={<Docterdashboard/>}/>

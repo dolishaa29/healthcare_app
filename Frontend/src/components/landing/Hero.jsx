@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CalendarClock, FileText, Video, Sparkles, ArrowRight, Stethoscope } from 'lucide-react';
+import {
+  CalendarClock, FileText, Video, Sparkles, ArrowRight, Stethoscope,
+  MapPin, TrendingUp, ClipboardList,
+} from 'lucide-react';
 
 const HERO_POINTS = [
   { icon: <CalendarClock size={18} className="text-indigo-500" />, label: 'Auto slot booking' },
@@ -14,8 +17,44 @@ const AVATARS = [
   { initials: 'MP', bg: 'bg-indigo-200', text: 'text-indigo-800' },
 ];
 
+const HEADLINES = [
+  ['Book, Consult, Follow Up —', 'All Without Leaving Home'],
+  ['See a Doctor Today,', 'Not Next Week'],
+  ['Every Report, Every Message —', 'All in One Place'],
+];
+
+const WIDGETS = [
+  { icon: <Sparkles size={14} className="text-indigo-600" />, label: 'AI Symptom Triage' },
+  { icon: <FileText size={14} className="text-indigo-600" />, label: 'Instant Report Analysis' },
+  { icon: <MapPin size={14} className="text-indigo-600" />, label: 'Nearby Hospitals' },
+  { icon: <TrendingUp size={14} className="text-indigo-600" />, label: 'Health Trend Insights' },
+  { icon: <ClipboardList size={14} className="text-indigo-600" />, label: 'AI Visit Briefing' },
+  { icon: <Video size={14} className="text-indigo-600" />, label: 'Live Video Consult' },
+];
+
+const WIDGET_POSITIONS = [
+  'absolute -right-10 top-14 hidden sm:flex',
+  'absolute -left-12 bottom-28 hidden sm:flex',
+  'absolute -right-8 bottom-4 hidden sm:flex',
+];
+
 const Hero = () => {
   const navigate = useNavigate();
+  const [headlineIndex, setHeadlineIndex] = useState(0);
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setHeadlineIndex((i) => (i + 1) % HEADLINES.length), 4500);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => (t + 1) % WIDGETS.length), 3200);
+    return () => clearInterval(id);
+  }, []);
+
+  const [line1, line2] = HEADLINES[headlineIndex];
+  const visibleWidgets = WIDGET_POSITIONS.map((_, slot) => WIDGETS[(tick + slot * 2) % WIDGETS.length]);
 
   return (
     <section className="relative overflow-hidden bg-slate-50">
@@ -40,10 +79,11 @@ const Hero = () => {
         </div>
 
         <h1
-          className="motion-safe:animate-[fadeInUp_0.6s_ease-out_both] text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]"
-          style={{ animationDelay: '70ms' }}
+          key={headlineIndex}
+          className="motion-safe:animate-[fadeInUp_0.5s_ease-out_both] text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]"
+          style={{ minHeight: '2.2em' }}
         >
-          Book, Consult, Follow Up —<br />All Without Leaving Home
+          {line1}<br />{line2}
         </h1>
 
         <p
@@ -86,7 +126,7 @@ const Hero = () => {
       </div>
 
       <div
-        className="motion-safe:animate-[fadeInUp_0.7s_ease-out_both] relative max-w-lg mx-auto px-6 pt-16 pb-20 md:pb-28"
+        className="motion-safe:animate-[fadeInUp_0.7s_ease-out_both] relative max-w-lg mx-auto px-6 pt-16 pb-24 md:pb-32"
         style={{ animationDelay: '350ms' }}
       >
         <div className="relative mx-auto w-64">
@@ -135,14 +175,14 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="absolute -right-10 top-16 hidden sm:flex items-center gap-2 bg-white border border-slate-100 rounded-2xl shadow-lg shadow-slate-200/60 px-3 py-2.5">
-            <Sparkles size={14} className="text-indigo-600" />
-            <span className="text-[11px] font-bold text-slate-700">AI Symptom Triage</span>
-          </div>
-          <div className="absolute -left-12 bottom-24 hidden sm:flex items-center gap-2 bg-white border border-slate-100 rounded-2xl shadow-lg shadow-slate-200/60 px-3 py-2.5">
-            <FileText size={14} className="text-indigo-600" />
-            <span className="text-[11px] font-bold text-slate-700">Instant Report Analysis</span>
-          </div>
+          {visibleWidgets.map((w, slot) => (
+            <div key={slot} className={`${WIDGET_POSITIONS[slot]} items-center gap-2 bg-white border border-slate-100 rounded-2xl shadow-lg shadow-slate-200/60 px-3 py-2.5`}>
+              <span key={w.label} className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex items-center gap-2">
+                {w.icon}
+                <span className="text-[11px] font-bold text-slate-700 whitespace-nowrap">{w.label}</span>
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

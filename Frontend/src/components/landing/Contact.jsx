@@ -35,9 +35,10 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="bg-white border-y border-slate-100">
+    <section id="contact">
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-20 md:py-28">
         <Reveal className="text-center">
+          <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">Get In Touch</p>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
             We'd love to hear from you
           </h2>
@@ -59,7 +60,7 @@ const Contact = () => {
         </div>
 
         <Reveal>
-          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 md:p-10 max-w-2xl mx-auto">
+          <div className="bg-white border border-slate-100 rounded-3xl p-8 md:p-10 max-w-2xl mx-auto shadow-sm">
             {submitted ? (
               <div className="text-center py-10">
                 <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-5">

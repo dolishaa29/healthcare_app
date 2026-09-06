@@ -33,6 +33,7 @@ const SECTIONS = [
 const Privacy = () => (
   <section id="privacy" className="max-w-3xl mx-auto px-6 md:px-10 py-20 md:py-28">
     <Reveal className="text-center mb-12">
+      <p className="text-[11px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-3">Legal</p>
       <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
         Your data, handled with care
       </h2>
