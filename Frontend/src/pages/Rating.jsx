@@ -63,7 +63,7 @@ const Rating = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#FDFBFF] px-6 py-10 md:px-10">
+        <div className="min-h-screen bg-[#fafaf9] px-6 py-10 md:px-10">
 
             {/* Header */}
             <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
@@ -71,7 +71,7 @@ const Rating = () => {
                     <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Feedback</p>
                     <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
                         Rate{" "}
-                        <span className="bg-linear-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
+                        <span className="bg-linear-to-r from-violet-600 to-indigo-500 bg-clip-text text-transparent">
                             Doctor
                         </span>
                     </h1>
@@ -186,7 +186,7 @@ const Rating = () => {
                         <button
                             type="submit"
                             disabled={submitting || rating === 0}
-                            className="flex items-center gap-2 px-8 py-3.5 bg-linear-to-r from-purple-600 to-indigo-500 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-100 hover:opacity-90 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 px-8 py-3.5 bg-linear-to-r from-violet-600 to-indigo-500 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-100 hover:opacity-90 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                             <Send size={15} />
                             {submitting ? "Submitting..." : "Submit Review"}

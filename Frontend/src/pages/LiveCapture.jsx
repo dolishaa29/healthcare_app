@@ -118,7 +118,7 @@ const LiveCapture = () => {
 
 
   return (
-    <div className="h-full overflow-y-auto md:overflow-hidden bg-[#f8fafc] p-4 md:p-6 flex flex-col gap-5">
+    <div className="h-full overflow-y-auto md:overflow-hidden bg-[#fafaf9] p-4 md:p-6 flex flex-col gap-5">
 
       <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex items-center gap-3 shrink-0">
         <div className="p-2.5 bg-indigo-600 rounded-xl">

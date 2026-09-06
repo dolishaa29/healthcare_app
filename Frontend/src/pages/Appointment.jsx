@@ -77,7 +77,7 @@ const Appointment = () => {
 
   if (success) {
     return (
-      <div className="h-full overflow-y-auto bg-[#FDFBFF] flex items-center justify-center p-10">
+      <div className="h-full overflow-y-auto bg-[#fafaf9] flex items-center justify-center p-10">
         <div className="text-center max-w-md">
           <div className="relative mx-auto mb-8 w-32 h-32">
             <div className="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-30" />
@@ -105,7 +105,7 @@ const Appointment = () => {
 
           <button
             onClick={() => { setSuccess(false); setSelectedDoctor(null); setStep(1); setSearch(""); }}
-            className="px-8 py-4 bg-linear-to-r from-purple-600 to-indigo-500 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 hover:opacity-90 transition-all active:scale-[0.98]"
+            className="px-8 py-4 bg-linear-to-r from-violet-600 to-indigo-500 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 hover:opacity-90 transition-all active:scale-[0.98]"
           >
             Book Another Appointment
           </button>
@@ -115,7 +115,7 @@ const Appointment = () => {
   }
 
   return (
-    <div className="h-full overflow-y-auto bg-[#FDFBFF]">
+    <div className="h-full overflow-y-auto bg-[#fafaf9]">
       {/* Header */}
       <div className="px-6 pt-8 pb-6 md:px-10 border-b border-slate-100 bg-white">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -123,7 +123,7 @@ const Appointment = () => {
             <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Healthcare</p>
             <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter">
               Book an{" "}
-              <span className="bg-linear-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-violet-600 to-indigo-500 bg-clip-text text-transparent">
                 Appointment
               </span>
             </h1>
@@ -216,7 +216,7 @@ const Appointment = () => {
                     {getImageUrl(selectedDoctor?.image) ? (
                       <img src={getImageUrl(selectedDoctor.image)} alt={selectedDoctor.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-linear-to-br from-indigo-100 to-purple-200 flex items-center justify-center">
+                      <div className="w-full h-full bg-linear-to-br from-indigo-100 to-violet-200 flex items-center justify-center">
                         <span className="text-6xl font-black text-indigo-300">{selectedDoctor?.name?.[0]}</span>
                       </div>
                     )}
@@ -291,7 +291,7 @@ const Appointment = () => {
                 <button
                   onClick={sendAppointmentRequest}
                   disabled={submitting || !description.trim()}
-                  className="w-full py-4 bg-linear-to-r from-purple-600 to-indigo-500 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 text-sm"
+                  className="w-full py-4 bg-linear-to-r from-violet-600 to-indigo-500 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 text-sm"
                 >
                   {submitting ? (
                     <><Loader2 size={17} className="animate-spin" /> Sending Request...</>
@@ -315,7 +315,7 @@ const Appointment = () => {
 const StepPill = ({ number, label, active, done }) => (
   <div className="flex items-center gap-2">
     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all duration-300 shadow-sm
-      ${active ? "bg-linear-to-br from-purple-600 to-indigo-500 text-white shadow-indigo-200" : "bg-slate-100 text-slate-400"}`}>
+      ${active ? "bg-linear-to-br from-violet-600 to-indigo-500 text-white shadow-indigo-200" : "bg-slate-100 text-slate-400"}`}>
       {done ? "✓" : number}
     </div>
     <span className={`text-xs font-bold hidden sm:block transition-colors ${active ? "text-slate-700" : "text-slate-300"}`}>
@@ -347,7 +347,7 @@ const DoctorSelectCard = ({ doctor, imageUrl, onSelect }) => (
       {imageUrl ? (
         <img src={imageUrl} alt={doctor.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
       ) : (
-        <div className="w-full h-full bg-linear-to-br from-indigo-50 to-purple-100 flex items-center justify-center">
+        <div className="w-full h-full bg-linear-to-br from-indigo-50 to-violet-100 flex items-center justify-center">
           <span className="text-7xl font-black text-indigo-200">{doctor.name?.[0]}</span>
         </div>
       )}
@@ -380,7 +380,7 @@ const DoctorSelectCard = ({ doctor, imageUrl, onSelect }) => (
       )}
 
       <div className="mt-auto pt-4">
-        <button className="w-full py-3 rounded-2xl bg-linear-to-r from-purple-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-widest group-hover:shadow-lg group-hover:shadow-indigo-100 transition-all duration-300">
+        <button className="w-full py-3 rounded-2xl bg-linear-to-r from-violet-600 to-indigo-500 text-white font-bold text-[11px] uppercase tracking-widest group-hover:shadow-lg group-hover:shadow-indigo-100 transition-all duration-300">
           Select Doctor
         </button>
       </div>

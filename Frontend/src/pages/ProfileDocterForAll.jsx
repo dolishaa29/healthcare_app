@@ -75,7 +75,7 @@ const ProfileDocterForAll = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FDFBFF] flex items-center justify-center">
+      <div className="min-h-screen bg-[#fafaf9] flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
       </div>
     );
@@ -83,7 +83,7 @@ const ProfileDocterForAll = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#FDFBFF] flex items-center justify-center">
+      <div className="min-h-screen bg-[#fafaf9] flex items-center justify-center">
         <div className="text-center space-y-4">
           <p className="text-red-500 font-bold">{error}</p>
           <button onClick={() => navigate(-1)} className="px-5 py-2 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-600 hover:bg-slate-50">
@@ -95,7 +95,7 @@ const ProfileDocterForAll = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFBFF] px-6 py-10 md:px-10">
+    <div className="min-h-screen bg-[#fafaf9] px-6 py-10 md:px-10">
 
       {/* Header */}
       <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
@@ -103,7 +103,7 @@ const ProfileDocterForAll = () => {
           <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Physician</p>
           <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
             Doctor{' '}
-            <span className="bg-linear-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-600 to-indigo-500 bg-clip-text text-transparent">
               Profile
             </span>
           </h1>
@@ -134,7 +134,7 @@ const ProfileDocterForAll = () => {
             {imagePreview ? (
               <img src={imagePreview} className="w-full h-full object-cover" alt="Doctor" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-indigo-100 to-purple-100">
+              <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-indigo-100 to-violet-100">
                 <span className="text-3xl font-black text-indigo-300">{doctor?.name?.[0] || '?'}</span>
               </div>
             )}
@@ -155,7 +155,7 @@ const ProfileDocterForAll = () => {
                 </span>
               )}
               {doctor?.experienceYears && (
-                <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-xl text-[10px] font-black uppercase tracking-wider">
+                <span className="px-3 py-1 bg-violet-50 text-violet-600 rounded-xl text-[10px] font-black uppercase tracking-wider">
                   {doctor.experienceYears}Y Exp
                 </span>
               )}

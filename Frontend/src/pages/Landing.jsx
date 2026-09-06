@@ -13,6 +13,7 @@ import CTA from '../components/landing/CTA';
 import Contact from '../components/landing/Contact';
 import Privacy from '../components/landing/Privacy';
 import Footer from '../components/landing/Footer';
+import Bot from '../components/bot';
 
 const Landing = () => (
   <div className="w-full bg-white font-sans text-slate-900">
@@ -28,7 +29,9 @@ const Landing = () => (
     <FAQ />
     <Contact />
     <Privacy />
+    <CTA />
     <Footer />
+    <Bot />
   </div>
 );
 

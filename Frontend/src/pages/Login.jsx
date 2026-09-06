@@ -100,10 +100,10 @@ const Login = () => {
 }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#FDFBFF] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#FDFBFF)] font-sans overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#fafaf9] bg-[radial-gradient(ellipse_at_top,_#f4f6ec,_#fafaf9)] font-sans overflow-hidden">
 
-      <div className="motion-safe:animate-[floatSlow_9s_ease-in-out_infinite] absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
-      <div className="motion-safe:animate-[floatSlower_11s_ease-in-out_infinite] absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
+      <div className="motion-safe:animate-[floatSlow_9s_ease-in-out_infinite] absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-200/40 blur-[100px] rounded-full" />
+      <div className="motion-safe:animate-[floatSlower_11s_ease-in-out_infinite] absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-indigo-200/40 blur-[100px] rounded-full" />
 
 
 
@@ -111,7 +111,7 @@ const Login = () => {
 
         <div className="text-center mb-10">
           <h1 className="text-3xl font-black tracking-tighter text-slate-900">
-            Aura<span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Health</span>
+            Aura<span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Health</span>
           </h1>
           <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-2">Professional Care Portal</p>
         </div>
@@ -124,7 +124,7 @@ const Login = () => {
               onClick={() => setRole(r)}
               className={`flex-1 py-3 text-xs font-bold uppercase rounded-xl transition-all duration-300 ${
                 role === r 
-                ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg scale-[1.03]' 
+                ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg scale-[1.03]' 
                 : 'text-slate-500 hover:text-slate-800'
               }`}
             >
@@ -142,7 +142,7 @@ const Login = () => {
               value={email}
               onChange={(e)=>setEmail(e.target.value)}
               required
-              className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
             />
           </div>
 
@@ -154,7 +154,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
             />
           </div>
           {role === "user" && (
@@ -162,7 +162,7 @@ const Login = () => {
               <button 
                 type="button"
                 onClick={() => navigate('/forgotpassword/user')}
-                className="text-sm text-purple-600 hover:underline font-semibold"
+                className="text-sm text-violet-600 hover:underline font-semibold"
               >
                 Forgot Password?
               </button>
@@ -174,7 +174,7 @@ const Login = () => {
               <button 
                 type="button"
                 onClick={() => navigate('/forgotpassword/doctor')}
-                className="text-sm text-purple-600 hover:underline font-semibold"
+                className="text-sm text-violet-600 hover:underline font-semibold"
               >
                 Forgot Password?
               </button>
@@ -184,7 +184,7 @@ const Login = () => {
            
           <button 
             type="submit"
-            className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98]"
+            className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-violet-200 transform transition-all active:scale-[0.98]"
           >
             Sign In as {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
@@ -193,14 +193,14 @@ const Login = () => {
          {role === "user" && (
           <p className="text-center text-sm text-slate-500 mt-6">
             Don't have an account? 
-            <button onClick={() => navigate('/Userregister')} className="text-purple-600 hover:underline ml-1 font-semibold">Register</button>
+            <button onClick={() => navigate('/Userregister')} className="text-violet-600 hover:underline ml-1 font-semibold">Register</button>
           </p>
         )}
 
         {role === "doctor" && (
           <p className="text-center text-sm text-slate-500 mt-6">
             Don't have an account?  
-            <button onClick={() => navigate('/Doctorregister')} className="text-purple-600 hover:underline ml-1 font-semibold">Register</button>
+            <button onClick={() => navigate('/Doctorregister')} className="text-violet-600 hover:underline ml-1 font-semibold">Register</button>
           </p>
         )}
 

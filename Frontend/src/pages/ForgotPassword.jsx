@@ -55,10 +55,10 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#FDFBFF] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#FDFBFF)] font-sans overflow-hidden">
+        <div className="min-h-screen w-full flex items-center justify-center bg-[#fafaf9] bg-[radial-gradient(ellipse_at_top,_#f4f6ec,_#fafaf9)] font-sans overflow-hidden">
 
-            <div className="motion-safe:animate-[floatSlow_9s_ease-in-out_infinite] absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
-            <div className="motion-safe:animate-[floatSlower_11s_ease-in-out_infinite] absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
+            <div className="motion-safe:animate-[floatSlow_9s_ease-in-out_infinite] absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-200/40 blur-[100px] rounded-full" />
+            <div className="motion-safe:animate-[floatSlower_11s_ease-in-out_infinite] absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-indigo-200/40 blur-[100px] rounded-full" />
             <div className="absolute inset-0 z-0 pointer-events-none">
             </div>
 
@@ -66,7 +66,7 @@ const ForgotPassword = () => {
 
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-black tracking-tighter text-slate-900">
-                        Aura<span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Health</span>
+                        Aura<span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Health</span>
                     </h1>
                     <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-2">
                         {step === 1 ? "Reset Access" : "Verify Identity"}
@@ -91,13 +91,13 @@ const ForgotPassword = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+                                className="w-full px-5 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
                             />
                         </div>
                         <button 
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-50"
+                            className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-violet-200 transform transition-all active:scale-[0.98] disabled:opacity-50"
                         >
                             {loading ? "Requesting..." : "Send OTP"}
                         </button>
@@ -129,7 +129,7 @@ const ForgotPassword = () => {
                         <button 
                             type="button" 
                             onClick={() => { setStep(1); setStatus({msg:"", isError:false}); }}
-                            className="text-sm text-purple-600 hover:underline font-semibold transition-all mt-4"
+                            className="text-sm text-violet-600 hover:underline font-semibold transition-all mt-4"
                         >
                             Wait, I entered wrong email
                         </button>
@@ -139,7 +139,7 @@ const ForgotPassword = () => {
                 <div className="mt-10 pt-6 border-t border-slate-100 text-center">
                     <button 
                         onClick={() => navigate('/login')}
-                        className="text-sm text-slate-500 hover:text-purple-600 font-semibold flex items-center justify-center gap-2 mx-auto transition-colors"
+                        className="text-sm text-slate-500 hover:text-violet-600 font-semibold flex items-center justify-center gap-2 mx-auto transition-colors"
                     >
                         <span>←</span> Back to Login
                     </button>

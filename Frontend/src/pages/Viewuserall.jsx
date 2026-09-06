@@ -42,22 +42,22 @@ const Viewuserall = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#fafaf9]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#eff6ff,_#f8fafc)] font-sans py-12 px-4 relative overflow-x-hidden">
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/40 blur-[100px] rounded-full -z-10" />
+    <div className="min-h-screen w-full bg-[#fafaf9] bg-[radial-gradient(ellipse_at_top,_#f4f6ec,_#fafaf9)] font-sans py-12 px-4 relative overflow-x-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-100/40 blur-[100px] rounded-full -z-10" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100/40 blur-[100px] rounded-full -z-10" />
 
-      <div className="max-w-4xl mx-auto bg-white/70 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(59,130,246,0.08)] p-6 md:p-12">
+      <div className="max-w-4xl mx-auto bg-white/70 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(86,107,46,0.08)] p-6 md:p-12">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div className="flex items-center gap-6">
-            <div className="w-24 h-24 md:w-28 md:h-28 rounded-3xl border-4 border-white overflow-hidden shadow-2xl bg-gradient-to-tr from-blue-500 to-indigo-500 flex-shrink-0">
+            <div className="w-24 h-24 md:w-28 md:h-28 rounded-3xl border-4 border-white overflow-hidden shadow-2xl bg-gradient-to-tr from-violet-500 to-indigo-600 flex-shrink-0">
               {imagePreview ? (
                 <img src={imagePreview} className="w-full h-full object-cover" alt="User" />
               ) : (
@@ -77,7 +77,7 @@ const Viewuserall = () => {
           </div>
           <button 
             onClick={() => navigate(-1)}
-            className="px-6 py-2 text-sm font-bold text-slate-500 hover:text-blue-600 bg-white border border-slate-200 rounded-full hover:border-blue-200 hover:bg-blue-50 transition-all shadow-sm"
+            className="px-6 py-2 text-sm font-bold text-slate-500 hover:text-indigo-600 bg-white border border-slate-200 rounded-full hover:border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm"
           >
             ← Back
           </button>
@@ -93,7 +93,7 @@ const Viewuserall = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <section className="space-y-5">
                 <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></span>
+                  <span className="w-2 h-2 bg-indigo-500 rounded-full shadow-[0_0_8px_rgba(86,107,46,0.5)]"></span>
                   Personal Details
                 </h3>
                 <div className="space-y-4">

@@ -126,7 +126,7 @@ const Admindashboard = () => {
                   tick={{ fontSize: 11, fill: "#94a3b8" }}
                   width={28}
                 />
-                <Tooltip content={<ChartTooltip />} cursor={{ fill: "#f8fafc" }} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "#fafaf9" }} />
                 <Bar dataKey="value" radius={[8, 8, 0, 0]}>
                   {(data?.appointmentChart ?? []).map((entry) => (
                     <Cell key={entry.label} fill={BAR_COLORS[entry.label] ?? "#818cf8"} />

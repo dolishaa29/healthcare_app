@@ -70,10 +70,10 @@ const Userregister = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#FDFBFF] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#FDFBFF)] font-sans overflow-hidden py-10">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#fafaf9] bg-[radial-gradient(ellipse_at_top,_#f4f6ec,_#fafaf9)] font-sans overflow-hidden py-10">
 
-      <div className="motion-safe:animate-[floatSlow_9s_ease-in-out_infinite] absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
-      <div className="motion-safe:animate-[floatSlower_11s_ease-in-out_infinite] absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
+      <div className="motion-safe:animate-[floatSlow_9s_ease-in-out_infinite] absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-200/40 blur-[100px] rounded-full" />
+      <div className="motion-safe:animate-[floatSlower_11s_ease-in-out_infinite] absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-indigo-200/40 blur-[100px] rounded-full" />
 
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
@@ -87,7 +87,7 @@ const Userregister = () => {
 
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black tracking-tighter text-slate-900">
-            Aura<span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Health</span>
+            Aura<span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Health</span>
           </h1>
           <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-2">
             {step === 1 ? "Create Patient Account" : "Verify Your Email"}
@@ -105,7 +105,7 @@ const Userregister = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
                 />
               </div>
               <div>
@@ -116,7 +116,7 @@ const Userregister = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
                 />
               </div>
             </div>
@@ -129,7 +129,7 @@ const Userregister = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
               />
             </div>
 
@@ -140,7 +140,7 @@ const Userregister = () => {
                 value={contact}
                 onChange={setContact}
                 required
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
               />
             </div>
 
@@ -152,13 +152,13 @@ const Userregister = () => {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
               />
             </div>
 
             <button
               type="submit" disabled={loading}
-              className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-70"
+              className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-violet-200 transform transition-all active:scale-[0.98] disabled:opacity-70"
             >
               {loading ? "Sending OTP..." : "Send Verification OTP"}
             </button>
@@ -168,7 +168,7 @@ const Userregister = () => {
         {step === 2 && (
           <form onSubmit={handleOtpVerify} className="space-y-4">
             <p className="text-center text-sm text-slate-500">
-              A 6-digit OTP has been sent to <span className="font-semibold text-purple-600">{email}</span>
+              A 6-digit OTP has been sent to <span className="font-semibold text-violet-600">{email}</span>
             </p>
 
             <div>
@@ -180,13 +180,13 @@ const Userregister = () => {
                 onChange={(e) => setOtp(e.target.value)}
                 maxLength={6}
                 required
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 text-center text-xl tracking-[0.5em] placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 text-center text-xl tracking-[0.5em] placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
               />
             </div>
 
             <button
               type="submit" disabled={loading}
-              className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-70"
+              className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-violet-200 transform transition-all active:scale-[0.98] disabled:opacity-70"
             >
               {loading ? "Verifying..." : "Verify & Register"}
             </button>
@@ -194,7 +194,7 @@ const Userregister = () => {
             <button
               type="button"
               onClick={() => { setStep(1); setMessage(""); setOtp(""); }}
-              className="w-full py-2 text-sm text-slate-500 hover:text-purple-600 transition-colors"
+              className="w-full py-2 text-sm text-slate-500 hover:text-violet-600 transition-colors"
             >
               Back to form
             </button>
@@ -209,7 +209,7 @@ const Userregister = () => {
 
         <p className="text-center text-sm text-slate-500 mt-6">
           Already have an account?
-          <button onClick={() => navigate('/login')} className="text-purple-600 hover:underline ml-1 font-semibold">Sign In</button>
+          <button onClick={() => navigate('/login')} className="text-violet-600 hover:underline ml-1 font-semibold">Sign In</button>
         </p>
       </div>
     </div>

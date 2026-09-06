@@ -11,7 +11,7 @@ const CTA = () => {
       <Reveal className="relative overflow-hidden rounded-3xl bg-indigo-600 px-8 py-16 md:py-20 text-center">
         <div className="relative">
           <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-            Ready to give your clinic a pulse?
+            Ready to skip the waiting room?
           </h2>
           <p className="text-indigo-100 mt-4 max-w-xl mx-auto">
             Join AuraHealth today and book your first appointment in minutes.

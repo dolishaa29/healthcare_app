@@ -4,12 +4,10 @@ import { Menu, X, ArrowRight } from 'lucide-react';
 
 const NAV_LINKS = [
   { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Product', href: '#features' },
+  { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'About', href: '#about' },
   { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' },
-  { label: 'Privacy', href: '#privacy' },
 ];
 
 const Navbar = () => {

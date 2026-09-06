@@ -49,16 +49,16 @@ const Changepassuser = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f8fafc] bg-[radial-gradient(ellipse_at_top,_#f5f3ff,_#f8fafc)] font-sans overflow-hidden py-10">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#fafaf9] bg-[radial-gradient(ellipse_at_top,_#f4f6ec,_#fafaf9)] font-sans overflow-hidden py-10">
       
-      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-purple-200/40 blur-[100px] rounded-full" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
+      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-200/40 blur-[100px] rounded-full" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-indigo-200/40 blur-[100px] rounded-full" />
 
       <div className="relative z-10 w-full max-w-[450px] p-10 bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-[0_30px_60px_-15px_rgba(147,51,234,0.1)] mx-4">
         
         <div className="text-center mb-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
-            Aura<span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Health</span>
+            Aura<span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Health</span>
           </h1>
           <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-2">Security Settings</p>
           <h2 className="text-xl font-semibold text-slate-700 mt-4">Update Password</h2>
@@ -73,7 +73,7 @@ const Changepassuser = () => {
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
             />
           </div>
 
@@ -85,7 +85,7 @@ const Changepassuser = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Enter new password"
               required
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-purple-500/10 focus:border-purple-400 transition-all shadow-sm"
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400 transition-all shadow-sm"
             />
           </div>
 
@@ -100,7 +100,7 @@ const Changepassuser = () => {
               className={`w-full px-4 py-3 bg-white border rounded-xl text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-4 transition-all shadow-sm ${
                 newPassword && confirmNewPassword && newPassword !== confirmNewPassword 
                 ? 'border-red-300 focus:ring-red-500/10 focus:border-red-400' 
-                : 'border-slate-200 focus:ring-purple-500/10 focus:border-purple-400'
+                : 'border-slate-200 focus:ring-violet-500/10 focus:border-violet-400'
               }`}
             />
           </div>
@@ -108,7 +108,7 @@ const Changepassuser = () => {
           <button
             type="submit"
             disabled={loading || !newPassword || newPassword !== confirmNewPassword}
-            className="w-full py-4 mt-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-purple-200 transform transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-violet-200 transform transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Update Password"}
           </button>
@@ -129,7 +129,7 @@ const Changepassuser = () => {
         <div className="mt-8 text-center">
           <button 
             onClick={() => navigate(-1)} 
-            className="text-slate-400 hover:text-purple-600 text-sm font-medium transition-colors"
+            className="text-slate-400 hover:text-violet-600 text-sm font-medium transition-colors"
           >
             ← Back to Profile
           </button>
