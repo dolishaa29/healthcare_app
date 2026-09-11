@@ -1,5 +1,4 @@
 const { getModel, GEMINI_API_KEY } = require("../config/gemini");
-const Report = require("../model/report");
 
 exports.chat = async (req, res) => {
   try {
@@ -19,25 +18,9 @@ exports.chat = async (req, res) => {
       });
     }
 
-    let fullPrompt = prompt;
-
-    if (req.user) {
-      const reports = await Report.find({ user: req.user._id })
-        .select("title summary createdAt")
-        .sort({ createdAt: -1 })
-        .limit(5);
-
-      if (reports.length) {
-        const context = reports
-          .map((r) => `- [${r.createdAt.toDateString()}] ${r.title}: ${r.summary}`)
-          .join("\n");
-        fullPrompt = `The patient asking this question has the following recent medical report summaries on file. Use them only if relevant to the question below; otherwise ignore them and answer normally.\n\n${context}\n\nPatient question: ${prompt}`;
-      }
-    }
-
     const model = getModel();
 
-    const result = await model.generateContent(fullPrompt);
+    const result = await model.generateContent(prompt);
 
     res.status(200).json({
       success: true,
@@ -50,5 +33,59 @@ exports.chat = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+exports.chatStream = async (req, res) => {
+  if (!GEMINI_API_KEY) {
+    return res.status(400).json({
+      success: false,
+      message: "GEMINI_API_KEY is not configured",
+    });
+  }
+
+  const { prompt } = req.body;
+
+  if (!prompt) {
+    return res.status(400).json({
+      success: false,
+      message: "Prompt is required",
+    });
+  }
+
+  res.status(200);
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("X-Accel-Buffering", "no");
+  res.flushHeaders();
+
+  let clientClosed = false;
+  res.on("close", () => {
+    clientClosed = true;
+  });
+
+  try {
+    const model = getModel();
+    const result = await model.generateContentStream(prompt);
+
+    for await (const chunk of result.stream) {
+      if (clientClosed) break;
+      const chunkText = chunk.text();
+      if (!chunkText) continue;
+      res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
+    }
+
+    if (!clientClosed) {
+      await result.response;
+      res.write(`event: done\ndata: {}\n\n`);
+    }
+  } catch (error) {
+    console.error("Gemini Stream Error:", error);
+    if (!clientClosed) {
+      res.write(`event: error\ndata: ${JSON.stringify({ message: error.message })}\n\n`);
+    }
+  } finally {
+    if (!clientClosed) res.end();
   }
 };

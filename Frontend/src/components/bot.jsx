@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
 import { X, Send, Stethoscope, Sparkles } from "lucide-react";
+
+const FALLBACK_MESSAGE = "Sorry, I couldn't process that. Please try again.";
 
 const Bot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +10,7 @@ const Bot = () => {
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const abortControllerRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -19,23 +20,102 @@ const Bot = () => {
     if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
   }, [isOpen]);
 
+  useEffect(() => () => abortControllerRef.current?.abort(), []);
+
+  const closeChat = () => {
+    abortControllerRef.current?.abort();
+    setIsOpen(false);
+  };
+
+  const updateLastMessage = (updater) => {
+    setMessages((prev) => {
+      const next = [...prev];
+      next[next.length - 1] = updater(next[next.length - 1]);
+      return next;
+    });
+  };
+
   const sendMessage = async () => {
     if (!prompt.trim() || loading) return;
     const text = prompt.trim();
-    setMessages((prev) => [...prev, { text, sender: "user" }]);
+    setMessages((prev) => [
+      ...prev,
+      { text, sender: "user" },
+      { text: "", sender: "bot", streaming: true },
+    ]);
     setPrompt("");
     setLoading(true);
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/chat`,
-        { prompt: text },
-        { headers: { Authorization: `Bearer ${Cookies.get("token")}` }, withCredentials: true }
-      );
-      setMessages((prev) => [...prev, { text: res.data.text, sender: "bot" }]);
-    } catch {
-      setMessages((prev) => [...prev, { text: "Sorry, I couldn't process that. Please try again.", sender: "bot" }]);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/stream`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: text }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok || !res.body) throw new Error(`Request failed with status ${res.status}`);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let buffer = "";
+      let doneReceived = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        let sepIndex;
+        while ((sepIndex = buffer.indexOf("\n\n")) !== -1) {
+          const rawFrame = buffer.slice(0, sepIndex);
+          buffer = buffer.slice(sepIndex + 2);
+          if (!rawFrame.trim()) continue;
+
+          let eventType = "message";
+          let dataLine = null;
+          for (const line of rawFrame.split("\n")) {
+            if (line.startsWith("event:")) eventType = line.slice(6).trim();
+            else if (line.startsWith("data:")) dataLine = line.slice(5).trim();
+          }
+
+          if (eventType === "done") {
+            doneReceived = true;
+            updateLastMessage((m) => ({ ...m, streaming: false }));
+          } else if (eventType === "error") {
+            doneReceived = true;
+            updateLastMessage((m) => ({
+              text: m.text || FALLBACK_MESSAGE,
+              sender: "bot",
+              streaming: false,
+            }));
+          } else if (dataLine) {
+            const { text: chunkText } = JSON.parse(dataLine);
+            updateLastMessage((m) => ({ ...m, text: m.text + chunkText }));
+          }
+        }
+      }
+
+      if (!doneReceived) {
+        updateLastMessage((m) => ({
+          text: m.text || FALLBACK_MESSAGE,
+          sender: "bot",
+          streaming: false,
+        }));
+      }
+    } catch (err) {
+      if (err.name === "AbortError") return;
+      updateLastMessage((m) => ({
+        text: m.text || FALLBACK_MESSAGE,
+        sender: "bot",
+        streaming: false,
+      }));
     } finally {
       setLoading(false);
+      abortControllerRef.current = null;
     }
   };
 
@@ -60,7 +140,7 @@ const Bot = () => {
             </div>
           </div>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={closeChat}
             className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition-all"
           >
             <X size={15} />
@@ -106,23 +186,18 @@ const Bot = () => {
                     : "bg-slate-100 text-slate-700 rounded-bl-md"
                   }`}
               >
-                {msg.text}
+                {msg.sender === "bot" && msg.streaming && !msg.text ? (
+                  <div className="flex items-center gap-1 py-0.5">
+                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                  </div>
+                ) : (
+                  msg.text
+                )}
               </div>
             </div>
           ))}
-
-          {loading && (
-            <div className="flex items-end gap-2">
-              <div className="w-6 h-6 bg-linear-to-br from-indigo-500 to-violet-500 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                <Stethoscope size={11} className="text-white" />
-              </div>
-              <div className="bg-slate-100 px-4 py-3 rounded-2xl rounded-bl-md flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-              </div>
-            </div>
-          )}
 
           <div ref={bottomRef} />
         </div>
