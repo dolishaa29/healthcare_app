@@ -30,17 +30,6 @@ const Userdashboard = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadAll();
-  }, []);
-
-  const loadAll = async () => {
-    setLoading(true);
-    setError("");
-    await Promise.all([fetchDashboard(), fetchAppointments()]);
-    setLoading(false);
-  };
-
   const fetchDashboard = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_API_URL + "/userdashboard", {
@@ -66,6 +55,17 @@ const Userdashboard = () => {
       setError("Couldn't load your appointments. Please try again.");
     }
   };
+
+  const loadAll = async () => {
+    setLoading(true);
+    setError("");
+    await Promise.all([fetchDashboard(), fetchAppointments()]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadAll();
+  }, []);
 
   const now = new Date();
   const isTimeReached = (date, time) => now >= new Date(`${date}T${time}`);
@@ -93,7 +93,7 @@ const Userdashboard = () => {
         </div>
       )}
 
-      {/* Header */}
+      { }
       <div className="motion-safe:animate-[fadeInUp_0.5s_ease-out_both] flex items-center justify-between mb-8">
         {loading ? (
           <div className="h-10 w-72 bg-slate-200/70 rounded-lg animate-pulse" />
@@ -116,7 +116,7 @@ const Userdashboard = () => {
         )}
       </div>
 
-      {/* Stat row */}
+      { }
       <div
         className="motion-safe:animate-[fadeInUp_0.5s_ease-out_both] grid grid-cols-3 gap-4 mb-8 max-w-3xl"
         style={{ animationDelay: '80ms' }}
@@ -137,7 +137,7 @@ const Userdashboard = () => {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6 max-w-5xl">
-        {/* Quick actions */}
+        { }
         <div
           className="motion-safe:animate-[fadeInUp_0.5s_ease-out_both] lg:col-span-2 space-y-4"
           style={{ animationDelay: '150ms' }}
@@ -166,7 +166,7 @@ const Userdashboard = () => {
           />
         </div>
 
-        {/* Sidebar widgets */}
+        { }
         <div
           className="motion-safe:animate-[fadeInUp_0.5s_ease-out_both] space-y-6"
           style={{ animationDelay: '220ms' }}

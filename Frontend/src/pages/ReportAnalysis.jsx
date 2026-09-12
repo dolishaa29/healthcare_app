@@ -148,13 +148,13 @@ const ReportAnalysis = () => {
 
   return (
     <div className="flex h-full overflow-hidden bg-white">
-      {/* Sidebar */}
+      { }
       <aside
         className={`w-full md:w-72 shrink-0 flex-col border-r border-slate-100 bg-white ${
           showingDetail ? "hidden md:flex" : "flex"
         }`}
       >
-        {/* Header */}
+        { }
         <div className="px-4 pt-5 pb-3 border-b border-slate-100">
           <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-0.5">
             AI-Powered
@@ -163,7 +163,7 @@ const ReportAnalysis = () => {
             Report Analysis
           </h1>
 
-          {/* Upload button */}
+          { }
           <label
             className={`flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer border-2 border-dashed ${
               uploading
@@ -208,7 +208,7 @@ const ReportAnalysis = () => {
           )}
         </div>
 
-        {/* Report list */}
+        { }
         <div className="flex-1 overflow-y-auto py-2 px-2">
           {reports.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center px-4 py-12">
@@ -285,7 +285,7 @@ const ReportAnalysis = () => {
         </div>
       </aside>
 
-      {/* Main chat area */}
+      { }
       <main className={`flex-1 min-w-0 overflow-hidden ${showingDetail ? "flex" : "hidden md:flex"} flex-col bg-white`}>
         {trendsLoading || trendsText !== null ? (
           <>
@@ -318,7 +318,7 @@ const ReportAnalysis = () => {
           </>
         ) : activeReport ? (
           <>
-            {/* Chat header */}
+            { }
             <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-100 shrink-0">
               <button
                 onClick={() => setActiveReport(null)}
@@ -337,7 +337,7 @@ const ReportAnalysis = () => {
               </div>
             </div>
 
-            {/* Messages */}
+            { }
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1 bg-slate-50">
               {activeReport.messages?.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center py-16">
@@ -371,7 +371,7 @@ const ReportAnalysis = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
+            { }
             <form
               onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
               className="flex items-end gap-3 px-5 py-3.5 border-t border-slate-100 bg-white shrink-0"

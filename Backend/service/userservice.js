@@ -138,7 +138,6 @@ exports.userlist=async(req,res)=>
     const page = parseInt(req.query.page, 10);
     const limit = parseInt(req.query.limit, 10);
 
-    // page/limit are opt-in — omit them to get the old unpaginated behavior.
     if (!page || !limit) {
         let users=await rec.find();
         return res.status(200).json({users:users});

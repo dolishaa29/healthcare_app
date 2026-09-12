@@ -1,2 +1,8 @@
 node_modules
 .env
+*.log
+
+public/images/*
+public/uploads/*
+!public/images/.gitkeep
+!public/uploads/.gitkeep

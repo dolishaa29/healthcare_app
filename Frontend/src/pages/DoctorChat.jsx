@@ -51,7 +51,7 @@ const DoctorChat = () => {
 
   return (
     <div className="flex h-full overflow-hidden bg-white">
-      {/* Sidebar */}
+      { }
       <aside
         className={`w-full md:w-72 shrink-0 flex-col border-r border-slate-100 bg-white ${
           active ? "hidden md:flex" : "flex"
@@ -120,7 +120,7 @@ const DoctorChat = () => {
         </div>
       </aside>
 
-      {/* Chat area */}
+      { }
       <main className={`flex-1 min-w-0 overflow-hidden ${active ? "flex" : "hidden md:flex"} flex-col`}>
         {active ? (
           <ChatWindow

@@ -172,10 +172,6 @@ exports.bookSlot = async (req, res) => {
   try {
     await appointment.save();
   } catch (err) {
-    // Unique index on {doctorid, date, time} is the real guard against a
-    // double-booking race — the findOne check above can't prevent two
-    // concurrent requests (e.g. hitting different server instances) from
-    // both passing it before either writes.
     if (err.code === 11000) {
       return res.status(400).json({ success: false, msg: 'This slot was just taken. Please choose another.' });
     }

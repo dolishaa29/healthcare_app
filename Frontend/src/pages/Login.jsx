@@ -182,11 +182,12 @@ const Login = () => {
           )
           }
            
-          <button 
+          <button
             type="submit"
-            className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-violet-200 transform transition-all active:scale-[0.98]"
+            disabled={loading}
+            className="w-full py-4 mt-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-90 text-white font-bold rounded-2xl shadow-xl shadow-violet-200 transform transition-all active:scale-[0.98] disabled:opacity-50"
           >
-            Sign In as {role.charAt(0).toUpperCase() + role.slice(1)}
+            {loading ? "Signing In..." : `Sign In as ${role.charAt(0).toUpperCase() + role.slice(1)}`}
           </button>
         </form>
         

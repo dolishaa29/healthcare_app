@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -27,7 +27,7 @@ const DoctorCard = ({ doctor, image }) => {
       alert("Appointment Booked Successfully!");
       setIsBooking(false);
       setDescription("");
-    } catch (err) {
+    } catch {
       alert("Error booking appointment");
     } finally {
       setLoading(false);

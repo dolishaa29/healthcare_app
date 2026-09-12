@@ -27,7 +27,7 @@ const Adminregister = () => {
       } else {
         setMessage(res.data.message || "Registration Failed");
       }
-    } catch (error) {
+    } catch {
       setMessage("Error while registering ");
     }
   };

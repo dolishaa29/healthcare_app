@@ -147,7 +147,7 @@ const Bot = () => {
           </button>
         </div>
 
-        {/* Messages */}
+        { }
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3" style={{ minHeight: "280px", maxHeight: "340px" }}>
           {messages.length === 0 && !loading && (
             <div className="flex flex-col items-center justify-center h-full py-8 text-center">
@@ -202,7 +202,7 @@ const Bot = () => {
           <div ref={bottomRef} />
         </div>
 
-        {/* Input */}
+        { }
         <div className="px-4 pb-4 pt-2 border-t border-slate-50 shrink-0">
           <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-300 transition-all">
             <input
@@ -225,7 +225,7 @@ const Bot = () => {
         </div>
       </div>
 
-      {/* FAB */}
+      { }
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className={`w-14 h-14 bg-linear-to-br from-indigo-600 to-violet-600 hover:opacity-90 text-white rounded-2xl shadow-xl shadow-indigo-200 flex items-center justify-center transition-all duration-300 active:scale-95

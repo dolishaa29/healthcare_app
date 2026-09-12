@@ -31,14 +31,14 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between">
-        {/* Brand Logo */}
+        { }
         <a href="#" className="flex items-center gap-2 group">
           <span className="font-bold text-2xl tracking-tight text-slate-900 transition-opacity group-hover:opacity-90">
             Aura<span className="text-indigo-600">Health</span>
           </span>
         </a>
 
-        {/* Desktop Navigation Links */}
+        { }
         <nav className="hidden md:flex items-center gap-1 bg-slate-900/5 p-1.5 rounded-full border border-slate-900/5 backdrop-blur-sm">
           {NAV_LINKS.map((link) => (
             <a
@@ -51,7 +51,7 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Desktop CTA Buttons */}
+        { }
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={() => navigate('/login')}
@@ -68,7 +68,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Hamburger Button */}
+        { }
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
           className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100/80 transition-colors"
@@ -78,7 +78,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Drawer */}
+      { }
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           menuOpen ? 'max-h-[calc(100vh-4rem)] opacity-100' : 'max-h-0 opacity-0'

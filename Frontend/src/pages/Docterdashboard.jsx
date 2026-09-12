@@ -21,17 +21,6 @@ const Docterdashboard = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadAll();
-  }, []);
-
-  const loadAll = async () => {
-    setLoading(true);
-    setError("");
-    await Promise.all([fetchDashboard(), fetchAppointments()]);
-    setLoading(false);
-  };
-
   const fetchDashboard = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_API_URL + "/doctordashboard", {
@@ -63,6 +52,17 @@ const Docterdashboard = () => {
       setError("Couldn't load your appointments. Please try again.");
     }
   };
+
+  const loadAll = async () => {
+    setLoading(true);
+    setError("");
+    await Promise.all([fetchDashboard(), fetchAppointments()]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadAll();
+  }, []);
 
   const now = new Date();
   const todayKey = now.toISOString().slice(0, 10);
@@ -111,7 +111,7 @@ const Docterdashboard = () => {
         )}
       </div>
 
-      {/* Stat row */}
+      { }
       <div
         className="motion-safe:animate-[fadeInUp_0.5s_ease-out_both] grid grid-cols-3 gap-4 mb-8 max-w-3xl"
         style={{ animationDelay: '80ms' }}

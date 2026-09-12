@@ -83,8 +83,6 @@ const FaqItem = forwardRef(({ q, a, index, isOpen, onToggle, onKeyDown }, ref) =
 FaqItem.displayName = 'FaqItem';
 
 const FAQ = () => {
-  // Single-open accordion. To allow several open at once, swap this for a
-  // Set of indices and toggle membership instead.
   const [openIndex, setOpenIndex] = useState(null);
   const triggerRefs = useRef([]);
 

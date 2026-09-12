@@ -14,8 +14,6 @@ let messageSchema = mongo.Schema({
 
 }, { timestamps: true });
 
-// Chat history is always fetched by this exact pair, sorted by time —
-// see getHistoryForUser/getHistoryForDoctor in service/chatservice.js.
 messageSchema.index({ userId: 1, doctorId: 1, createdAt: 1 });
 
 module.exports = mongo.model('message', messageSchema);

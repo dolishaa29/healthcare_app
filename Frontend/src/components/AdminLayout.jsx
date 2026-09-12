@@ -21,7 +21,7 @@ const AdminLayout = () => {
   return (
     <div className="flex h-screen bg-[#fafaf9] font-sans text-slate-900 overflow-hidden">
 
-      {/* Mobile top bar */}
+      { }
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4 z-30">
         <span className="font-bold text-lg tracking-tight text-slate-900">
           Aura<span className="text-indigo-600">Admin</span>
@@ -35,7 +35,7 @@ const AdminLayout = () => {
         </button>
       </div>
 
-      {/* Mobile backdrop */}
+      { }
       {mobileOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-slate-900/40 z-40"

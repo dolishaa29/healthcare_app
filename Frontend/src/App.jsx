@@ -46,7 +46,7 @@ function App() {
       <BrowserRouter>
       <Suspense fallback={null}>
       <Routes>
-        <Route path='/hehe' element={<Adminregister/>}/>
+        <Route path='/admin-setup' element={<Adminregister/>}/>
         <Route path='/' element={<Landing/>}/>
         <Route path='/login' element={<Login/>}/>
 

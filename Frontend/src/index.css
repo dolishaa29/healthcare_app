@@ -1,13 +1,6 @@
 @import "tailwindcss";
 
-/*
- * Brand palette: warm sage/olive + cream, replacing the default cool
- * indigo/violet/slate. Overriding the built-in Tailwind color variables
- * here re-skins every existing `indigo-*` / `violet-*` / `slate-*` /
- * `gray-*` utility class across the app without touching each file.
- */
 @theme {
-  /* slate + gray -> warm cream/stone neutrals */
   --color-slate-50: #fafaf9;
   --color-slate-100: #f5f5f4;
   --color-slate-200: #e7e5e4;
@@ -32,7 +25,6 @@
   --color-gray-900: #1c1917;
   --color-gray-950: #0c0a09;
 
-  /* indigo -> primary brand olive */
   --color-indigo-50: #f4f6ec;
   --color-indigo-100: #e7ecd7;
   --color-indigo-200: #d1ddae;
@@ -45,7 +37,6 @@
   --color-indigo-900: #2f3818;
   --color-indigo-950: #171d0d;
 
-  /* violet -> lighter/warmer moss, used as the light side of brand gradients */
   --color-violet-50: #f6f7ec;
   --color-violet-100: #eaeed7;
   --color-violet-200: #d7ddae;

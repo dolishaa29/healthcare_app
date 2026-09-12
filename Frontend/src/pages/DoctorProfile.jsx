@@ -129,7 +129,7 @@ const DoctorProfile = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5 max-w-3xl">
-        {/* Photo + Name card */}
+        { }
         <div
           className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-6"
           style={{ animationDelay: '60ms' }}

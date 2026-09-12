@@ -84,7 +84,7 @@ const Admindashboard = () => {
         </div>
       )}
 
-      {/* Stat row */}
+      { }
       <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] shrink-0 flex flex-col sm:flex-row gap-5">
         {loading ? (
           <>
@@ -99,7 +99,7 @@ const Admindashboard = () => {
         )}
       </div>
 
-      {/* Chart — fills remaining height */}
+      { }
       <div
         className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] flex-1 min-h-[340px] md:min-h-0 bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col"
         style={{ animationDelay: '80ms' }}

@@ -123,46 +123,40 @@ flowchart TD
 
 ## 3. Sequence Diagram
 
-Self-serve slot booking traced through the actual layers (`appointrouter.js` → `appointmentcontroller.js` → `service/appointment.js` → `appointmentnew` collection), including the double-booking race that the compound unique index (`{doctorid, date, time}`) is specifically there to catch — noted in the README's reliability section and confirmed in [appointment.js](../Backend/model/Appointment/appointment.js).
+Self-serve slot booking traced through the actual layers (`appointrouter.js` → `service/appointment.js` → `appointmentnew` collection — the router wires routes straight to exported service functions, no controller in between), including the double-booking race that the compound unique index (`{doctorid, date, time}`) is specifically there to catch — noted in the README's reliability section and confirmed in [appointment.js](../Backend/model/Appointment/appointment.js).
 
-![Sequence Diagram](uml-images/03-sequence.png)
+> The pre-rendered PNG for this diagram (`uml-images/03-sequence.png`) still shows an older, incorrect version with a controller hop and hasn't been regenerated — treat the Mermaid source below as authoritative.
 
 ```mermaid
 sequenceDiagram
     actor P as Patient
     participant FE as SlotBooking Wizard (Frontend)
     participant RT as appointrouter.js
-    participant CT as appointmentcontroller.js
     participant SV as service/appointment.js
     participant DB as MongoDB (appointmentnew)
 
     P->>FE: select doctor + date
     FE->>RT: GET /available-slots?doctorId&date
-    RT->>CT: getAvailableSlots(req, res)
-    CT->>SV: generateTimeSlots(doctorId, date)
+    RT->>SV: getAvailableSlots(req, res)
     SV->>DB: find booked {doctorid, date}
     DB-->>SV: booked times []
-    SV-->>CT: free slots []
-    CT-->>RT: 200 free slots
+    SV-->>RT: 200 free slots
     RT-->>FE: available slots
     FE-->>P: render selectable slots
 
     P->>FE: pick slot, confirm booking
     FE->>RT: POST /book-slot {doctorId, date, time}
-    RT->>CT: bookSlot(req, res)
-    CT->>SV: bookSlot(userid, doctorid, date, time)
+    RT->>SV: bookSlot(req, res)
     SV->>DB: insert appointmentnew
 
     alt slot taken between GET and POST (race lost)
         DB-->>SV: E11000 duplicate key error
-        SV-->>CT: throw conflict
-        CT-->>RT: 409 slot no longer available
+        SV-->>RT: 409 slot no longer available
         RT-->>FE: booking failed, refresh slots
         FE-->>P: show error, reload available slots
     else insert succeeds
         DB-->>SV: appointment document
-        SV-->>CT: appointment created
-        CT-->>RT: 201 booking confirmed
+        SV-->>RT: 201 booking confirmed
         RT-->>FE: booking confirmed
         FE-->>P: SuccessScreen
     end
@@ -345,9 +339,9 @@ classDiagram
 
 ## 5. Component Diagram
 
-Every feature module follows the same `Router → Controller → Service → Model` layering (as already noted in the README), except the bot/report/skin-analysis routers, which call their service directly. This diagram shows that layering plus every external component it talks to.
+Every feature module follows the same `Router → Service → Model` layering (as already noted in the README) — there is no separate controller layer; routers call exported service functions directly as route handlers. This diagram shows that layering plus every external component it talks to.
 
-![Component Diagram](uml-images/05-component.png)
+> The pre-rendered PNG for this diagram (`uml-images/05-component.png`) still shows an older, incorrect version with a controller layer and hasn't been regenerated — treat the Mermaid source below as authoritative.
 
 ```mermaid
 flowchart TB
@@ -360,8 +354,7 @@ flowchart TB
     subgraph BE["Backend — Node.js + Express 5"]
         Routers["Routers<br/>admin · doctor · user · appointment ·<br/>rating · bot · chat · report · skin"]
         MW["Middleware<br/>JWT guards (admin/doctor/user)<br/>Multer · Redis rate-limit"]
-        Controllers["Controllers"]
-        Services["Services<br/>business logic"]
+        Services["Services<br/>request handling + business logic"]
         Models["Models<br/>Mongoose schemas"]
         ChatIO["chatSocket.js"]
         MeetIO["meetingSocket.js"]
@@ -382,7 +375,7 @@ flowchart TB
     SocketClient -->|"Socket.IO protocol"| ChatIO
     SocketClient -->|"Socket.IO protocol"| MeetIO
 
-    Routers --> MW --> Controllers --> Services --> Models --> Mongo
+    Routers --> MW --> Services --> Models --> Mongo
     Services -->|"upload/fetch media"| Cloud
     Services -->|"send OTP / credentials"| SMTPsvc
     Services -->|"chatbot / report / skin analysis"| Gemini

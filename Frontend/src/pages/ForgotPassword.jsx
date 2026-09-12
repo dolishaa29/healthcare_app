@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
@@ -15,7 +14,6 @@ const ForgotPassword = () => {
 
     const isUser = role === "user";
     const apiPath = isUser ? "/user" : "/doctor";
-    const token = Cookies.get(isUser ? "token" : "emstoken");
 
     const handleSendOtp = async (e) => {
         e.preventDefault();

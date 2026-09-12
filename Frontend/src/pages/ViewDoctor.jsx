@@ -34,7 +34,7 @@ const ViewDoctorss = () => {
     return (
         <div className="h-full overflow-y-auto bg-slate-50 w-full px-4 md:px-10 py-10">
 
-            {/* Header */}
+            { }
             <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] w-full flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-6 border-b border-slate-100 gap-4">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
                     Find &amp; Book <br/>
@@ -53,7 +53,7 @@ const ViewDoctorss = () => {
                 )}
             </div>
 
-            {/* Search */}
+            { }
             {!loading && doctors.length > 0 && (
                 <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] relative max-w-md mb-8" style={{ animationDelay: '80ms' }}>
                     <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -75,7 +75,7 @@ const ViewDoctorss = () => {
                 </div>
             )}
 
-            {/* Content */}
+            { }
             {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                     {[1, 2, 3, 4, 5, 6].map((n) => (

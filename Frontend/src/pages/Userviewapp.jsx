@@ -61,7 +61,7 @@ const Userviewapp = () => {
 
   return (
     <div className="h-full overflow-y-auto bg-slate-50 px-6 py-10 md:px-10">
-      {/* Header */}
+      { }
       <div className="motion-safe:animate-[fadeInUp_0.4s_ease-out_both] mb-10">
         <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">
           Healthcare
@@ -121,7 +121,7 @@ const AppointmentCard = ({ app, active, index = 0 }) => {
     style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
     className="motion-safe:animate-[fadeInUp_0.45s_ease-out_both] bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-lg hover:shadow-indigo-50/50 transition-all duration-300 flex flex-col"
   >
-    {/* Status badge */}
+    { }
     <div className="flex items-center justify-between mb-5">
       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
         Appointment
@@ -140,7 +140,7 @@ const AppointmentCard = ({ app, active, index = 0 }) => {
       </span>
     </div>
 
-    {/* Doctor info */}
+    { }
     <div className="mb-5">
       <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest mb-1">
         Consulting Doctor
@@ -153,7 +153,7 @@ const AppointmentCard = ({ app, active, index = 0 }) => {
       </p>
     </div>
 
-    {/* Date & time */}
+    { }
     <div className="space-y-2.5 flex-1">
       <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl">
         <div className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg">
@@ -191,7 +191,7 @@ const AppointmentCard = ({ app, active, index = 0 }) => {
       )}
     </div>
 
-    {/* Action */}
+    { }
     <button
       disabled={!active}
       onClick={() => active && navigate(`/meeting/${app._id}`)}

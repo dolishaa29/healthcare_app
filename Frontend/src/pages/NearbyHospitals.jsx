@@ -57,7 +57,6 @@ const NearbyHospitals = () => {
 
   useEffect(() => {
     if (position) search(position);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position]);
 
   return (

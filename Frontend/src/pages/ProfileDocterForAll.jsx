@@ -97,7 +97,7 @@ const ProfileDocterForAll = () => {
   return (
     <div className="min-h-screen bg-[#fafaf9] px-6 py-10 md:px-10">
 
-      {/* Header */}
+      { }
       <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
         <div>
           <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Physician</p>
@@ -128,7 +128,7 @@ const ProfileDocterForAll = () => {
 
       <div className="space-y-5 max-w-3xl">
 
-        {/* Profile summary card */}
+        { }
         <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <div className="w-24 h-24 rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-100 shrink-0">
             {imagePreview ? (
@@ -169,7 +169,7 @@ const ProfileDocterForAll = () => {
           </div>
         </div>
 
-        {/* Bio */}
+        { }
         {doctor?.bio && (
           <SectionCard icon={<Stethoscope size={15} />} title="About">
             <p className="text-sm text-slate-600 leading-relaxed italic border-l-4 border-indigo-100 pl-4">
@@ -178,7 +178,7 @@ const ProfileDocterForAll = () => {
           </SectionCard>
         )}
 
-        {/* Professional Info */}
+        { }
         <SectionCard icon={<Stethoscope size={15} />} title="Professional Information">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Full Name" value={`Dr. ${doctor?.name}`} />
@@ -196,7 +196,7 @@ const ProfileDocterForAll = () => {
           </div>
         </SectionCard>
 
-        {/* Academic */}
+        { }
         <SectionCard icon={<GraduationCap size={15} />} title="Academic Background">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Degree / Title" value={doctor?.title} />
@@ -206,7 +206,7 @@ const ProfileDocterForAll = () => {
           </div>
         </SectionCard>
 
-        {/* Reviews */}
+        { }
         {ratings.length > 0 && (
           <SectionCard icon={<MessageSquare size={15} />} title="Patient Reviews" accent="amber">
             <div className="flex items-center gap-4 mb-5 p-4 bg-amber-50 rounded-2xl border border-amber-100">

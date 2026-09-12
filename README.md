@@ -74,8 +74,7 @@ flowchart TB
 
     subgraph Server["Node.js + Express 5"]
         REST["REST routers<br/>admin, doctor, user, appointment,<br/>rating, bot, chat, report, skin"]
-        CTRL["Controllers"]
-        SVC["Services (business logic)"]
+        SVC["Services (request handling +<br/>business logic)"]
         SIO["Socket.IO server<br/>+ Redis adapter"]
     end
 
@@ -87,7 +86,7 @@ flowchart TB
     STUN{{"STUN<br/>stun.l.google.com:19302"}}
 
     C1 -->|"REST / axios"| REST
-    REST --> CTRL --> SVC --> DB
+    REST --> SVC --> DB
     SVC --> CLOUD
     SVC --> MAIL
     SVC --> GEMINI
@@ -128,7 +127,7 @@ Config lives in `docker-compose.yml` and `nginx/nginx.conf` at the repo root —
 
 ### Module Layering (UML)
 
-Every feature module follows the same Router → Controller → Service → Model layering. The appointment module is the most interesting instance of it, because it carries two independent creation paths — a legacy admin-approved request, and a newer self-serve slot booking — that write to two different collections.
+Every feature module follows the same Router → Service → Model layering — routers call their service module's exported functions directly as route handlers, with no separate controller layer in between. The appointment module is the most interesting instance of it, because it carries two independent creation paths — a legacy admin-approved request, and a newer self-serve slot booking — that write to two different collections.
 
 ```mermaid
 classDiagram
@@ -136,20 +135,15 @@ classDiagram
         <<layer>>
         HTTP endpoints, auth middleware
     }
-    class Controller {
-        <<layer>>
-        thin request or response glue
-    }
     class Service {
         <<layer>>
-        business logic
+        request handling + business logic
     }
     class Model {
         <<layer>>
         Mongoose schema
     }
-    Router --> Controller
-    Controller --> Service
+    Router --> Service
     Service --> Model
 ```
 
@@ -484,8 +478,7 @@ health/
 │   ├── Dockerfile              # Node 22 Alpine
 │   ├── config/                 # Cloudinary, CORS origins (config/corsOrigins.js), Redis client (config/redisClient.js)
 │   ├── router/                 # Route definitions (admin, doctor, user, appointment, chat, rating, bot, report, skin analysis)
-│   ├── controller/             # Request handlers
-│   ├── service/                 # Business logic (chat, appointments, ratings, AI services)
+│   ├── service/                 # Request handlers + business logic (chat, appointments, ratings, AI services) — routers call these directly, no controller layer
 │   ├── model/                   # Mongoose schemas (User, Doctor, Admin, Appointment, Message, OTP, ...)
 │   ├── middleware/              # JWT auth per role, Multer upload config, Redis-backed rate limiting
 │   └── socket/                  # Socket.IO handlers (chatSocket, meetingSocket/WebRTC signaling) — Redis-adapter backed
@@ -495,7 +488,9 @@ health/
 │       ├── components/          # Shared components & layouts (AdminLayout, DoctorLayout, UserLayout, private routes)
 │       └── socket.js            # Socket.IO client setup
 └── docs/
-    └── live.md                 # Deep-dive on the live-capture AI pipeline
+    ├── uml.md                  # Eight UML diagrams (use case, activity, sequence, class, component, deployment, communication, object)
+    ├── PROJECT_STRUCTURE.md    # Complete, file-by-file map of the repository
+    └── INTERVIEW_PREP.md       # Tech-stack rationale, trade-offs, and anticipated Q&A
 ```
 
 ## Getting Started
@@ -605,5 +600,6 @@ Scale further by adding a `backend3`, etc. to `docker-compose.yml` (same shape a
 
 ## Documentation
 
-- [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) — complete, file-by-file map of the repository (Backend and Frontend), plus the router → controller → service layering and a few structural notes on stub/legacy files.
-- [docs/live.md](docs/live.md) — walkthrough of the live-capture pipeline (webcam capture → Socket.IO → server-side processing → real-time UI feedback). Note: this describes an earlier design; the implemented `LiveCapture.jsx` instead POSTs a frame to `/skin-analysis` for Gemini every 5s — see the note in `docs/PROJECT_STRUCTURE.md`.
+- [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) — complete, file-by-file map of the repository (Backend and Frontend), plus the router → service layering and a few structural notes on stub/legacy files.
+- [docs/uml.md](docs/uml.md) — eight UML views (use case, activity, sequence, class, component, deployment, communication, object) modeling the actual routes, services, and schemas.
+- [docs/INTERVIEW_PREP.md](docs/INTERVIEW_PREP.md) — why each technology was chosen over its alternatives, known trade-offs, and anticipated interview questions with prepared answers.

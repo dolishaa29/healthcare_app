@@ -25,19 +25,18 @@ const Footer = () => {
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
-    // Handle newsletter logic here
   };
 
   return (
     <footer className="bg-slate-900 text-slate-300 relative overflow-hidden">
-      {/* Main Content Area */}
+      { }
       <div className="max-w-7xl mx-auto px-6 md:px-10 pt-16 pb-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
           
-          {/* Brand & Newsletter Column (Spans 5 cols on large screens) */}
+          { }
           <div className="md:col-span-5 flex flex-col justify-between">
             <div>
-              {/* Brand Logo */}
+              { }
               <a href="#" className="inline-block mb-4">
                 <span className="font-bold text-2xl tracking-tight text-white">
                   Aura<span className="text-indigo-400">Health</span>
@@ -49,7 +48,7 @@ const Footer = () => {
               </p>
             </div>
 
-            {/* Newsletter Subscription */}
+            { }
             <div className="mt-8">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-200 mb-3">
                 Subscribe to updates
@@ -75,10 +74,10 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Links Columns (Spans 7 cols on large screens) */}
+          { }
           <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 pt-2">
             
-            {/* Product Links */}
+            { }
             <div>
               <p className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-4">
                 Product
@@ -155,7 +154,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Socials */}
+        { }
         <div className="mt-16 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex items-center gap-1">
             <span>&copy; {new Date().getFullYear()} AuraHealth Inc. Built with</span>
@@ -163,7 +162,7 @@ const Footer = () => {
             <span>for better healthcare.</span>
           </div>
 
-          {/* Social Icons */}
+          { }
           <div className="flex items-center gap-4 text-slate-400">
             <a href="#" className="p-2 hover:bg-slate-800 hover:text-white rounded-lg transition-colors" aria-label="X (Twitter)">
               <XIcon className="w-4 h-4" />

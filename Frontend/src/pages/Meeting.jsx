@@ -17,7 +17,7 @@ const Meeting = () => {
   const pcRef = useRef(null);
   const localStreamRef = useRef(null);
 
-  const [status, setStatus] = useState('connecting'); // connecting | waiting | connected | ended | error
+  const [status, setStatus] = useState('connecting'); 
   const [errorMsg, setErrorMsg] = useState('');
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);

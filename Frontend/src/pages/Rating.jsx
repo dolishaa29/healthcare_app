@@ -55,7 +55,7 @@ const Rating = () => {
             setDescription("");
             fetchRatings();
             setTimeout(() => setSuccess(false), 4000);
-        } catch (error) {
+        } catch {
             setError("Error submitting rating. Please try again.");
         } finally {
             setSubmitting(false);
@@ -65,7 +65,7 @@ const Rating = () => {
     return (
         <div className="min-h-screen bg-[#fafaf9] px-6 py-10 md:px-10">
 
-            {/* Header */}
+            { }
             <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
                 <div>
                     <p className="text-[10px] font-bold text-indigo-500 tracking-[0.2em] uppercase mb-1">Feedback</p>
@@ -87,7 +87,7 @@ const Rating = () => {
 
             <div className="max-w-3xl space-y-5">
 
-                {/* Stats bar */}
+                { }
                 {averageRating && (
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex items-center gap-6">
                         <div className="text-center shrink-0">
@@ -112,7 +112,7 @@ const Rating = () => {
                     </div>
                 )}
 
-                {/* Submit form */}
+                { }
                 <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
                     <div className="flex items-center gap-2.5 mb-5">
                         <div className="p-1.5 rounded-xl bg-amber-50 text-amber-500">
@@ -123,7 +123,7 @@ const Rating = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-5">
 
-                        {/* Star picker */}
+                        { }
                         <div>
                             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
                                 Your Rating (1–5)
@@ -156,7 +156,7 @@ const Rating = () => {
                             </div>
                         </div>
 
-                        {/* Description */}
+                        { }
                         <div>
                             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
                                 Comment <span className="text-slate-300 normal-case font-medium">(optional)</span>
@@ -194,7 +194,7 @@ const Rating = () => {
                     </form>
                 </div>
 
-                {/* Reviews list */}
+                { }
                 {data.length > 0 && (
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
                         <div className="flex items-center gap-2.5 mb-5">
