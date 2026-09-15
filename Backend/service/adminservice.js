@@ -66,6 +66,7 @@ res.clearCookie("token");
 return res.status(200).json({success: true,msg:'admin logout successfully'})
 }
 
+
 exports.adminDashboard = async (req, res) => {
     const admin           = req.admin;
     const doctorModel     = require("../model/doctor");
